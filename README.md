@@ -481,22 +481,3 @@ Une fonctionnalité est considérée comme terminée lorsque :
 Le projet est actuellement en phase de cadrage et de développement initial.
 
 ---
-
-## Vision
-
-JaciGreen ne doit pas être simplement un site vitrine.
-
-L'objectif est de construire progressivement une **plateforme numérique évolutive** capable d'accompagner les activités, les produits, les formations et les futurs services numériques de JaciGreen.
-
-```text
-Website
-   ↓
-Digital Platform
-   ↓
-Business Services
-   ↓
-Data & Automation
-   ↓
-Future Digital Ecosystem
-```
-
