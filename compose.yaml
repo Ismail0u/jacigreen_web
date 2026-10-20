@@ -1,0 +1,80 @@
+# Environnement de DÉVELOPPEMENT local. Ne pas utiliser tel quel en production
+# (voir docs/operations/docker.md pour les différences entre environnements).
+name: jacigreen
+
+services:
+  db:
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:${DB_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [backend_net]
+
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      CORS_ALLOWED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+      FRONTEND_DEPLOY_HOOK_URL: ""
+    volumes:
+      - ./backend:/app
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health/', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    networks: [backend_net, frontend_net]
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    environment:
+      # Public : utilisé par le navigateur (formulaire de contact).
+      VITE_API_URL: http://localhost:8000
+      VITE_SITE_URL: http://localhost:5173
+      # Réseau interne : utilisé par le serveur de développement et le build (pré-rendu).
+      API_INTERNAL_URL: http://backend:8000
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks: [frontend_net]
+
+networks:
+  backend_net:
+  frontend_net:
+
+volumes:
+  db_data:
+  frontend_node_modules:
