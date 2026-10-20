@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" },
+  "[typescript][typescriptreact][json][css][markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "python.analysis.extraPaths": ["backend"],
+  "eslint.workingDirectories": ["frontend"],
+  "chat.promptFilesRecommendations": {},
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true
+}
