@@ -1,0 +1,28 @@
+[project]
+name = "jacigreen-backend"
+version = "0.1.0"
+description = "API et administration de contenu JACIGREEN (Django REST Framework)"
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["**/migrations/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "DJ", "S", "SIM", "C4"]
+ignore = ["DJ001"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101", "S105", "S106"]
+"config/settings/test.py" = ["S105"]
+# Fichier de données éditoriales : les textes longs restent sur une ligne pour être relus facilement.
+"apps/common/management/commands/seed_institutional_draft.py" = ["E501"]
+
+[tool.coverage.run]
+source = ["apps", "config"]
+omit = ["*/migrations/*", "*/tests/*", "config/asgi.py", "config/wsgi.py"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true

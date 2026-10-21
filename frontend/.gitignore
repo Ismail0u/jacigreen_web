@@ -1,0 +1,7 @@
+node_modules/
+build/
+.react-router/
+coverage/
+.env
+.env.local
+*.log

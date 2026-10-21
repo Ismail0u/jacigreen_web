@@ -1,0 +1,92 @@
+/*
+ * SOURCE UNIQUE DE VÉRITÉ DU DESIGN SYSTEM JACIGREEN.
+ * Tailwind CSS v4 génère les classes utilitaires (bg-brand, text-ink-muted, ...) à
+ * partir de ce bloc @theme. Aucune valeur de couleur ne doit être écrite en dur dans
+ * les composants. Les contrastes des paires de couleurs ci-dessous sont vérifiés par
+ * src/styles/tokens.test.ts (objectif WCAG 2.2 AA).
+ *
+ * STATUT : proposition à faire valider par JaciGreen (voir docs/architecture/design-system.md).
+ * - Palette alignée sur le CODE des maquettes Stitch (stitch-theme.css), pas sur la prose de DESIGN.md.
+ * - Couleurs du logo officiel (vert, magenta) : extraites du JPEG 400x400 fourni, valeurs
+ *   approximatives. Elles servent d'accents décoratifs, pas de couleurs de texte.
+ */
+@theme {
+  /* --- Couleurs : surfaces --- */
+  --color-surface: #f6fbf5; /* fond de page (valeur du code Stitch) */
+  --color-surface-alt: #ebefea; /* bandeaux et cartes secondaires (surface-container Stitch) */
+  --color-surface-raised: #ffffff; /* blanc : champs de formulaire, cartes */
+
+  /* --- Couleurs : texte --- */
+  --color-ink: #202522; /* texte courant */
+  --color-ink-muted: #5a635d; /* texte secondaire (≥ 4,5:1 sur ivoire et sable) */
+
+  /* --- Couleurs : marque --- */
+  --color-brand: #173a2c; /* vert forêt : en-têtes, boutons principaux, fonds sombres */
+  --color-on-brand: #f6fbf5; /* texte sur fond vert forêt */
+  --color-accent: #3f6b45; /* vert d'action : liens, éléments interactifs sur fond clair */
+  --color-ochre: #c29453; /* ocre DÉCORATIF uniquement (on-tertiary-container Stitch) : filets, aplats sans texte */
+  --color-ochre-text: #7f5c20; /* ocre pour le TEXTE sur ivoire ou sable */
+  --color-ochre-strong: #8a6427; /* fond de bouton d'accent avec texte blanc */
+  --color-on-ochre-strong: #ffffff;
+
+  /* --- Couleurs : identité du logo (décoratives, jamais en texte courant) --- */
+  --color-logo-green: #3fa244;
+  --color-logo-magenta: #b55c98;
+  --color-logo-grey: #878381;
+  --color-magenta-text: #8f3f77; /* magenta utilisable en TEXTE sur ivoire */
+
+  /* --- Couleurs : états et bordures --- */
+  --color-hairline: #d7d9d2; /* filets (non textuels) */
+  --color-border-strong: #6b746e; /* bordure de champ (≥ 3:1, composant d'interface) */
+  --color-danger: #a8231b;
+  --color-success: #2e6b3a;
+  --color-focus: #173a2c; /* anneau de focus sur fond clair */
+  --color-focus-on-dark: #f6fbf5; /* anneau de focus sur fond sombre */
+
+  /* --- Typographie --- */
+  --font-display: "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", Georgia, serif;
+
+  --text-display: 3.25rem; /* titre éditorial d'accueil */
+  --text-display--line-height: 1.1;
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 1.15;
+  --text-h2: 1.875rem;
+  --text-h2--line-height: 1.2;
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.3;
+  --text-lead: 1.1875rem; /* paragraphe d'introduction */
+  --text-lead--line-height: 1.65;
+  --text-body: 1rem; /* 16 px : les maquettes utilisaient 15 px */
+  --text-body--line-height: 1.65;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-label: 0.8125rem; /* étiquettes en capitales : 13 px minimum (maquettes : 12 px) */
+  --text-label--line-height: 1.25;
+  --tracking-label: 0.08em;
+
+  /* --- Rayons : sobres, institutionnels --- */
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  /* --- Ombres : quasi absentes (pas d'ombres lourdes) --- */
+  --shadow-hairline: 0 0 0 1px var(--color-hairline);
+  --shadow-raised: 0 1px 2px rgb(23 58 44 / 0.12);
+
+  /* --- Largeurs de contenu --- */
+  --container-page: 80rem;
+  --container-reading: 44rem;
+
+  /* --- Points de rupture --- */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+
+  /* --- Transitions --- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+}
