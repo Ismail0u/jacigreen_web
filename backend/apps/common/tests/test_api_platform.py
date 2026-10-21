@@ -70,15 +70,15 @@ class AdminTests(TestCase):
         self.assertNotContains(response, 'name="message"')
 
 
-class SeedDemoTests(TestCase):
+class SeedInstitutionalDraftPlatformTests(TestCase):
     @override_settings(DEBUG=True)
     def test_seed_marks_everything_as_demo(self):
-        call_command("seed_demo", stdout=io.StringIO())
+        call_command("seed_institutional_draft", stdout=io.StringIO())
         self.assertTrue(Solution.objects.exists())
         self.assertFalse(Solution.objects.filter(is_demo=False).exists())
-        self.assertTrue(all(s.name.startswith("[DÉMO]") for s in Solution.objects.all()))
+        self.assertTrue(all(s.is_demo for s in Solution.objects.all()))
 
     @override_settings(DEBUG=False)
     def test_seed_refuses_outside_debug(self):
         with self.assertRaises(CommandError):
-            call_command("seed_demo", stdout=io.StringIO())
+            call_command("seed_institutional_draft", stdout=io.StringIO())

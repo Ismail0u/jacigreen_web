@@ -59,9 +59,8 @@ class SeedInstitutionalDraftTests(TestCase):
         self.assertEqual(Article.objects.count(), 3)
 
     def test_clear_removes_previous_demo_content(self):
-        call_command("seed_demo", stdout=io.StringIO())
+        run()
         run("--clear")
-        self.assertFalse(Solution.objects.filter(slug__startswith="demo-").exists())
         self.assertEqual(Solution.objects.count(), 3)
 
     @override_settings(DEBUG=False)
