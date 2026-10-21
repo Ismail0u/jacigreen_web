@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Inter:wght@400;500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"inverse-primary":"#a9cfbb","on-secondary-container":"#426e48","outline":"#717974","on-surface":"#181d1a","error":"#ba1a1a","secondary-fixed-dim":"#a2d2a4","on-tertiary":"#ffffff","on-tertiary-fixed-variant":"#624003","on-background":"#181d1a","surface-tint":"#436655","on-error-container":"#93000a","outline-variant":"#c1c8c2","surface-bright":"#f6fbf5","on-tertiary-container":"#c29453","inverse-surface":"#2c322e","on-primary-fixed":"#002115","on-secondary-fixed":"#002109","primary-fixed-dim":"#a9cfbb","tertiary":"#2d1b00","primary-fixed":"#c4ebd7","secondary-container":"#bdefbf","on-tertiary-fixed":"#291800","error-container":"#ffdad6","secondary-fixed":"#bdefbf","surface-container-highest":"#dfe4df","inverse-on-surface":"#edf2ed","surface-container":"#ebefea","secondary":"#3c6842","primary-container":"#173a2c","on-primary":"#ffffff","on-secondary-fixed-variant":"#24502c","on-primary-container":"#7fa492","surface-dim":"#d7dbd6","tertiary-fixed":"#ffddb3","tertiary-fixed-dim":"#f1be78","on-error":"#ffffff","surface-container-low":"#f0f5f0","on-surface-variant":"#414844","surface-container-lowest":"#ffffff","background":"#f6fbf5","primary":"#002418","surface":"#f6fbf5","on-secondary":"#ffffff","tertiary-container":"#492e00","surface-variant":"#dfe4df","surface-container-high":"#e5e9e4","on-primary-fixed-variant":"#2b4d3e"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-mobile":"1.25rem","space-lg":"1.5rem","space-xl":"2.5rem","space-sm":"0.5rem","space-xs":"0.25rem","gutter-mobile":"1rem","margin":"3rem","space-md":"1rem","gutter":"1.5rem"},"fontFamily":{"headline-2xl":["DM Sans"],"quote-editorial":["\"Source Serif 4\""],"headline-lg":["DM Sans"],"label-md":["DM Sans"],"headline-2xl-mobile":["DM Sans"],"headline-xl-mobile":["DM Sans"],"body-sm":["Inter"],"headline-md":["DM Sans"],"body-md":["Inter"],"code-technical":["Inter"],"body-lg":["Inter"],"headline-xl":["DM Sans"],"headline-sm":["DM Sans"]},"fontSize":{"headline-2xl":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"quote-editorial":["24px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"400"}],"headline-lg":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.06em","fontWeight":"600"}],"headline-2xl-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"code-technical":["12px",{"lineHeight":"16px","fontWeight":"500"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.025em","fontWeight":"700"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between"><a class="flex items-center gap-3" data-path="a-propos" href="#"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary">JACIGREEN</span><span class="font-label-md text-label-md uppercase text-on-tertiary-container bg-surface-container px-2 py-0.5 rounded">SAHEL</span></a><nav class="hidden lg:flex items-center gap-1" data-active-classes="bg-primary-container text-on-primary font-bold"><a class="px-3 py-2 text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors" data-path="a-propos" href="#">À propos</a><a class="px-3 py-2 text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors" data-path="solutions" href="#">Solutions</a><a class="px-3 py-2 text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors" data-path="services" href="#">Services</a><a class="px-3 py-2 text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors" data-path="projets" href="#">Projets</a><a class="px-3 py-2 text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors" data-path="formations" href="#">Formations</a><a class="px-3 py-2 text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors" data-path="actualites" href="#">Actualités</a><a class="px-3 py-2 text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors" data-path="contact" href="#">Contact</a></nav><div class="flex items-center gap-4"><a class="px-space-md py-2.5 bg-primary-container text-on-primary font-label-md text-label-md uppercase tracking-wider rounded transition-colors hover:bg-secondary hover:text-on-secondary" data-path="contact" href="#">Nous contacter</a><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Xib1gGCn9SDz3WQJq00WIkbmZU3WDgtJXryCv7p6FDy_POv6DHDsLuqNVPEIwTdzjr7kiL9SR9iyPNYRT6e5kvxZ6rZGWBvVDQv9Agh-wNt8EoXEfEO7xElbVGC7BxX4kXZRQpsNrZjT3pxjridRoltOHbTZYsHpXd3Ipl8CJzWymtP4orLaDuKoLEWFnDYpiQt7r2HYinnlIJjXpSKEQaL8xd2BYgU9DRE_q_lnSdWB8mx3xKVAbHqdSvBZUJkmO1gyH4w0vYQog"/></div></div></header><main class="w-full pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- BREADCRUMB & METADATA BAR -->
+<section class="w-full bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 py-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
+<nav aria-label="Breadcrumb" class="flex items-center gap-2">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="a-propos" href="#">Accueil</a>
+<span class="text-outline-variant font-code-technical text-code-technical">/</span>
+<span class="font-body-sm text-body-sm font-semibold text-primary">Projets &amp; Réalisations</span>
+</nav>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-code-technical text-code-technical uppercase tracking-wider text-on-surface-variant">PÔLE INGÉNIERIE &amp; DÉPLOIEMENT OPÉRATIONNEL TERRITORIAL • 5 BASSINS HYDROGRAPHIQUES COUVERTS</span>
+</div>
+</div>
+</section>
+<!-- HERO SECTION -->
+<section class="w-full bg-surface py-12 lg:py-16">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end mb-10">
+<div class="lg:col-span-8 space-y-4">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 bg-surface-container rounded text-on-tertiary-container font-label-md text-label-md uppercase tracking-wider">
+            EXPÉRIENCES &amp; RÉALISATIONS
+          </div>
+<h1 class="font-headline-2xl text-headline-2xl text-primary max-w-3xl">
+            Des solutions conçues, testées et déployées sur le terrain.
+          </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+            De l'expérimentation académique aux périmètres villageois et fluviaux, JACIGREEN intervient directement auprès des communautés et des institutions pour transformer les végétaux invasifs et les résidus organiques en leviers concrets de résilience énergétique, agronomique et climatique.
+          </p>
+</div>
+<div class="lg:col-span-4 flex flex-col justify-end">
+<div class="p-5 bg-surface-container rounded space-y-2">
+<span class="font-code-technical text-code-technical text-secondary uppercase font-semibold">CADRE OPÉRATIONNEL</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Infrastructures décentralisées à forte intensité de main-d'œuvre locale, associées aux protocoles de bioconversion validés par l'Institut 2iE.
+            </p>
+</div>
+</div>
+</div>
+<!-- KEY STATS STRIP -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-surface-container-low rounded mb-10">
+<div class="space-y-1">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">6</div>
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">Régions équipées au Niger</div>
+<div class="font-code-technical text-code-technical text-secondary">Diffa à Tillabéri</div>
+</div>
+<div class="space-y-1">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">≈ 4 000</div>
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">Bénéficiaires directs documentés</div>
+<div class="font-code-technical text-code-technical text-secondary">Rapports d'impact de terrain</div>
+</div>
+<div class="space-y-1">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">3</div>
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">Filières pilotes au Tchad</div>
+<div class="font-code-technical text-code-technical text-secondary">Programme ELLESadAPt</div>
+</div>
+<div class="space-y-1">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">2</div>
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">Plateformes R&amp;D 2iE &amp; Sahel</div>
+<div class="font-code-technical text-code-technical text-secondary">Cinétique anaérobie validée</div>
+</div>
+</div>
+<!-- HERO VISUAL -->
+<div class="relative w-full rounded overflow-hidden shadow-sm bg-surface-container">
+<img alt="Mission de terrain JACIGREEN dans le bassin du Lac Tchad" class="w-full h-[380px] lg:h-[500px] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD51o6Cz3lQ90j2xIoza0LqtgqmytUoBD-u8E1G4N8GfBYs-biUT5hcD2leKwKoq67oUgLrlShUsyNe8muX-xKHzuQn1DQknY6Xp71BQ3t-VbPMh8ddr9CPU88muxjcJOiVLwGU26NoHg0gmArpdYHjSGMHndY39GaCG-EcXVCF7eIJ7UIjsXjUPg3Rz-aqsujzvaItoPvGysl8BGg5fkjMexSZ_QmRsZ7bUxk66Pti3W3Og9CUk-4URw"/>
+<div class="absolute bottom-0 inset-x-0 bg-primary/85 text-on-primary px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 backdrop-blur-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-secondary-fixed">pin_drop</span>
+<span class="font-label-md text-label-md uppercase tracking-wider font-semibold">MISSION DE TERRAIN</span>
+<span class="text-outline-variant font-code-technical text-code-technical hidden sm:inline">•</span>
+<span class="font-body-sm text-body-sm text-surface-container-high">Surveillance et déploiement d'unités de biovalorisation décentralisées</span>
+</div>
+<div class="font-code-technical text-code-technical text-surface-container-high">
+            PROTOCOLE IN SITU 2024–2025
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- TERRITORIES / GEOGRAPHIC NAVIGATION -->
+<section class="w-full bg-surface-container-low py-12 lg:py-16">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="space-y-2 mb-8">
+<span class="font-label-md text-label-md uppercase text-on-tertiary-container tracking-wider font-semibold">ANCRAGE GÉOGRAPHIQUE</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">5 Territoires d'intervention hydrographiques et agronomiques</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Chaque unité de transformation est conçue en étroite adéquation avec les régimes d'étiage, la salinité des sols et les profils d'ensoleillement des bassins fluviaux partenaires.
+        </p>
+</div>
+<!-- TECHNICAL GEOGRAPHIC SELECTOR -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6" id="geo-selector">
+<div class="p-4 bg-primary text-on-primary rounded cursor-default shadow-sm transition-all" data-basin="niger">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md uppercase font-bold text-secondary-fixed">01. ACTIF</span>
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+</div>
+<div class="font-headline-sm text-headline-sm leading-tight mb-1">Niger</div>
+<div class="font-body-sm text-body-sm text-surface-container-high">Bassin du fleuve Niger &amp; zones péri-lacustres</div>
+</div>
+<div class="p-4 bg-surface rounded hover:bg-surface-container transition-colors cursor-pointer" data-basin="burkina">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md uppercase font-semibold text-on-surface-variant">02. PILOTE R&amp;D</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="font-headline-sm text-headline-sm leading-tight text-primary mb-1">Burkina Faso</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Plateforme d'expérimentation Ouagadougou / 2iE</div>
+</div>
+<div class="p-4 bg-surface rounded hover:bg-surface-container transition-colors cursor-pointer" data-basin="tchad">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md uppercase font-semibold text-on-surface-variant">03. DÉPLOIEMENT</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="font-headline-sm text-headline-sm leading-tight text-primary mb-1">Tchad</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Périmètre du Lac Tchad &amp; Lacs Léré et Tréné</div>
+</div>
+<div class="p-4 bg-surface rounded hover:bg-surface-container transition-colors cursor-pointer" data-basin="nigeria">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md uppercase font-semibold text-on-surface-variant">04. AUDIT</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+</div>
+<div class="font-headline-sm text-headline-sm leading-tight text-primary mb-1">Nigeria</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">États côtiers &amp; affluents de la Bénoué / Ondo</div>
+</div>
+<div class="p-4 bg-surface rounded hover:bg-surface-container transition-colors cursor-pointer" data-basin="burundi">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md uppercase font-semibold text-on-surface-variant">05. CADRAGE</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+</div>
+<div class="font-headline-sm text-headline-sm leading-tight text-primary mb-1">Burundi</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Corridor des Grands Lacs / Lac Tanganyika</div>
+</div>
+</div>
+<!-- TECHNICAL NOTE CARD -->
+<div class="p-4 bg-surface rounded flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary text-2xl mt-0.5">architecture</span>
+<div class="space-y-1">
+<h4 class="font-label-md text-label-md uppercase tracking-wider font-semibold text-primary">ADAPTABILITÉ DES DIGESTEURS MAÇONNÉS AUX SUBSTRATS SAHÉLIENS</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Les dimensions volumétriques, les temps de rétention hydraulique (TRH de 28 à 45 jours selon la température ambiante) et les ratios de co-digestion (fientes avicoles, bouses bovines et biomasse hachée de jacinthe d’eau) sont recalibrés spécifiquement pour chaque territoire d’intervention afin d’assurer un rendement méthanogène optimal sans apport thermique externe.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- EDITORIAL PROJECT INDEX -->
+<section class="w-full bg-surface py-16 lg:py-24">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 space-y-20">
+<!-- PROJECT 01 (NIGER) - FEATURED PROJECT -->
+<article class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-surface-container-lowest p-6 lg:p-10 rounded shadow-sm">
+<!-- Visual Left -->
+<div class="lg:col-span-6 space-y-3">
+<div class="relative rounded overflow-hidden bg-surface-container">
+<img alt="Installation de biodigesteurs en maçonnerie géosourcée au Niger" class="w-full h-[360px] lg:h-[440px] object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1U_TFrsJEKbDnqGIXLgXhmaYHSqTKNLj5dsYsjOpG_BTVwSxXlRJPCc_sfrL3Acv5-Q5O_Q2qm77e_4fw8KT26jf1K7lbs8p0iHHX63wr70ZoVa3l8n6KvzJcKIORwEwz-AOinQnMdQ98nnSWbnblvo5E0KriVyJ7HWCs5NQbZgTh3ekT_iFZ1NBe_53y5pQH-W7deL_4A5QDUm_-UqbRDg7EHWF998cHKeTkPGZ9D6HVHcmdYu8W81C-Uw"/>
+<div class="absolute top-4 left-4">
+<span class="px-2.5 py-1 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider rounded">
+                PROJET HISTORIQUE MAJEUR
+              </span>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded flex items-center justify-between text-on-surface-variant">
+<span class="font-code-technical text-code-technical uppercase">TECHNOLOGIE DÉPLOYÉE : JACIBIOGAZ™ RURAL SÉRIE M-20</span>
+<span class="font-code-technical text-code-technical font-semibold text-secondary">RÉCEPTIONNÉ</span>
+</div>
+</div>
+<!-- Details Right -->
+<div class="lg:col-span-6 space-y-5">
+<div class="space-y-2">
+<div class="font-code-technical text-code-technical uppercase text-on-tertiary-container tracking-wider font-semibold">
+              NIGER • 2020–2022 • DÉPLOIEMENT DÉCENTRALISÉ EN MILIEU RURAL
+            </div>
+<h3 class="font-headline-xl text-headline-xl text-primary leading-tight">
+              Programme pluriannuel de méthanisation rurale et valorisation de la jacinthe d'eau
+            </h3>
+</div>
+<!-- Problem Block -->
+<div class="p-4 bg-surface-container-low rounded space-y-1">
+<div class="font-label-md text-label-md uppercase text-on-surface-variant font-semibold">Problématique traitée</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Asphyxie récurrente des cours d'eau par la jacinthe d'eau limitant la navigation et le maraîchage, couplée à une forte précarité énergétique pour la cuisson des ménages et des cantines rurales.
+            </p>
+</div>
+<!-- Contribution JACIGREEN -->
+<div class="space-y-2">
+<div class="font-label-md text-label-md uppercase text-primary font-semibold">Contribution technique JACIGREEN</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Conception et construction in situ d'unités de méthanisation semi-enterrées en maçonnerie protégée (JaciBiogaz™) avec dôme fixe géosourcé. Structuration des schémas de fauchage villageois et formation d'artisans maçons locaux.
+            </p>
+</div>
+<!-- Regions tags -->
+<div class="space-y-1.5">
+<div class="font-code-technical text-code-technical uppercase text-on-surface-variant font-semibold">6 Régions couvertes :</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-body-sm text-body-sm rounded">Diffa</span>
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-body-sm text-body-sm rounded">Dosso</span>
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-body-sm text-body-sm rounded">Maradi</span>
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-body-sm text-body-sm rounded">Zinder</span>
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-body-sm text-body-sm rounded">Tahoua</span>
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-body-sm text-body-sm rounded">Tillabéri</span>
+</div>
+</div>
+<!-- Documented outcome -->
+<div class="p-4 bg-secondary-fixed/30 rounded space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">verified</span>
+<span class="font-headline-sm text-headline-sm text-primary">≈ 4 000 bénéficiaires directs documentés</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+              Donnée historique documentée issue des bilans de campagne opérationnelle. Production continue de biogaz de cuisson et génération de digestat stabilisé pour les périmètres maraîchers riverains.
+            </p>
+</div>
+<!-- Actions -->
+<div class="pt-2">
+<a class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider rounded hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">download</span>
+              Fiche de synthèse Niger (PDF)
+            </a>
+</div>
+</div>
+</article>
+<!-- PROJECT 02 (BURKINA FASO) - FEATURED PROJECT -->
+<article class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-surface-container-lowest p-6 lg:p-10 rounded shadow-sm">
+<!-- Details Left -->
+<div class="lg:col-span-6 space-y-5 order-2 lg:order-1">
+<div class="space-y-2">
+<div class="font-code-technical text-code-technical uppercase text-on-tertiary-container tracking-wider font-semibold">
+              BURKINA FASO • 2018–EN COURS • RECHERCHE APPLIQUÉE &amp; VALORISATION AGRO-ÉCOLOGIQUE
+            </div>
+<h3 class="font-headline-xl text-headline-xl text-primary leading-tight">
+              Plateforme pilote de méthanisation 2iE et formulation agronomique JaciGrow™
+            </h3>
+</div>
+<!-- Problem Block -->
+<div class="p-4 bg-surface-container-low rounded space-y-1">
+<div class="font-label-md text-label-md uppercase text-on-surface-variant font-semibold">Problématique traitée</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Nécessité de valider scientifiquement la cinétique microbienne de biodigestion sur des substrats mixtes tropicaux et d'homologuer un fertilisant organique de substitution aux engrais minéraux importés.
+            </p>
+</div>
+<!-- Contribution JACIGREEN -->
+<div class="space-y-2">
+<div class="font-label-md text-label-md uppercase text-primary font-semibold">Contribution technique JACIGREEN</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Érection d'une unité pilote de méthanisation semi-continue sur le campus de l'Institut 2iE à Ouagadougou. Caractérisation physico-chimique de la sève de jacinthe d'eau et mise au point de la matrice de co-digestion anaérobie.
+            </p>
+</div>
+<!-- Scope & Distribution -->
+<div class="space-y-1.5">
+<div class="font-code-technical text-code-technical uppercase text-on-surface-variant font-semibold">Périmètre d'application :</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Unité de méthanisation 2iE et distribution agronomique du biofertilisant JaciGrow™ auprès des coopératives maraîchères de la ceinture verte de Ouagadougou.
+            </p>
+</div>
+<!-- Documented outcome -->
+<div class="p-4 bg-secondary-fixed/30 rounded space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">science</span>
+<span class="font-headline-sm text-headline-sm text-primary">Validation agronomique des ratios N-P-K</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Diminution notable de l'acidification des sols sahéliens, enrichissement en matière humique stable et adoption active par les exploitants maraîchers urbains et périurbains.
+            </p>
+</div>
+<!-- Actions -->
+<div class="pt-2">
+<a class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider rounded hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">bar_chart</span>
+              Données d'essais agronomiques
+            </a>
+</div>
+</div>
+<!-- Visual Right -->
+<div class="lg:col-span-6 space-y-3 order-1 lg:order-2">
+<div class="relative rounded overflow-hidden bg-surface-container">
+<img alt="Cultures maraîchères fertilisées avec l'amendement JaciGrow au Burkina Faso" class="w-full h-[360px] lg:h-[440px] object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UH4QQxIj-mGcf8ODMZvqmYWb_SwgpZqM3ZmBMcX8Qo2GNihcwr0Nh0WexFaS14Xl60YHSmjG4Yg3zR9JTtJBKYProhB2OQQy3LoMpvMRML8_zzNxSZqnOZQf1oZVKAhflJ-zEVFY6vY5-TtjFbBZUFZnVRah5SiOnNKVcUPwZJ7Crzw2hrgnhxRI1NZ922jXt6fFG0Ba849GaUguIGUqkhWdAQtnikeBLFkYZrvlDUexMkRIqWsuGsz9hL"/>
+<div class="absolute top-4 right-4">
+<span class="px-2.5 py-1 bg-surface-container-lowest text-primary font-label-md text-label-md uppercase tracking-wider rounded shadow-sm">
+                HOMOLOGATION SCIENTIFIQUE
+              </span>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded flex items-center justify-between text-on-surface-variant">
+<span class="font-code-technical text-code-technical uppercase">LABORATOIRE PARTENAIRE : INSTITUT INTERNATIONAL 2IE</span>
+<span class="font-code-technical text-code-technical font-semibold text-secondary">PROGRAMME CONTINU</span>
+</div>
+</div>
+</article>
+<!-- PROJECT 03 (TCHAD) - FEATURED PROJECT -->
+<article class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-surface-container-lowest p-6 lg:p-10 rounded shadow-sm">
+<!-- Visual Left -->
+<div class="lg:col-span-6 space-y-3">
+<div class="relative rounded overflow-hidden bg-surface-container">
+<img alt="Collecte communautaire et tri de la jacinthe d'eau au Tchad" class="w-full h-[360px] lg:h-[440px] object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1U87awX9f8EzE7dgOGA8JKh3CXRpWpzH4rvNIkgHbxDNGLBwxqRhs2ZQPYTmU152NJ_j0sUTf1JaOapBTWosxfNzW9Q4A00uVYN0CCs4BSbJAL80YFxX19gG4uPhdL0ghIisBXNIVMmybXGkJU8eUi8SN-RYJdXQIYQ6j0qyhZdn4ZavzlV2sFmn-8kA0ovGKaLgRlruBh4Uxr104RNlIl7tgQ4y-bNR7vNB-OZURw7GwMZjaHn_F9lM7rd"/>
+<div class="absolute top-4 left-4">
+<span class="px-2.5 py-1 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider rounded">
+                PROGRAMME EN COURS
+              </span>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded flex items-center justify-between text-on-surface-variant">
+<span class="font-code-technical text-code-technical uppercase">ZONE D'IMPACT : LACS LÉRÉ ET TRÉNÉ / BASSIN DU LAC TCHAD</span>
+<span class="font-code-technical text-code-technical font-semibold text-secondary">PHASE 2025–2026</span>
+</div>
+</div>
+<!-- Details Right -->
+<div class="lg:col-span-6 space-y-5">
+<div class="space-y-2">
+<div class="font-code-technical text-code-technical uppercase text-on-tertiary-container tracking-wider font-semibold">
+              TCHAD • 2025–2026 • PROJET ELLESadAPt &amp; RÉSILIENCE CLIMATIQUE
+            </div>
+<h3 class="font-headline-xl text-headline-xl text-primary leading-tight">
+              Autonomisation économique et biotransformation circulaire dans le bassin du Lac Tchad
+            </h3>
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+              Partenariat opérationnel : <strong class="text-primary font-medium">CAPBL</strong> (Comité d'Action pour la Promotion des Bassins Lacustres).
+            </div>
+</div>
+<!-- Problem Block -->
+<div class="p-4 bg-surface-container-low rounded space-y-1">
+<div class="font-label-md text-label-md uppercase text-on-surface-variant font-semibold">Problématique traitée</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Prolifération accélérée des tapis flottants de jacinthe d'eau étouffant les frayères de poissons et bloquant les corridors d'accès aux berges dans un contexte de vulnérabilité climatique accrue pour les femmes rurales.
+            </p>
+</div>
+<!-- Contribution JACIGREEN Phased -->
+<div class="space-y-3">
+<div class="font-label-md text-label-md uppercase text-primary font-semibold">Contribution technique JACIGREEN</div>
+<div class="space-y-2">
+<div class="p-3 bg-surface-container rounded">
+<span class="font-code-technical text-code-technical text-secondary uppercase font-bold block mb-1">PHASE 2025</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Implantation de trois unités communautaires de compostage aérobie contrôlé et de prétraitement de biomasse destinées aux groupements maraîchers féminins.
+                </p>
+</div>
+<div class="p-3 bg-surface-container rounded">
+<span class="font-code-technical text-code-technical text-on-tertiary-container uppercase font-bold block mb-1">PHASE 2026 (CONTINUATION PROGRAMMÉE)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Extension de la chaîne de valeur vers la vannerie technique (bio-matériaux et fibres végétales séchées) et dimensionnement d'un micro-réseau pilote de biogaz de cuisson collective.
+                </p>
+</div>
+</div>
+</div>
+<!-- Documented outcome -->
+<div class="p-4 bg-secondary-fixed/30 rounded space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">water_drop</span>
+<span class="font-headline-sm text-headline-sm text-primary">Restauration des frayères &amp; emplois verts</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Création d'emplois verts féminins directs, valorisation de plusieurs centaines de tonnes de matière végétale collectée et réouverture des débarcadères fluviaux.
+            </p>
+</div>
+<!-- Actions -->
+<div class="pt-2">
+<a class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider rounded hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">description</span>
+              Protocole opérationnel ELLESadAPt
+            </a>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- OTHER STUDIES & REGIONAL EXTENSIONS -->
+<section class="w-full bg-surface-container-low py-16 lg:py-20">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="space-y-2 mb-10">
+<span class="font-label-md text-label-md uppercase text-on-tertiary-container tracking-wider font-semibold">ÉTUDES DE FAISABILITÉ &amp; MISSIONS D'INGÉNIERIE RÉGIONALE</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">Déploiements exploratoires et transferts de savoir-faire</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Au-delà des plateformes de méthanisation installées, JACIGREEN accompagne les gouvernements provinciaux et les gestionnaires de bassins transfrontaliers dans la cartographie des charges trophiques et la faisabilité technico-économique.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- CARD 1: NIGERIA -->
+<div class="p-6 lg:p-8 bg-surface-container-lowest rounded shadow-sm flex flex-col justify-between space-y-6">
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-label-md text-label-md uppercase tracking-wider rounded">BASSIN LITTORAL &amp; RÉSEAUX FLUVIAUX</span>
+<span class="font-code-technical text-code-technical text-on-tertiary-container font-semibold">MISSION RÉALISÉE</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">NIGERIA — ÉTAT D'ONDO</h3>
+<p class="font-body-sm text-body-sm text-secondary font-medium">Audit de biomasse et adaptation mécatronique pour les voies d'eau navigables</p>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Audit technique d'évaluation de la biomasse proliférante dans les canaux de navigation de l'État d'Ondo. Évaluation de l'intégration mécatronique d'un faucardeur mécanique adapté aux hauts-fonds et modélisation de réacteurs de biogaz communautaires pour les communautés halieutiques.
+            </p>
+</div>
+<div class="pt-4 bg-surface-container-low p-4 rounded flex items-center justify-between">
+<span class="font-code-technical text-code-technical text-on-surface-variant uppercase">LIVRABLE STRATÉGIQUE</span>
+<span class="font-body-sm text-body-sm font-semibold text-primary">Étude préliminaire &amp; audit d'impact environnemental</span>
+</div>
+</div>
+<!-- CARD 2: BURUNDI -->
+<div class="p-6 lg:p-8 bg-surface-container-lowest rounded shadow-sm flex flex-col justify-between space-y-6">
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 bg-surface-container text-on-surface font-label-md text-label-md uppercase tracking-wider rounded">CORRIDOR DES GRANDS LACS</span>
+<span class="font-code-technical text-code-technical text-on-tertiary-container font-semibold">TRANSFERT TECHNIQUE</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">BURUNDI — BUJUMBURA &amp; LAC TANGANYIKA</h3>
+<p class="font-body-sm text-body-sm text-secondary font-medium">Diagnostic d'infestation côtière et valorisation en vannerie bio-sourcée</p>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Diagnostic d'infestation du littoral nord du lac Tanganyika et transfert de protocoles de gestion mécanique douce de la jacinthe d'eau. Études thermiques pour le séchage solaire contrôlé de la matière première et mise en place d'ateliers de vannerie artisanale bio-sourcée.
+            </p>
+</div>
+<div class="pt-4 bg-surface-container-low p-4 rounded flex items-center justify-between">
+<span class="font-code-technical text-code-technical text-on-surface-variant uppercase">LIVRABLE STRATÉGIQUE</span>
+<span class="font-body-sm text-body-sm font-semibold text-primary">Mission de cadrage technique &amp; transfert méthodologique</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- METHODOLOGY & FIELD RIGOR BANNER -->
+<section class="w-full bg-surface py-12">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="p-8 lg:p-10 bg-surface-container rounded flex flex-col md:flex-row items-start md:items-center gap-6">
+<div class="p-4 bg-surface-container-lowest rounded text-primary">
+<span class="material-symbols-outlined text-4xl">verified_user</span>
+</div>
+<div class="space-y-2">
+<span class="font-label-md text-label-md uppercase text-on-tertiary-container tracking-wider font-semibold">RÈGLE D'INTERVENTION JACIGREEN SUR LE TERRAIN</span>
+<p class="font-quote-editorial text-quote-editorial text-primary leading-relaxed">
+            « Chaque déploiement territorial fait l'objet d'un audit hydro-agronomique préliminaire. JACIGREEN n'installe aucune infrastructure sans formation préalable des usagers et sans intégration d'artisans maçons et techniciens locaux, garantissant la maintenance pérenne et la souveraineté technique des ouvrages. »
+          </p>
+<div class="font-code-technical text-code-technical text-on-surface-variant uppercase tracking-wider">
+            DIRECTION TECHNIQUE ET PROTOCOLES DE TRANSFERT COMMUNAUTAIRE
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- FINAL CTA -->
+<section class="w-full bg-primary-container text-on-primary py-16 lg:py-24">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-8 space-y-4">
+<span class="font-label-md text-label-md uppercase text-primary-fixed tracking-wider font-semibold">INGÉNIERIE DE BASSIN &amp; COOPÉRATION</span>
+<h2 class="font-headline-2xl text-headline-2xl text-on-primary leading-tight">
+            Vous avez un territoire, une ressource ou un problème à valoriser ?
+          </h2>
+<p class="font-body-lg text-body-lg text-surface-container max-w-2xl leading-relaxed">
+            Ministères, bailleurs internationaux, agences de bassin, municipalités et coopératives : nos ingénieurs étudient la faisabilité de projets circulaires adaptés à vos contraintes hydrographiques et agro-climatiques.
+          </p>
+</div>
+<div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-4">
+<a class="px-6 py-3.5 bg-surface-container-lowest text-primary text-center font-label-md text-label-md uppercase tracking-wider rounded hover:bg-surface-container transition-colors font-semibold" data-path="contact" href="#">
+            Parler à JACIGREEN
+          </a>
+<a class="px-6 py-3.5 text-center font-label-md text-label-md uppercase tracking-wider rounded transition-colors text-on-primary hover:bg-surface-container-lowest/10" data-path="services" href="#">
+            Consulter nos référentiels d'ingénierie
+          </a>
+</div>
+</div>
+</div>
+</section>
+<!-- INTERACTIVITY SCRIPT -->
+<script>
+    (function() {
+      // Set Projets as active in shell navbar
+      try {
+        const navLinks = document.querySelectorAll('header nav a');
+        navLinks.forEach(link => {
+          if (link.getAttribute('data-path') === 'projets') {
+            link.classList.add('bg-primary-container', 'text-on-primary', 'font-bold');
+            link.classList.remove('text-on-surface-variant');
+          } else {
+            link.classList.remove('bg-primary-container', 'text-on-primary', 'font-bold');
+          }
+        });
+      } catch (e) {}
+
+      // Interactive Basin Selector
+      const selectorCards = document.querySelectorAll('#geo-selector > div');
+      selectorCards.forEach(card => {
+        card.addEventListener('click', () => {
+          selectorCards.forEach(c => {
+            c.className = 'p-4 bg-surface rounded hover:bg-surface-container transition-colors cursor-pointer';
+            const badge = c.querySelector('span:first-child');
+            if (badge) badge.className = 'font-label-md text-label-md uppercase font-semibold text-on-surface-variant';
+            const title = c.querySelector('.font-headline-sm');
+            if (title) title.className = 'font-headline-sm text-headline-sm leading-tight text-primary mb-1';
+            const desc = c.querySelector('.font-body-sm');
+            if (desc) desc.className = 'font-body-sm text-body-sm text-on-surface-variant';
+          });
+          card.className = 'p-4 bg-primary text-on-primary rounded cursor-default shadow-sm transition-all';
+          const activeBadge = card.querySelector('span:first-child');
+          if (activeBadge) activeBadge.className = 'font-label-md text-label-md uppercase font-bold text-secondary-fixed';
+          const activeTitle = card.querySelector('.font-headline-sm');
+          if (activeTitle) activeTitle.className = 'font-headline-sm text-headline-sm leading-tight mb-1 text-on-primary';
+          const activeDesc = card.querySelector('.font-body-sm');
+          if (activeDesc) activeDesc.className = 'font-body-sm text-body-sm text-surface-container-high';
+        });
+      });
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low"><div class="max-w-7xl mx-auto px-6 lg:px-12 py-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-gutter mb-space-xl"><div class="lg:col-span-2 flex flex-col justify-between pr-4"><div><div class="flex items-center gap-2 mb-space-md"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary">JACIGREEN</span></div><p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm mb-space-md">Ingénierie écologique et valorisation souveraine des bassins fluviaux sahéliens. Transformation de la jacinthe d’eau invasive en intrants biofertilisants et énergie propre.</p><div class="font-code-technical text-code-technical text-on-surface-variant uppercase tracking-wider">Niamey • Ouagadougou • N'Djamena</div></div></div><div><h4 class="font-label-md text-label-md uppercase text-on-surface mb-space-md tracking-wider">Solutions</h4><ul class="space-y-2"><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="solutions" href="#">JaciGrow™ Biofertilisant</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="solutions" href="#">JaciBiogaz™ Énergie</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="solutions" href="#">JaciPur'O™ Traitement</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="solutions" href="#">Valorisation Biomasse</a></li></ul></div><div><h4 class="font-label-md text-label-md uppercase text-on-surface mb-space-md tracking-wider">Services &amp; Projets</h4><ul class="space-y-2"><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="services" href="#">Fauche Mécanisée</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="services" href="#">Audits Bassins Fluviaux</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="projets" href="#">Fleuve Niger 2030</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="projets" href="#">Restauration Lac Tchad</a></li></ul></div><div><h4 class="font-label-md text-label-md uppercase text-on-surface mb-space-md tracking-wider">Ressources</h4><ul class="space-y-2"><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="formations" href="#">Cycles de Formation</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="actualites" href="#">Rapports d'Impact</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="actualites" href="#">Publications Scientifiques</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="actualites" href="#">Dossiers de Presse</a></li></ul></div><div><h4 class="font-label-md text-label-md uppercase text-on-surface mb-space-md tracking-wider">Institution</h4><ul class="space-y-2"><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="a-propos" href="#">Gouvernance</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="contact" href="#">Secrétariat Général</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="mentions-legales" href="#">Mentions Légales</a></li><li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" data-path="confidentialite" href="#">Confidentialité</a></li></ul></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between text-body-sm font-body-sm text-on-surface-variant"><p>© 2025 JACIGREEN Technologies. Tous droits réservés. République du Niger.</p><div class="flex items-center gap-space-lg mt-4 md:mt-0"><span class="font-code-technical text-code-technical">ISO 14001 ECOLOGICAL ENGINEERING STANDARD</span></div></div></div></footer></body></html>
