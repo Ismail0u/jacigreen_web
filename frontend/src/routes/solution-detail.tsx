@@ -2,6 +2,7 @@ import { Badge } from "~/components/ui/Badge";
 import { ButtonLink } from "~/components/ui/Button";
 import { Container } from "~/components/ui/Container";
 import { DemoBanner } from "~/components/ui/DemoNotice";
+import { MediaFrame } from "~/components/ui/MediaFrame";
 import { Prose } from "~/components/ui/Prose";
 import { buildMeta } from "~/lib/seo";
 import { getSolution } from "~/services/api/content";
@@ -39,13 +40,13 @@ export default function SolutionDetail({ loaderData }: Route.ComponentProps) {
           {solution.tagline ? (
             <p className="mt-3 font-display text-lead text-ochre-text">{solution.tagline}</p>
           ) : null}
-          {solution.cover_image ? (
-            <img
-              src={solution.cover_image}
-              alt={solution.cover_alt}
-              className="mt-10 aspect-[16/9] w-full max-w-4xl object-cover"
-            />
-          ) : null}
+          <MediaFrame
+            src={solution.cover_image}
+            alt={solution.cover_alt}
+            aspect="16/9"
+            icon={solution.category === "energy" ? "solar_power" : "eco"}
+            className="mt-10 max-w-4xl"
+          />
           <div className="mt-10">
             <Prose text={solution.description} />
           </div>

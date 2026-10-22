@@ -1,5 +1,6 @@
 import { Badge } from "~/components/ui/Badge";
 import { DemoBadge } from "~/components/ui/DemoNotice";
+import { MediaFrame } from "~/components/ui/MediaFrame";
 import type { Project } from "~/types/api";
 
 function period(project: Project): string {
@@ -12,6 +13,13 @@ function period(project: Project): string {
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="border border-hairline bg-surface-raised p-6">
+      <MediaFrame
+        src={project.cover_image}
+        alt={project.cover_alt}
+        aspect="4/3"
+        icon="agriculture"
+        className="mb-5"
+      />
       <div className="flex flex-wrap items-center gap-2">
         <Badge>{project.country_label}</Badge>
         <DemoBadge show={project.is_demo} />

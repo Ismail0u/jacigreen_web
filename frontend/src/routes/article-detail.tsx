@@ -1,6 +1,7 @@
 import { ButtonLink } from "~/components/ui/Button";
 import { Container } from "~/components/ui/Container";
 import { DemoBanner } from "~/components/ui/DemoNotice";
+import { MediaFrame } from "~/components/ui/MediaFrame";
 import { Prose } from "~/components/ui/Prose";
 import { formatDate } from "~/lib/format";
 import { buildMeta } from "~/lib/seo";
@@ -39,13 +40,12 @@ export default function ArticleDetail({ loaderData }: Route.ComponentProps) {
           </p>
           <h1 className="mt-3 max-w-4xl text-h1 md:text-display">{article.title}</h1>
           <p className="mt-5 max-w-reading text-lead text-ink-muted">{article.excerpt}</p>
-          {article.cover_image ? (
-            <img
-              src={article.cover_image}
-              alt={article.cover_alt}
-              className="mt-10 aspect-[16/9] w-full max-w-4xl object-cover"
-            />
-          ) : null}
+          <MediaFrame
+            src={article.cover_image}
+            alt={article.cover_alt}
+            aspect="16/9"
+            className="mt-10 max-w-4xl"
+          />
           <div className="mt-10">
             <Prose text={article.body} />
           </div>

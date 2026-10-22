@@ -1,12 +1,20 @@
 import { Link } from "react-router";
 
 import { DemoBadge } from "~/components/ui/DemoNotice";
+import { MediaFrame } from "~/components/ui/MediaFrame";
 import { formatDate } from "~/lib/format";
 import type { ArticleSummary } from "~/types/api";
 
 export function ArticleCard({ article }: { article: ArticleSummary }) {
   return (
     <article className="border-t border-brand pt-5">
+      <MediaFrame
+        src={article.cover_image}
+        alt={article.cover_alt}
+        aspect="4/3"
+        icon="eco"
+        className="mb-5"
+      />
       <p className="flex items-center gap-3 text-small text-ink-muted">
         <time dateTime={article.published_at ?? undefined}>{formatDate(article.published_at)}</time>
         <DemoBadge show={article.is_demo} />
