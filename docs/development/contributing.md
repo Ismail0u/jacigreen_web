@@ -9,7 +9,6 @@
 
 ## Règles
 - Pas de dépendance sans justification dans la PR (nom, raison, alternative native écartée).
-- Pas de contenu institutionnel inventé (ADR-0006) ; mettre à jour `docs/content/content-register.md` quand un contenu réel est intégré.
 - Toute commande modifiée est répercutée dans `README.md` et `.github/workflows/ci.yml`.
 - Modifier un modèle : migration relue et commitée. Modifier l'API : docs + types TypeScript + tests.
 - Modifier les tokens : justification dans la PR, contrastes verts (`tokens.test.ts`).

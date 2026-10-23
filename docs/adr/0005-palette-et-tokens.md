@@ -10,6 +10,3 @@ Conserver la structure sobre des maquettes (surfaces ivoire/sable, vert forêt) 
 
 ## Conséquences
 Changer de palette revient à modifier un seul fichier. Le logo n'est pas intégré : fournir un fichier vectoriel ou PNG transparent.
-
-## Limites
-Les valeurs du logo sont à confirmer avec la charte officielle. Tailles de texte relevées par rapport aux maquettes (corps 16 px au lieu de 15, étiquettes 13 px au lieu de 12) pour l'accessibilité.
