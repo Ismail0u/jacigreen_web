@@ -19,8 +19,8 @@ une source vérifiable.
 | Certifications, normes, brevets et labels | Maquettes | Inventés / interdits | Ne pas publier ni réutiliser. |
 | Coordonnées, adresses et contacts publics | Maquettes | Absents des sources validées | Ne rien afficher avant fourniture et validation. |
 | Informations légales et textes juridiques | Maquettes et cahiers des charges | À rédiger et valider juridiquement | La page reste une structure neutre `noindex`; ne pas inventer de mentions, politique ou CGU. |
-| Logo et photographies | `frontend/public/brand/README.md` et maquettes | Fichiers officiels absents | Attendre les fichiers validés ; ne pas utiliser les visuels hébergés chez Google ni des images sans rapport. |
-| Palette et identité visuelle | `docs/adr/0005-palette-et-tokens.md` | Proposition à valider | Conserver les tokens actuels jusqu'à décision humaine. |
+| Logo et photographies | `frontend/public/brand/jacigreen.png` et `frontend/public/images/README.md` | Logo JACIGREEN fourni dans le dépôt ; photographies éditoriales absentes | Le logo carré PNG à fond blanc est intégré dans le Header/Footer. Conserver ses proportions et son fond ; ne pas utiliser les visuels distants des maquettes ni des photographies sans rapport. |
+| Palette et identité visuelle | Valeurs exactes fournies dans la mission ; `docs/adr/0005-palette-et-tokens.md` | Palette de marque adoptée comme référence | Les tokens conservent les couleurs exactes ; les teintes insuffisamment contrastées restent décoratives et ne servent pas au texte courant. |
 | Objet « Rachat de biodigesteur (information) » | Contradiction C1 de `docs/project/audit-initial.md` | Décision proposée | Conserver uniquement le motif informatif dans le formulaire ; aucun formulaire dédié ni traitement Phase 2. |
 
 ## Sources disponibles et limites
@@ -33,5 +33,6 @@ une source vérifiable.
 - Les maquettes Stitch sont des références de composition, pas des sources
   factuelles. Plusieurs contiennent des coordonnées, certifications, chiffres,
   références et projets inventés.
-- Aucun logo officiel utilisable, photographie ou coordonnée publique n'est
-  actuellement recensé dans les ressources du frontend.
+- Le logo JACIGREEN fourni (`frontend/public/brand/jacigreen.png`) est utilisé
+  par le site ; aucune photographie éditoriale ni coordonnée publique validée
+  n'est recensée dans les ressources du frontend.
