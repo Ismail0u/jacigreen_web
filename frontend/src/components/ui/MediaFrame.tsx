@@ -31,7 +31,7 @@ export function MediaFrame({
 
   return (
     <div
-      className={`relative w-full overflow-hidden border border-hairline bg-surface-alt ${className}`}
+      className={`relative w-full overflow-hidden border border-outline-variant bg-surface-container-high ${className}`}
       style={style}
     >
       {src ? (
@@ -49,9 +49,11 @@ export function MediaFrame({
         <div
           aria-hidden="true"
           data-placeholder=""
-          className="flex size-full items-center justify-center"
+          className="flex size-full items-center justify-center bg-surface-container-high"
         >
-          <span className="material-symbols-outlined text-display text-ink-muted/30">{icon}</span>
+          <span className="material-symbols-outlined text-4xl text-on-surface-variant/35">
+            {icon}
+          </span>
         </div>
       )}
     </div>
