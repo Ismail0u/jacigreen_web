@@ -1,39 +1,65 @@
 import { Link } from "react-router";
 
+import { Container } from "~/components/ui/Container";
 import { MAIN_NAV, SITE_NAME } from "~/lib/site";
 
-import { Container } from "../ui/Container";
+import { BrandLogo } from "./BrandLogo";
 
 export function Footer() {
   return (
-    <footer className="on-dark mt-24 bg-brand py-12 text-on-brand">
-      <Container className="grid gap-10 md:grid-cols-[2fr_1fr]">
-        <div>
-          <p className="font-display text-h3 font-extrabold">{SITE_NAME}</p>
-          <p className="mt-3 max-w-reading text-small opacity-90">
-            Valorisation des ressources naturelles et des déchets : solutions environnementales,
-            énergétiques et agricoles.
-          </p>
-        </div>
-        <nav aria-label="Pied de page">
-          <ul className="space-y-2 text-small">
-            {MAIN_NAV.map((item) => (
-              <li key={item.to}>
-                <Link className="underline-offset-4 hover:underline" to={item.to}>
-                  {item.label}
+    <footer className="mt-16 border-t border-outline-variant bg-surface-container-low py-space-xl text-on-surface">
+      <Container>
+        <div className="grid grid-cols-1 gap-space-xl border-b border-outline-variant pb-space-xl md:grid-cols-2 lg:grid-cols-6">
+          <div className="lg:col-span-2">
+            <Link to="/" aria-label={`${SITE_NAME}, accueil`} className="inline-flex">
+              <BrandLogo />
+            </Link>
+            <p className="mt-3 max-w-reading text-body-sm text-on-surface-variant">
+              Présentation institutionnelle en cours de validation.
+            </p>
+          </div>
+          <nav aria-label="Navigation du pied de page" className="lg:col-span-2">
+            <h2 className="font-display text-label font-semibold tracking-wider text-on-surface-variant uppercase">
+              Découvrir
+            </h2>
+            <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-small sm:grid-cols-3 lg:grid-cols-2">
+              {MAIN_NAV.map((item) => (
+                <li key={item.to}>
+                  <Link
+                    className="underline-offset-4 hover:text-secondary hover:underline"
+                    to={item.to}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div>
+            <h2 className="font-display text-label font-semibold tracking-wider text-on-surface-variant uppercase">
+              Institution
+            </h2>
+            <ul className="mt-4 space-y-2 text-small">
+              <li>
+                <Link
+                  className="underline-offset-4 hover:text-secondary hover:underline"
+                  to="/mentions-legales"
+                >
+                  Mentions légales
                 </Link>
               </li>
-            ))}
-            <li>
-              <Link className="underline-offset-4 hover:underline" to="/mentions-legales">
-                Mentions légales
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </Container>
-      <Container className="mt-10">
-        <p className="border-t border-on-brand/30 pt-6 text-small opacity-90">
+              <li>
+                <Link
+                  className="underline-offset-4 hover:text-secondary hover:underline"
+                  to="/contact"
+                >
+                  Nous contacter
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p className="pt-space-lg text-code-technical text-on-surface-variant">
           © {new Date().getFullYear()} {SITE_NAME}
         </p>
       </Container>
