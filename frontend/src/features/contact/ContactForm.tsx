@@ -47,7 +47,7 @@ export function ContactForm({ initialSubject }: { initialSubject?: ContactSubjec
         )}
       </FormField>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <FormField id="name" label="Nom et prénom" required error={errors.name?.message}>
           {(aria) => (
             <input

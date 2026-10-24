@@ -23,31 +23,35 @@ export function SolutionCard({ solution }: { solution: SolutionSummary }) {
           : "eco";
 
   return (
-    <article className="relative flex h-full flex-col border border-hairline bg-surface-raised p-6 focus-within:outline focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-focus">
+    <article className="relative flex h-full flex-col border-t-2 border-on-tertiary-container bg-surface-container-lowest pb-space-lg transition-colors focus-within:outline focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-focus hover:bg-surface-container-low">
       <MediaFrame
         src={solution.cover_image}
         alt={solution.cover_alt}
         aspect="4/3"
         icon={icon}
-        className="mb-5"
+        className="border-0"
       />
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-space-sm px-space-lg pt-space-lg">
         <Badge>{CATEGORY_LABELS[solution.category]}</Badge>
         {solution.maturity === "prototype" ? <Badge tone="prototype">En prototypage</Badge> : null}
         <DemoBadge show={solution.is_demo} />
       </div>
-      <h3 className="mt-4 text-h3">
+      <h3 className="mt-space-md px-space-lg font-headline-md text-headline-md">
         <Link
           to={`/solutions/${solution.slug}`}
-          className="after:absolute after:inset-0 hover:underline"
+          className="after:absolute after:inset-0 after:content-[''] hover:text-secondary hover:underline"
         >
           {solution.name}
         </Link>
       </h3>
       {solution.tagline ? (
-        <p className="mt-1 font-display text-small text-ochre-text">{solution.tagline}</p>
+        <p className="mt-1 px-space-lg font-body-sm text-body-sm text-on-surface-variant">
+          {solution.tagline}
+        </p>
       ) : null}
-      <p className="mt-3 text-ink-muted">{solution.summary}</p>
+      <p className="mt-space-md px-space-lg font-body-md text-body-md text-on-surface-variant">
+        {solution.summary}
+      </p>
     </article>
   );
 }
