@@ -7,10 +7,17 @@ export function meta() {
 
 export default function NotFound() {
   return (
-    <Container className="py-24">
-      <h1 className="text-h1">Page introuvable</h1>
-      <p className="mt-4 text-lead text-ink-muted">Cette page n'existe pas ou a été déplacée.</p>
-      <div className="mt-8">
+    <Container className="grid min-h-[60vh] content-center py-space-xl">
+      <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+        Erreur 404
+      </p>
+      <h1 className="mt-3 font-headline-2xl-mobile text-headline-2xl-mobile md:font-headline-2xl md:text-headline-2xl">
+        Page introuvable
+      </h1>
+      <p className="mt-space-md max-w-reading font-body-lg text-body-lg text-on-surface-variant">
+        Cette page n'existe pas ou a été déplacée.
+      </p>
+      <div className="mt-space-lg">
         <ButtonLink to="/">Retour à l'accueil</ButtonLink>
       </div>
     </Container>

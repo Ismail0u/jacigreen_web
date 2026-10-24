@@ -1,4 +1,5 @@
 import { Container } from "~/components/ui/Container";
+import { ContentPending } from "~/components/ui/ContentPending";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { buildMeta } from "~/lib/seo";
 
@@ -16,12 +17,12 @@ export default function Legal() {
   return (
     <>
       <PageHeader title="Mentions légales" />
-      <section className="py-16">
+      <section className="py-space-xl md:py-20">
         <Container>
-          <p className="max-w-reading text-ink-muted">
+          <ContentPending className="max-w-reading">
             Les mentions légales, la politique de confidentialité et les conditions d'utilisation
             seront publiées après validation par JACIGREEN.
-          </p>
+          </ContentPending>
         </Container>
       </section>
     </>

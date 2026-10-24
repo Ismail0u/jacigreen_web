@@ -3,10 +3,10 @@ import { ProjectCard } from "~/features/projects/ProjectCard";
 import { SolutionCard } from "~/features/solutions/SolutionCard";
 import { ButtonLink } from "~/components/ui/Button";
 import { Container } from "~/components/ui/Container";
+import { ContentPending } from "~/components/ui/ContentPending";
 import { DemoBanner } from "~/components/ui/DemoNotice";
 import { MediaFrame } from "~/components/ui/MediaFrame";
 import { MEDIA } from "~/content/media";
-import { COMPANY_INTRO, HERO_TITLE, VALUE_CHAIN } from "~/content/site-copy";
 import { buildMeta, organizationJsonLd } from "~/lib/seo";
 import { listLatestArticles, listProjects, listSolutions } from "~/services/api/content";
 
@@ -24,8 +24,8 @@ export async function loader() {
 export function meta() {
   return [
     ...buildMeta({
-      title: "JACIGREEN | Valorisation des ressources naturelles et des déchets",
-      description: COMPANY_INTRO,
+      title: "JACIGREEN",
+      description: "Présentation institutionnelle de JACIGREEN en attente de validation.",
       path: "/",
     }),
     organizationJsonLd(),
@@ -39,22 +39,29 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <DemoBanner show={hasDemo} />
-      <section className="on-dark bg-brand py-20 text-on-brand md:py-28">
-        <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <p className="font-display text-label font-semibold tracking-(--tracking-label) uppercase opacity-90">
-              Ingénierie environnementale
+      <section className="on-dark bg-primary-container py-space-xl text-on-primary md:py-20">
+        <Container className="grid grid-cols-1 items-center gap-gutter lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          <div className="py-4 md:py-8">
+            <p className="font-label-md text-label-md font-semibold text-on-primary uppercase">
+              JACIGREEN
             </p>
-            <h1 className="mt-4 max-w-4xl text-h1 text-on-brand md:text-display">{HERO_TITLE}</h1>
-            <p className="mt-6 max-w-reading text-lead opacity-95">{COMPANY_INTRO}</p>
-            <div className="mt-10 flex flex-wrap gap-4">
+            <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-headline-2xl-mobile text-on-primary md:font-headline-2xl md:text-headline-2xl">
+              Présentation institutionnelle
+            </h1>
+            <div className="mt-space-lg max-w-reading">
+              <ContentPending>
+                La présentation de l'organisation et de ses activités sera publiée après validation
+                institutionnelle.
+              </ContentPending>
+            </div>
+            <div className="mt-space-xl flex flex-wrap gap-space-md">
               <ButtonLink to="/solutions" variant="accent">
                 Découvrir nos solutions
               </ButtonLink>
               <ButtonLink
                 to="/contact"
                 variant="secondary"
-                className="border-on-brand text-on-brand hover:bg-on-brand hover:text-brand"
+                className="border-on-primary text-on-primary hover:bg-on-primary hover:text-primary-container"
               >
                 Nous contacter
               </ButtonLink>
@@ -66,92 +73,166 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             aspect={MEDIA.homeHero.aspect}
             icon={MEDIA.homeHero.icon}
             priority
-            className="border-on-brand/20 bg-on-brand/10"
+            className="border-on-primary/20 bg-on-primary/10"
           />
         </Container>
       </section>
 
-      <section className="py-16 md:py-20" aria-labelledby="demarche">
+      <section className="py-space-xl md:py-20" aria-labelledby="demarche">
         <Container>
-          <h2 id="demarche" className="text-h2">
-            Notre démarche
-          </h2>
-          <ol className="mt-10 grid gap-8 md:grid-cols-5">
-            {VALUE_CHAIN.map((step, index) => (
-              <li key={step.label} className="border-t-2 border-ochre pt-4">
-                <p className="font-display text-label font-semibold tracking-(--tracking-label) text-ochre-text uppercase">
-                  Étape {index + 1}
-                </p>
-                <h3 className="mt-1 text-h3">{step.label}</h3>
-                <p className="mt-2 text-small text-ink-muted">{step.description}</p>
-              </li>
-            ))}
-          </ol>
+          <div className="grid grid-cols-1 gap-gutter lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+                Présentation
+              </p>
+              <h2 id="demarche" className="mt-2 max-w-lg font-headline-xl text-headline-xl">
+                Positionnement et chaîne de valeur
+              </h2>
+            </div>
+            <ContentPending>
+              Les formulations de présentation et les étapes de la chaîne de valeur issues du
+              référentiel interne attendent une validation avant publication.
+            </ContentPending>
+          </div>
         </Container>
       </section>
 
-      <section className="bg-surface-alt py-16 md:py-20" aria-labelledby="solutions">
+      <section
+        className="bg-surface-container-low py-space-xl md:py-20"
+        aria-labelledby="solutions"
+      >
         <Container>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 id="solutions" className="text-h2">
-              Nos solutions
-            </h2>
+          <div className="flex flex-wrap items-end justify-between gap-space-md">
+            <div>
+              <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+                Expertise
+              </p>
+              <h2 id="solutions" className="mt-2 font-headline-xl text-headline-xl">
+                Nos solutions
+              </h2>
+            </div>
             <ButtonLink to="/solutions" variant="secondary">
-              Toutes les solutions
+              Explorer les solutions <span aria-hidden="true">→</span>
             </ButtonLink>
           </div>
           {solutions.length > 0 ? (
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-space-xl grid gap-gutter sm:grid-cols-2 lg:grid-cols-3">
               {solutions.map((solution) => (
                 <SolutionCard key={solution.slug} solution={solution} />
               ))}
             </div>
           ) : (
-            <p className="mt-8 text-ink-muted">Les solutions seront présentées prochainement.</p>
+            <div className="mt-space-xl">
+              <ContentPending>
+                Les solutions seront affichées après publication de contenus validés.
+              </ContentPending>
+            </div>
           )}
         </Container>
       </section>
 
-      <section className="bg-surface-alt py-16 md:py-20" aria-labelledby="realisations">
+      <section className="py-space-xl md:py-20" aria-labelledby="realisations">
         <Container>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 id="realisations" className="text-h2">
-              Des projets ancrés dans les territoires
-            </h2>
+          <div className="flex flex-wrap items-end justify-between gap-space-md">
+            <div>
+              <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+                Sur le terrain
+              </p>
+              <h2 id="realisations" className="mt-2 max-w-3xl font-headline-xl text-headline-xl">
+                Réalisations et projets
+              </h2>
+            </div>
             <ButtonLink to="/realisations" variant="secondary">
-              Toutes les réalisations
+              Voir les réalisations <span aria-hidden="true">→</span>
             </ButtonLink>
           </div>
           {projects.length > 0 ? (
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-space-xl grid gap-gutter md:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => (
                 <ProjectCard key={project.slug} project={project} />
               ))}
             </div>
           ) : (
-            <p className="mt-8 text-ink-muted">Aucune réalisation publiée pour le moment.</p>
+            <div className="mt-space-xl">
+              <ContentPending>
+                Les réalisations seront présentées dès qu'elles auront été validées.
+              </ContentPending>
+            </div>
           )}
         </Container>
       </section>
 
-      <section className="py-16 md:py-20" aria-labelledby="actualites">
-        <Container>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 id="actualites" className="text-h2">
-              Actualités
+      <section className="on-dark bg-primary-container py-space-xl text-on-primary md:py-20">
+        <Container className="grid grid-cols-1 items-center gap-gutter md:grid-cols-[1fr_auto]">
+          <div>
+            <p className="font-label-md text-label-md font-semibold text-on-primary uppercase">
+              Un projet ou une question ?
+            </p>
+            <h2 className="mt-2 max-w-3xl font-headline-xl text-headline-xl text-on-primary">
+              Échanger autour de votre besoin
             </h2>
+            <p className="mt-space-md max-w-reading font-body-md text-body-md text-on-primary/90">
+              Le formulaire de contact permet de préciser votre demande et de la transmettre à
+              JACIGREEN.
+            </p>
+          </div>
+          <ButtonLink
+            to="/contact"
+            variant="secondary"
+            className="w-fit border-on-primary text-on-primary hover:bg-on-primary hover:text-primary-container"
+          >
+            Nous contacter <span aria-hidden="true">→</span>
+          </ButtonLink>
+        </Container>
+      </section>
+
+      <section className="py-space-xl md:py-20" aria-labelledby="impact">
+        <Container className="grid grid-cols-1 items-start gap-gutter lg:grid-cols-[0.7fr_1.3fr]">
+          <div>
+            <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+              Informations institutionnelles
+            </p>
+            <h2 id="impact" className="mt-2 font-headline-xl text-headline-xl">
+              Données d'impact et reconnaissances
+            </h2>
+          </div>
+          <ContentPending>
+            Les indicateurs, partenariats ou distinctions éventuellement publiés nécessitent des
+            sources vérifiables et une validation préalable.
+          </ContentPending>
+        </Container>
+      </section>
+
+      <section
+        className="bg-surface-container-low py-space-xl md:py-20"
+        aria-labelledby="actualites"
+      >
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-space-md">
+            <div>
+              <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+                Actualités
+              </p>
+              <h2 id="actualites" className="mt-2 font-headline-xl text-headline-xl">
+                Publications récentes
+              </h2>
+            </div>
             <ButtonLink to="/actualites" variant="secondary">
-              Toutes les actualités
+              Toutes les actualités <span aria-hidden="true">→</span>
             </ButtonLink>
           </div>
           {articles.length > 0 ? (
-            <div className="mt-10 grid gap-8 md:grid-cols-3">
+            <div className="mt-space-xl grid gap-gutter sm:grid-cols-2 lg:grid-cols-3">
               {articles.map((article) => (
                 <ArticleCard key={article.slug} article={article} />
               ))}
             </div>
           ) : (
-            <p className="mt-8 text-ink-muted">Aucune actualité publiée pour le moment.</p>
+            <div className="mt-space-xl">
+              <ContentPending>
+                Les actualités apparaîtront après publication de contenus validés.
+              </ContentPending>
+            </div>
           )}
         </Container>
       </section>

@@ -1,7 +1,8 @@
 import { Container } from "~/components/ui/Container";
-import { DemoBadge, DemoBanner } from "~/components/ui/DemoNotice";
-import { EmptyState } from "~/components/ui/EmptyState";
+import { ContentPending } from "~/components/ui/ContentPending";
+import { DemoBanner } from "~/components/ui/DemoNotice";
 import { PageHeader } from "~/components/ui/PageHeader";
+import { ServiceEntry } from "~/features/services/ServiceEntry";
 import { buildMeta } from "~/lib/seo";
 import { listServices } from "~/services/api/content";
 
@@ -14,8 +15,7 @@ export async function loader() {
 export function meta() {
   return buildMeta({
     title: "Services",
-    description:
-      "Les services JACIGREEN : études, conception, formation et accompagnement technique.",
+    description: "Consultez les services publiés par JACIGREEN.",
     path: "/services",
   });
 }
@@ -34,44 +34,51 @@ export default function Services({ loaderData }: Route.ComponentProps) {
         intro="Des services présentés à partir des contenus publiés par JACIGREEN."
       />
       {otherServices.length > 0 ? (
-        <section className="py-16">
+        <section className="py-space-xl md:py-20">
           <Container>
-            <ul className="max-w-4xl divide-y divide-hairline border-y border-hairline">
+            <ul className="max-w-5xl divide-y divide-outline-variant border-y border-outline-variant">
               {otherServices.map((service) => (
-                <li key={service.slug} className="py-6">
-                  <h2 className="text-h3">
-                    {service.title} <DemoBadge show={service.is_demo} />
-                  </h2>
-                  <p className="mt-2 text-ink-muted">{service.summary}</p>
-                </li>
+                <ServiceEntry key={service.slug} service={service} headingLevel="h2" />
               ))}
             </ul>
           </Container>
         </section>
       ) : null}
-      {formations.length > 0 ? (
-        <section className="bg-surface-alt py-16" aria-labelledby="formations">
-          <Container>
-            <h2 id="formations" className="text-h2">
-              Formations et transfert d'expertise
-            </h2>
-            <ul className="mt-8 max-w-4xl divide-y divide-hairline border-y border-hairline">
-              {formations.map((service) => (
-                <li key={service.slug} className="py-6">
-                  <h3 className="text-h3">
-                    {service.title} <DemoBadge show={service.is_demo} />
-                  </h3>
-                  <p className="mt-2 text-ink-muted">{service.summary}</p>
-                </li>
-              ))}
-            </ul>
-          </Container>
-        </section>
-      ) : null}
+      <section
+        className="bg-surface-container-low py-space-xl md:py-20"
+        aria-labelledby="formations"
+      >
+        <Container>
+          <div className="grid grid-cols-1 items-start gap-gutter lg:grid-cols-[0.7fr_1.3fr]">
+            <div>
+              <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+                Transmission de savoir-faire
+              </p>
+              <h2 id="formations" className="font-headline-xl text-headline-xl">
+                Formations et transfert d'expertise
+              </h2>
+            </div>
+            {formations.length > 0 ? (
+              <ul className="mt-space-lg max-w-5xl divide-y divide-outline-variant border-y border-outline-variant">
+                {formations.map((service) => (
+                  <ServiceEntry key={service.slug} service={service} headingLevel="h3" />
+                ))}
+              </ul>
+            ) : (
+              <ContentPending>
+                Le catalogue, les formats et les publics concernés restent à confirmer avant
+                publication.
+              </ContentPending>
+            )}
+          </div>
+        </Container>
+      </section>
       {services.length === 0 ? (
-        <section className="py-16">
+        <section className="py-space-xl md:py-20">
           <Container>
-            <EmptyState>Aucun service n'est publié pour le moment.</EmptyState>
+            <ContentPending>
+              Les services et formations seront détaillés après validation des contenus à publier.
+            </ContentPending>
           </Container>
         </section>
       ) : null}
