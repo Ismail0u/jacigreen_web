@@ -1,17 +1,21 @@
-# Rapport de finalisation — état au 22 octobre 2026
+# Rapport de finalisation — état au 23 octobre 2026
 
 ## Statut
 
-**Finalisation partielle, livraison non prête pour la production.** Les routes
-existantes répondent en développement et les changements frontend passent lint,
-types, format et tests. La génération des pages pré-rendues reste bloquée : le
-build produit les bundles client et serveur, puis échoue en demandant `/_.data`
-au serveur local temporaire (ECONNREFUSED). En conséquence,
-`check:prerender` ne trouve ni pages HTML, ni sitemap, ni fallback.
+**NON PRÊT — blocage de configuration de production.** Le build et le pré-rendu
+complet fonctionnent après fixation du host Vite Preview à `127.0.0.1`. Les
+sorties HTML, sitemap, `robots.txt` et fallback sont présents ; le contrôle local
+sans mode production ni garde de démo passe. Le contrôle strict échoue sur 45
+problèmes : 14 canoniques locales, 20 contenus API marqués `is_demo=true` et 11
+pages qui affichent leur avertissement de démonstration. Le domaine public
+n'étant pas documenté, il n'est pas remplacé par une URL supposée : renseigner
+la vraie URL de déploiement et remplacer les données démo par des contenus
+validés avant de refaire le contrôle.
 
-Le contenu éditorial, le logo, les images, les coordonnées et les textes juridiques
-nécessitent encore validation ou fourniture par JACIGREEN. La fidélité visuelle
-n'a pas été validée par comparaison pixel à pixel.
+Les textes éditoriaux, images, coordonnées et textes juridiques nécessitent encore
+validation ou fourniture par JACIGREEN. Le logo PNG existe ; une variante
+transparente peut être fournie si nécessaire. La fidélité visuelle n'a pas été
+validée par comparaison pixel à pixel.
 
 ## Travaux réalisés
 
@@ -31,16 +35,25 @@ n'a pas été validée par comparaison pixel à pixel.
 - Mise en page À propos rapprochée de la structure éditoriale avec un média de
   remplacement ; aucune mission, vision ou valeur n'a été ajoutée.
 - Création du registre de validation des contenus et du plan de finalisation.
+- Lecture complète du document institutionnel et création de
+  `docs/project/matrice-contenu.md`, qui recense chacune de ses sections et son
+  statut, sa destination, sa présence dans le site et ses validations manquantes.
+- Retrait des formulations statiques non validées de la présentation, de la chaîne
+  de valeur, du pied de page et des métadonnées ; les emplacements concernés
+  signalent maintenant l'attente d'une validation institutionnelle.
+- Affichage des descriptions complètes des services depuis l'API et des
+  descriptions de réalisation lorsqu'elles sont renseignées, sans évolution du
+  contrat API.
 
 ## État des pages et fidélité visuelle
 
 | Page | État / fidélité | Écarts ou contenus omis |
 |---|---|---|
-| Accueil | Partiellement rapproché de la maquette | Hero à deux colonnes, chaîne de valeur, Solutions, Réalisations et Actualités ; fidélité détaillée non validée. |
-| À propos | Partiellement rapproché | Chaîne de valeur et média de remplacement ; histoire, mission, vision et valeurs non publiées faute de validation. |
+| Accueil | Partiellement rapproché de la maquette | Hero à deux colonnes et sections éditoriales ; présentation et chaîne de valeur en attente de validation ; fidélité détaillée non validée. |
+| À propos | Partiellement rapproché | Média de remplacement ; présentation, histoire, mission, vision et valeurs en attente de validation. |
 | Solutions et fiches | Fonctionnelles, améliorées | Données API et visuels de remplacement ; composition de la maquette non reproduite intégralement. |
-| Services / Formations | Fonctionnelles, section Formations conditionnelle | Aucun catalogue, durée ou session inventé. |
-| Réalisations | Fonctionnelle | Filtre pays conservé et visuels de remplacement ; exemples de la maquette non repris. |
+| Services / Formations | Fonctionnelles, section Formations conditionnelle | Description complète des entrées API ; aucun catalogue, durée ou session inventé. |
+| Réalisations | Fonctionnelle | Filtre pays conservé, descriptions API accessibles depuis les cartes et visuels de remplacement ; exemples de la maquette non repris. |
 | Actualités et articles | Fonctionnelles | Données API, aucun article fictif ou chiffre de la maquette ajouté ; médias de remplacement. |
 | Contact | Fonctionnel | Formulaire existant inchangé ; aucune coordonnée ou infrastructure non validée affichée. |
 | Mentions légales | Structure neutre `noindex` | Textes juridiques en attente de rédaction et validation. |
@@ -65,16 +78,18 @@ n'a pas été validée par comparaison pixel à pixel.
 |---|---|
 | `npm run lint` dans le conteneur frontend | Réussi |
 | `npm run typecheck` dans le conteneur frontend | Réussi |
-| `npm test` dans le conteneur frontend | Réussi : 8 fichiers, 57 tests |
+| `npm test` dans le conteneur frontend | Réussi : 11 fichiers, 62 tests |
 | `npm run format:check` dans le conteneur frontend | Réussi |
 | `git diff --check` | Réussi |
 | Test spécifique `MediaFrame.test.tsx` | Réussi : 3 tests |
 | Santé de l'API et listes Solutions, Services, Réalisations, Actualités depuis le frontend | Réussi : HTTP 200 |
-| Navigateur : 11 routes, 5 largeurs (360, 390, 768, 1024, 1440 px) | Réussi : 55 vérifications, aucun débordement horizontal et un seul `<h1>` par route |
+| Navigateur : reconstruction précédente, 11 routes et 5 largeurs (360, 390, 768, 1024, 1440 px) | Réussi antérieurement : 55 vérifications, aucun débordement horizontal et un seul `<h1>` par route. Pour ce lot contenu, l'accueil, À propos et Services ont été vérifiés dans le navigateur ; les 11 routes aux 5 largeurs ne sont pas re-testées. |
 | Menu mobile et touche Échap | Réussi : ouverture/fermeture vérifiée à 360 px |
 | Formulaire de contact dans le navigateur | Réussi : erreurs locales accessibles vérifiées sans envoyer ni enregistrer de demande |
-| `npm run build` | Échec à la phase de pré-rendu. Les bundles client et serveur compilent ; le serveur de prévisualisation local refuse la requête `/_.data` sur `127.0.0.1` avec `ECONNREFUSED`. Reproduit dans le conteneur frontend normal et dans un conteneur isolé. |
-| `npm run check:prerender` | Échec consécutif au build interrompu : pages HTML, sitemap, robots et fallback absents. |
+| `npm run build` | Réussi après ajout de `preview.host: "127.0.0.1"` dans `frontend/vite.config.ts`. Cause initiale : Vite liait le preview à `::1`, alors que le client HTTP du pré-rendu résolvait `localhost` vers `127.0.0.1`. |
+| `npm run check:prerender` | Réussi : HTML, canoniques locales, métadonnées, `h1`, sitemap, robots et fallback vérifiés. |
+| `npm run check:prerender -- --forbid-demo` | Échoue sur 31 problèmes : 20 ressources API marquées `is_demo=true` et 11 pages avec avertissement de démonstration. |
+| `npm run check:prerender -- --production --forbid-demo` | Échec : 45 problèmes — 14 canoniques locales, 20 éléments API avec `is_demo=true` et 11 pages avec avertissement de démonstration. Renseigner la vraie URL publique et remplacer les contenus démo par des contenus validés avant de refaire ce contrôle. |
 | Vérifications backend Ruff / migrations / OpenAPI / tests | Non exécutées : aucun fichier backend n'a été modifié. |
 | Comparaison visuelle navigateur vs captures Stitch | Non exécutée pixel à pixel ; seules la structure, les routes, le responsive et le débordement ont été contrôlés. |
 | Envoi réel du formulaire et vérification de stockage | Non exécutés pour ne pas créer de demande de test en base. |
@@ -90,7 +105,7 @@ n'a pas été validée par comparaison pixel à pixel.
 | Couvertures Réalisations | `/realisations` | 4:3 | 1200 × 900 px |
 | Couvertures Actualités | `/actualites` | 4:3 | 1200 × 900 px |
 | Article | `/actualites/:slug` | 16:9 | 1600 × 900 px |
-| Logo | En-tête et pied de page | SVG ou PNG transparent | Fichier officiel fourni par JACIGREEN |
+| Logo | En-tête et pied de page | PNG carré 400 × 400, fond blanc opaque | Fichier fourni : `frontend/public/brand/jacigreen.png` |
 
 Les images éditoriales viennent des champs `cover_image` et `cover_alt` de l'API ;
 le stockage et la diffusion en production restent à configurer. Tout média doit
@@ -100,16 +115,22 @@ s'agissait d'une photographie.
 ## Informations et décisions humaines requises
 
 - Autorisation de publier le document institutionnel et validation des textes
-  descriptifs déjà utilisés dans `frontend/src/content/site-copy.ts`.
-- Validation des noms, descriptions, maturités de Solutions et des Services
-  dans l'API avant publication.
+  descriptifs avant leur éventuelle réintégration dans le frontend (la copie
+  statique non validée a été retirée).
+- Validation des noms, descriptions et maturités de Solutions et Services avant
+  publication ; remplacer les enregistrements de démonstration sans désactiver
+  leur indicateur tant que leur authenticité n'est pas établie.
 - Décisions proposées de l'ADR 0003 : Formations comme section Services, termes
   Solutions/Produits et motif informatif du rachat.
-- Palette et identité (ADR 0005), logo officiel et photographies.
-- Coordonnées publiques, informations légales, politique de confidentialité,
-  CGU et validation juridique.
+- Photos éditoriales ; coordonnées publiques ; mentions légales, politique de
+  confidentialité et CGU à fournir/valider juridiquement.
+- URL canonique de production (`VITE_SITE_URL`). La palette exacte fournie dans
+  la mission est enregistrée et testée ; les rôles UI restent compatibles avec
+  WCAG et les maquettes Stitch.
 - Date de mise en production.
 
 Le registre complet et les règles de publication se trouvent dans
-`docs/content/content-register.md`. Les fichiers de travail préexistants du dépôt
-n'ont pas été inclus dans les changements.
+`docs/content/content-register.md`. Le worktree reste modifié et contient aussi
+des changements préexistants ; ils ont été préservés. Branche :
+`feature/core-backend-frontend`, suivie de `origin/feature/core-backend-frontend`.
+Aucun commit ni push n'a été effectué.

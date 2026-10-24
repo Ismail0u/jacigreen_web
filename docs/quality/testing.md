@@ -13,17 +13,16 @@
 | Pré-rendu | `docker compose exec frontend npm run build` puis `npm run check:prerender` (ajouter `-- --production --forbid-demo` avant une mise en production) |
 
 
-### A. Vérifié (contrôle exécuté avec succès)
+### A. Derniers résultats consignés
 | Contrôle | Résultat |
 |---|---|
-| Backend : Ruff (lint + format), `check`, `makemigrations --check`, `spectacular --validate --fail-on-warn` | Réussi |
-| Backend : 41 tests sur PostgreSQL 16 (modèles, API, permissions, limitation de débit, honeypot, Deploy Hook, admin, `seed_demo`, schéma, nombre de requêtes) | 41/41, couverture 93 % |
-| Backend : `check --deploy` avec les réglages de production | 1 avertissement (HSTS preload, volontaire) |
-| Frontend : `tsc --noEmit`, ESLint (strict + jsx-a11y), Prettier | Réussi, 0 erreur |
-| Frontend : 54 tests Vitest (contrastes des tokens, SEO, client API, bouton, en-tête, formulaire de contact) | 54/54 ; couverture globale 51 % (les pages ne sont couvertes que par les contrôles navigateur) |
-| `npm run build` : pré-rendu de 14 pages HTML (8 pages statiques + 3 solutions + 3 actualités de démonstration) depuis l'API réelle | Réussi ; `.data` et `__spa-fallback.html` générés |
-| `check:prerender` : titre, description, canonique, Open Graph, `<h1>` unique, `noindex`, sitemap, robots.txt, contenu de l'API dans le HTML | Réussi ; avec `--forbid-demo`, **échoue comme prévu** |
-| Navigateur (Chromium, `tools/browser_smoke.py`) : 22 contrôles | 22/22 : contenu présent sans JavaScript, navigation client (fichiers `.data`), filtre, 404, aucune erreur console, formulaire de contact enregistré en base PostgreSQL, 10 pages sans débordement horizontal à 375 px, menu mobile (`aria-expanded`, Échap) |
-| Script `entrypoint.sh` : attente réelle de PostgreSQL | Cas nominal réussi |
-| `react-router dev` avec l'API réelle | Pages rendues (HTTP 200, contenu présent) |
-| YAML de `compose.yaml`, `ci.yml`, `dependabot.yml` | Syntaxe valide |
+| Backend : Ruff (lint + format), `check`, `makemigrations --check`, `spectacular --validate --fail-on-warn`, tests PostgreSQL | Résultats historiques : lint/configuration réussis ; 41/41 tests, couverture 93 %. Non relancés pour la reconstruction UI. |
+| Frontend : `npm run typecheck`, `npm run lint`, `npm run format:check` | Réussi, 0 erreur |
+| Frontend : `npm test` | 62/62 tests Vitest réussis, y compris les garde-fous de palette et de contraste. |
+| `npm run build` | Réussi après configuration explicite du host Preview en IPv4 (`127.0.0.1`), ce qui corrige le décalage entre `::1` et la résolution de `localhost` du pré-rendu. |
+| `npm run check:prerender` | Réussi : HTML, canoniques locales, métadonnées, sitemap, robots et fallback vérifiés. |
+| `npm run check:prerender -- --forbid-demo` | Échoue sur 31 problèmes : 20 ressources API marquées `is_demo=true` et 11 avertissements rendus. |
+| `npm run check:prerender -- --production --forbid-demo` | Échoue sur 45 problèmes : 14 canoniques locales, 20 entrées API avec `is_demo=true` et 11 avertissements de démonstration rendus. Définir l'URL publique et remplacer les données par du contenu validé avant le contrôle final. |
+| Navigateur local : 11 routes, cinq largeurs (360, 390, 768, 1 024, 1 440 px) | Aucune barre de défilement horizontale après stabilisation ; liens d'ancrage Solutions/Actualités et menu mobile contrôlés. Aucun formulaire envoyé. Pas de comparaison pixel à pixel par route. |
+| Navigateur historique (`tools/browser_smoke.py`) | Ancien bilan : 22/22 contrôles ; la soumission de formulaire et les tests à 375 px ne sont pas des contrôles exécutés dans la reconstruction UI. |
+| Script `entrypoint.sh`, `react-router dev` et syntaxe YAML | Résultats historiques consignés ; non relancés dans cette reconstruction. |

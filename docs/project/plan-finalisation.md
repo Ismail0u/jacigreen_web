@@ -8,12 +8,12 @@ Les contenus de l'API restent soumis à validation avant toute publication.
 
 | Page | Route | Maquette | État du code | Écarts principaux observés | Source des données |
 |---|---|---|---|---|---|
-| Accueil | `/` | `jacigreen_accueil_institutional` | incomplet | Hero avec média de remplacement, chaîne de valeur, Solutions, Réalisations et Actualités ; fidélité détaillée et contenus institutionnels à valider. | `src/content/site-copy.ts` et API (`solutions`, `projects`, `articles`) |
-| À propos | `/a-propos` | `jacigreen_propos_notre_histoire` | incomplet | Introduction, chaîne de valeur et média de remplacement ; histoire et autres contenus de la maquette volontairement omis car non validés. | `src/content/site-copy.ts` ; document institutionnel interne |
+| Accueil | `/` | `jacigreen_accueil_institutional` | incomplet | Hero avec média de remplacement, blocs de présentation en attente de validation, Solutions, Réalisations et Actualités ; fidélité détaillée à vérifier. | API (`solutions`, `projects`, `articles`) ; copie statique à ajouter uniquement après validation |
+| À propos | `/a-propos` | `jacigreen_propos_notre_histoire` | incomplet | Média de remplacement ; présentation, histoire et autres contenus restent en attente de validation. | Document institutionnel interne, sous réserve de validation |
 | Solutions | `/solutions` | `jacigreen_nos_solutions` | incomplet | Liste API et état vide présents ; média de remplacement intégré ; sections éditoriales non validées omises. | API `GET /api/v1/solutions/` |
 | Fiche solution | `/solutions/:slug` | `jacigreen_jacibiogaz_fiche_solution` | incomplet | Chargement API, contenu brut, SEO et média de remplacement présents ; composition plus simple que la maquette. | API `GET /api/v1/solutions/{slug}/` |
-| Services (+ Formations) | `/services` | pas de maquette Services ; écran Formations destiné à une section | incomplet | Liste API présente ; section Formations affichée uniquement si une entrée publiée correspond. Aucun catalogue ni modèle `Training` ajouté. | API `GET /api/v1/services/` |
-| Réalisations | `/realisations` | `jacigreen_exp_riences_r_alisations` | incomplet | Liste, filtre pays via `?pays=` et média de remplacement présents ; aucune fiche de réalisation dans le frontend (hors périmètre courant). | API `GET /api/v1/projects/` |
+| Services (+ Formations) | `/services` | pas de maquette Services ; écran Formations destiné à une section | incomplet | Liste API présente ; descriptions complètes rendues ; section Formations affichée uniquement si une entrée publiée correspond. Aucun catalogue ni modèle `Training` ajouté. | API `GET /api/v1/services/` |
+| Réalisations | `/realisations` | `jacigreen_exp_riences_r_alisations` | incomplet | Liste, filtre pays via `?pays=` et média de remplacement présents ; description API accessible depuis la carte ; aucune fiche de réalisation dans le frontend (hors périmètre courant). | API `GET /api/v1/projects/` |
 | Actualités | `/actualites` | `jacigreen_actualit_s_ressources` | incomplet | Liste, état vide et médias de remplacement présents ; statistiques, contenu non validé et newsletter de la maquette omis. | API `GET /api/v1/articles/` |
 | Article | `/actualites/:slug` | aucune maquette | incomplet | Loader, SEO, rendu texte et média de remplacement présents ; présentation à harmoniser avec la maquette générale. | API `GET /api/v1/articles/{slug}/` |
 | Contact | `/contact` | `jacigreen_contact` | incomplet | Formulaire avec validation Zod, erreurs serveur, succès et limite API ; coordonnées et liens annexes de la maquette non repris, car non documentés. | Formulaire vers `POST /api/v1/contact-requests/` |
@@ -43,12 +43,13 @@ Les cases cochées signalent un travail réalisé. « Existe », « incomplet »
 
 - [x] Lire les instructions, ADR, architecture, contenus, scripts, composants, routes, API et tests.
 - [x] Relever la correspondance route / maquette / source de données.
-- [x] Vérifier les médias locaux : aucun média de site fourni ; logo à fournir.
+- [x] Vérifier les médias locaux : logo fourni et utilisé ; photographies éditoriales à fournir.
 
 ### Phase 2 — Plan
 
 - [x] Consigner l'état des pages, composants, sources et écarts dans ce document.
 - [x] Créer `docs/content/content-register.md` sans transformer un document interne en validation publique.
+- [x] Lire intégralement le document institutionnel et créer `docs/project/matrice-contenu.md` avec le statut, la destination, la présence actuelle et les validations manquantes pour chaque section.
 
 ### Phase 3 — Conception et composants communs
 
@@ -68,14 +69,16 @@ Les cases cochées signalent un travail réalisé. « Existe », « incomplet »
 - [ ] Contact — incomplet : conserver les champs API, validation, honeypot, erreurs et confirmation ; omettre les coordonnées non documentées.
 - [ ] Mentions légales, page introuvable et états vides/erreurs — incomplet / existe : vérifier les balises, le `noindex`, la navigation et la cohérence visuelle.
 - [ ] Passe globale — vérifier accessibilité, navigation clavier, responsive, contraste, liens et absence de débordement.
+- [x] Retirer des pages publiques la copie statique des sections 2, 6 et 10 tant que sa publication n'est pas validée ; maintenir des blocs d'attente.
+- [x] Rendre les descriptions de services et les descriptions renseignées des réalisations depuis les champs API existants, sans changer le contrat.
 
 ### Phases 5–6 — Vérification et correction
 
-- [x] Lint, format, types et tests frontend exécutés avec succès (8 fichiers, 57 tests).
-- [ ] Build et `check:prerender` : bundles compilés, pré-rendu bloqué sur `/_.data` (ECONNREFUSED) ; contrôle HTML échoue faute de sortie pré-rendue.
+- [x] Lint, format, types et tests frontend exécutés avec succès (62 tests).
+- [x] Build et contrôle local du pré-rendu : réussite après fixation explicite du host Preview IPv4 ; `check:prerender` passe. Le contrôle strict détecte 14 canoniques locales, 20 enregistrements API marqués démo et les avertissements rendus sur 11 pages.
 - [ ] Si le backend change : exécuter Ruff, `makemigrations --check`, OpenAPI et les tests backend.
 - [x] Rechercher les contenus et URL d'images interdits dans `frontend/src` ; seuls le test de garde et des pourcentages CSS génériques correspondent à la recherche textuelle.
-- [x] Vérifier en navigateur 11 routes aux cinq largeurs demandées, le menu mobile/Échap et la validation locale du formulaire ; le build pré-rendu reste en échec.
+- [x] Vérifier en navigateur 11 routes aux cinq largeurs demandées, le menu mobile/Échap et la validation locale du formulaire ; ces routes et largeurs ne sont pas toutes re-testées dans cette passe de clôture.
 
 ### Phase 7 — Rapport
 
@@ -85,7 +88,8 @@ Les cases cochées signalent un travail réalisé. « Existe », « incomplet »
 
 - Le document institutionnel est interne et sa publication est à confirmer ; son registre de validation référencé est absent.
 - Décisions encore proposées dans `docs/adr/0003` : Formations en section Services, taxonomie Solutions/Produits et traitement du rachat informatif.
-- La palette et le logo restent à valider (`docs/adr/0005`) ; aucun fichier logo exploitable n'est présent.
+- La palette exacte fournie est enregistrée dans `frontend/src/styles/tokens.css` et testée ; le logo `frontend/public/brand/jacigreen.png` est présent (PNG carré, fond blanc opaque).
 - Les textes juridiques, coordonnées publiques, date de mise en production et autorisation de publier le document institutionnel restent à fournir/valider.
+- L'URL canonique réelle de production doit être renseignée dans `VITE_SITE_URL`, puis le contrôle de pré-rendu en mode production doit être relancé.
 - Les coordonnées, certifications, brevets, rendements, chiffres d'impact, études, noms de clients et contenus des visuels de maquettes ne sont pas des sources publiables.
 - Le dépôt contient des modifications préexistantes dans `docs/adr/0005-palette-et-tokens.md`, `docs/architecture/api.md`, `docs/architecture/security.md`, `docs/development/contributing.md` et un fichier `COPILOT_START.md` non suivi ; ils n'ont pas été modifiés pendant l'audit.
