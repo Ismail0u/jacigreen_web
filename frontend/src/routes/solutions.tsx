@@ -1,6 +1,6 @@
 import { Container } from "~/components/ui/Container";
+import { ContentPending } from "~/components/ui/ContentPending";
 import { DemoBanner } from "~/components/ui/DemoNotice";
-import { EmptyState } from "~/components/ui/EmptyState";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { SolutionCard } from "~/features/solutions/SolutionCard";
 import { buildMeta } from "~/lib/seo";
@@ -15,32 +15,32 @@ export async function loader() {
 export function meta() {
   return buildMeta({
     title: "Solutions",
-    description:
-      "Les solutions JACIGREEN : biogaz, biofertilisants et valorisation des ressources locales.",
+    description: "Découvrez les solutions publiées par JACIGREEN.",
     path: "/solutions",
   });
 }
 
 export default function Solutions({ loaderData }: Route.ComponentProps) {
   const { solutions } = loaderData;
+
   return (
     <>
       <DemoBanner show={solutions.some((solution) => solution.is_demo)} />
       <PageHeader
         eyebrow="Solutions"
         title="Nos solutions"
-        intro="Des solutions conçues à partir des ressources disponibles localement."
+        intro="Découvrez les solutions présentées par JACIGREEN."
       />
-      <section className="py-16">
+      <section className="py-space-xl md:py-20">
         <Container>
           {solutions.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-3">
               {solutions.map((solution) => (
                 <SolutionCard key={solution.slug} solution={solution} />
               ))}
             </div>
           ) : (
-            <EmptyState>Aucune solution n'est publiée pour le moment.</EmptyState>
+            <ContentPending>Aucune solution n’est actuellement publiée.</ContentPending>
           )}
         </Container>
       </section>

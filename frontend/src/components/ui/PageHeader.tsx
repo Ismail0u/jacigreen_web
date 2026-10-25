@@ -8,15 +8,21 @@ interface PageHeaderProps {
 
 export function PageHeader({ eyebrow, title, intro }: PageHeaderProps) {
   return (
-    <header className="border-b border-hairline bg-surface-alt py-12 md:py-16">
+    <header className="border-b border-outline-variant bg-surface-container-low py-space-xl md:py-16">
       <Container>
         {eyebrow ? (
-          <p className="font-display text-label font-semibold tracking-(--tracking-label) text-ochre-text uppercase">
+          <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
             {eyebrow}
           </p>
         ) : null}
-        <h1 className="mt-2 text-h1 md:text-display">{title}</h1>
-        {intro ? <p className="mt-5 max-w-reading text-lead text-ink-muted">{intro}</p> : null}
+        <h1 className="mt-2 max-w-5xl font-headline-xl-mobile text-headline-xl-mobile md:font-headline-2xl md:text-headline-2xl">
+          {title}
+        </h1>
+        {intro ? (
+          <p className="mt-space-md max-w-reading font-body-lg text-body-lg text-on-surface-variant">
+            {intro}
+          </p>
+        ) : null}
       </Container>
     </header>
   );

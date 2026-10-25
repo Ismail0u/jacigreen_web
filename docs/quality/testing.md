@@ -1,29 +1,82 @@
 # Tests et contrôles de qualité
 
-## Commandes
-| Domaine | Commande (depuis la racine, avec Docker Compose) |
+## Commandes du projet
+
+Depuis la racine, avec Docker Compose :
+
+| Domaine | Commande |
 |---|---|
-| Backend : lint | `docker compose exec backend ruff check .` puis `ruff format --check .` |
-| Backend : configuration | `docker compose exec backend python manage.py check` |
-| Backend : migrations à jour | `docker compose exec backend python manage.py makemigrations --check --dry-run` |
-| Backend : schéma OpenAPI | `docker compose exec backend python manage.py spectacular --validate --fail-on-warn --file /tmp/schema.yml` |
-| Backend : tests + couverture | `docker compose exec -e DJANGO_SETTINGS_MODULE=config.settings.test backend sh -c "coverage run manage.py test && coverage report"` |
-| Frontend : lint, format, types | `docker compose exec frontend npm run lint`, `npm run format:check`, `npm run typecheck` |
-| Frontend : tests | `docker compose exec frontend npm test` (couverture : `npm run test:coverage`) |
-| Pré-rendu | `docker compose exec frontend npm run build` puis `npm run check:prerender` (ajouter `-- --production --forbid-demo` avant une mise en production) |
+| Backend lint/format | `docker compose exec backend ruff check .` puis `docker compose exec backend ruff format --check .` |
+| Backend configuration | `docker compose exec backend python manage.py check` |
+| Backend migrations | `docker compose exec backend python manage.py makemigrations --check --dry-run` |
+| Backend OpenAPI | `docker compose exec backend python manage.py spectacular --validate --fail-on-warn --file /tmp/schema.yml` |
+| Backend tests | `docker compose exec -T backend sh -c 'DJANGO_SETTINGS_MODULE=config.settings.test python manage.py test'` |
+| Frontend format/types/lint/tests | `docker compose exec frontend npm run format:check`, `npm run typecheck`, `npm run lint`, `npm test` |
+| Build/pré-rendu local | `docker compose exec frontend npm run build` puis `npm run check:prerender` |
+| Contrôle strict production | `docker compose exec frontend npm run check:prerender -- --production --forbid-demo` |
 
+`VITE_SITE_URL` doit être explicitement défini. Les URL locales configurées par
+Compose et dans `frontend/.env.example` sont réservées au développement. Le mode
+`--production` exige une URL HTTPS non locale ; `--forbid-demo` refuse les fiches
+`is_demo=true` et les marqueurs de démonstration rendus.
 
-### A. Vérifié (contrôle exécuté avec succès)
+## Résultats vérifiés le 24 octobre 2026
+
 | Contrôle | Résultat |
 |---|---|
-| Backend : Ruff (lint + format), `check`, `makemigrations --check`, `spectacular --validate --fail-on-warn` | Réussi |
-| Backend : 41 tests sur PostgreSQL 16 (modèles, API, permissions, limitation de débit, honeypot, Deploy Hook, admin, `seed_demo`, schéma, nombre de requêtes) | 41/41, couverture 93 % |
-| Backend : `check --deploy` avec les réglages de production | 1 avertissement (HSTS preload, volontaire) |
-| Frontend : `tsc --noEmit`, ESLint (strict + jsx-a11y), Prettier | Réussi, 0 erreur |
-| Frontend : 54 tests Vitest (contrastes des tokens, SEO, client API, bouton, en-tête, formulaire de contact) | 54/54 ; couverture globale 51 % (les pages ne sont couvertes que par les contrôles navigateur) |
-| `npm run build` : pré-rendu de 14 pages HTML (8 pages statiques + 3 solutions + 3 actualités de démonstration) depuis l'API réelle | Réussi ; `.data` et `__spa-fallback.html` générés |
-| `check:prerender` : titre, description, canonique, Open Graph, `<h1>` unique, `noindex`, sitemap, robots.txt, contenu de l'API dans le HTML | Réussi ; avec `--forbid-demo`, **échoue comme prévu** |
-| Navigateur (Chromium, `tools/browser_smoke.py`) : 22 contrôles | 22/22 : contenu présent sans JavaScript, navigation client (fichiers `.data`), filtre, 404, aucune erreur console, formulaire de contact enregistré en base PostgreSQL, 10 pages sans débordement horizontal à 375 px, menu mobile (`aria-expanded`, Échap) |
-| Script `entrypoint.sh` : attente réelle de PostgreSQL | Cas nominal réussi |
-| `react-router dev` avec l'API réelle | Pages rendues (HTTP 200, contenu présent) |
-| YAML de `compose.yaml`, `ci.yml`, `dependabot.yml` | Syntaxe valide |
+| Frontend `format:check` | Réussi |
+| Frontend `typecheck` | Réussi |
+| Frontend `lint` | Réussi, aucune règle désactivée |
+| Frontend `npm test` | 12 fichiers, 64 tests réussis |
+| Frontend `build` | Réussi dans le conteneur frontend déjà présent |
+| `check:prerender` | Réussi ; 13 URL de sitemap, HTML, métadonnées, canoniques locales de développement, `robots.txt` et fallback vérifiés |
+| `check:prerender -- --production --forbid-demo` | Échec strict sur 46 problèmes : URL publique HTTPS absente, 14 canoniques locales, 20 fiches `is_demo=true`, 11 pages avec marqueur visible. Ces blocages ne sont pas masqués. |
+| Backend Ruff lint/format | Réussi ; 60 fichiers déjà formatés |
+| `manage.py check` | Réussi, aucun problème |
+| `makemigrations --check --dry-run` | Réussi, aucune migration manquante |
+| Schéma OpenAPI | Réussi avec `--fail-on-warn` |
+| Backend Django tests | 47 tests réussis |
+| `DJANGO_SETTINGS_MODULE=config.settings.production python manage.py check --deploy` | Code de sortie 0 ; avertissement `security.W021` car HSTS preload est désactivé en attendant la validation du domaine. La commande utilisait les variables Compose de développement, pas des valeurs de production réelles. |
+| Vérification base de démonstration | 20/20 fiches publiées ont `is_demo=true` ; 0 fiche non-démo |
+| Navigateur | 14 routes × 5 largeurs = 70 vérifications : pas de débordement horizontal, exactement un `<h1>`, canonique et aucun lien vide |
+| Liens internes | 15 destinations uniques vérifiées, toutes HTTP 200 |
+| Console navigateur | Aucune erreur JavaScript ou console observée |
+| Menu mobile | Ouverture et fermeture par Échap vérifiées à 360 px après hydratation |
+| `git diff --check` | Réussi |
+
+Revalidation frontend effectuée le 25 octobre 2026 après la dernière réduction
+éditoriale : `format:check`, `typecheck`, `lint`, 12 fichiers/64 tests,
+`build` et `check:prerender` local ont tous réussi. `docker compose config
+--quiet` et un nouveau `git diff --check` ont également réussi.
+
+Les messages Django de type 404, 403, 429 et échec réseau apparus pendant les
+tests proviennent des scénarios négatifs attendus ; aucune suite n’a échoué.
+L’avertissement `security.W021` est distinct d’un échec de test. Le domaine
+réel n’étant pas confirmé, HSTS preload reste désactivé.
+
+## Reconstruction Docker
+
+`docker compose up -d --build` a été relancé, mais **n’a pas réussi**. Pendant
+`pip install -r requirements/dev.txt`, Docker n’a pas pu résoudre l’hôte du
+dépôt de paquets (`Temporary failure in name resolution`) après cinq
+réessais ; pip a terminé par `Could not find a version that satisfies the
+requirement Django==5.2.18`. Le build backend a échoué, puis le build frontend a
+été annulé.
+
+Les commandes de validation ont utilisé les conteneurs déjà existants, toujours
+en fonctionnement après l’échec ; elles ne certifient pas une image Docker
+fraîchement reconstruite. Le build frontend Vite exécuté dans ce conteneur
+existant a, lui, réussi.
+
+## Non exécuté ou non certifié
+
+- Le domaine de production étant inconnu et les données étant encore des
+  démonstrations, le contrôle strict n’est pas passé : le site n’est pas prêt
+  pour la production.
+- L’API n’a pas été vidée pour tester les états vides en navigateur. Les pages
+  contiennent des branches `ContentPending` pour ces cas.
+- La comparaison pixel à pixel par route avec les captures Stitch n’a pas été
+  effectuée.
+- Aucune migration, modification de modèle, de serializer ou d’endpoint backend
+  n’a été nécessaire.
+- Aucun formulaire n’a été envoyé pendant les contrôles navigateur.

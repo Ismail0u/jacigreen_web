@@ -1,14 +1,8 @@
 /*
- * SOURCE UNIQUE DE VÉRITÉ DU DESIGN SYSTEM JACIGREEN.
- * Tailwind CSS v4 génère les classes utilitaires (bg-brand, text-ink-muted, ...) à
- * partir de ce bloc @theme. Aucune valeur de couleur ne doit être écrite en dur dans
- * les composants. Les contrastes des paires de couleurs ci-dessous sont vérifiés par
- * src/styles/tokens.test.ts (objectif WCAG 2.2 AA).
  *
- * STATUT : proposition à faire valider par JaciGreen (voir docs/architecture/design-system.md).
- * - Palette alignée sur le CODE des maquettes Stitch (stitch-theme.css), pas sur la prose de DESIGN.md.
- * - Couleurs du logo officiel (vert, magenta) : extraites du JPEG 400x400 fourni, valeurs
- *   approximatives. Elles servent d'accents décoratifs, pas de couleurs de texte.
+ * Palette de marque fournie comme officielle : ses valeurs sont conservées exactement ci-dessous.
+ * Les couleurs de base de l'interface restent alignées sur le code des maquettes Stitch; les couleurs
+ * de marque trop claires pour le texte restent décoratives. Voir docs/architecture/design-system.md.
  */
 @theme {
   /* --- Couleurs : surfaces --- */
@@ -29,10 +23,18 @@
   --color-ochre-strong: #8a6427; /* fond de bouton d'accent avec texte blanc */
   --color-on-ochre-strong: #ffffff;
 
-  /* --- Couleurs : identité du logo (décoratives, jamais en texte courant) --- */
-  --color-logo-green: #3fa244;
-  --color-logo-magenta: #b55c98;
-  --color-logo-grey: #878381;
+  /* --- Palette de marque officielle (références, hors texte courant) --- */
+  --color-logo-green: #3aa33d;
+  --color-logo-green-secondary: #519152;
+  --color-logo-green-light: #b8e3b8;
+  --color-logo-magenta: #b55996;
+  --color-logo-magenta-light: #e0b5d3;
+  --color-logo-magenta-dark: #a4648c;
+  --color-logo-grey: #7f7a77;
+  --color-logo-grey-rose: #b7afb1;
+  --color-brand-off-white: #f9f8f8;
+  --color-brand-white: #ffffff;
+  --color-brand-black: #000000;
   --color-magenta-text: #8f3f77; /* magenta utilisable en TEXTE sur ivoire */
 
   /* --- Couleurs : états et bordures --- */

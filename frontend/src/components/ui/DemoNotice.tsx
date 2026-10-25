@@ -12,8 +12,8 @@ export function DemoBanner({ show }: { show: boolean }) {
   return (
     <div role="note" className="bg-danger py-2 text-small text-surface-raised">
       <Container>
-        Contenu de démonstration : ces éléments sont fictifs et ne constituent pas une information
-        institutionnelle de JACIGREEN.
+        Contenu de démonstration : ces fiches ne sont pas validées comme contenu éditorial
+        publiable.
       </Container>
     </div>
   );

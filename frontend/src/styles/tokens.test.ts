@@ -58,7 +58,38 @@ describe("design tokens : contrastes WCAG 2.2 AA", () => {
 
   it("documente les couleurs décoratives qui échouent en texte (garde-fou)", () => {
     expect(contrast("ochre", "surface")).toBeLessThan(4.5);
-    expect(contrast("logo-magenta", "surface")).toBeLessThan(4.5);
+    for (const color of [
+      "logo-green",
+      "logo-green-secondary",
+      "logo-green-light",
+      "logo-magenta",
+      "logo-magenta-light",
+      "logo-magenta-dark",
+      "logo-grey",
+      "logo-grey-rose",
+    ]) {
+      expect(contrast(color, "surface")).toBeLessThan(4.5);
+    }
+  });
+
+  it("conserve exactement la palette de marque officielle", () => {
+    const brandColors = {
+      "logo-green": "#3aa33d",
+      "logo-green-secondary": "#519152",
+      "logo-green-light": "#b8e3b8",
+      "logo-magenta": "#b55996",
+      "logo-magenta-light": "#e0b5d3",
+      "logo-magenta-dark": "#a4648c",
+      "logo-grey": "#7f7a77",
+      "logo-grey-rose": "#b7afb1",
+      "brand-off-white": "#f9f8f8",
+      "brand-white": "#ffffff",
+      "brand-black": "#000000",
+    } as const;
+
+    for (const [name, value] of Object.entries(brandColors)) {
+      expect(colors.get(name)).toBe(value);
+    }
   });
 });
 
@@ -82,7 +113,9 @@ describe("usage des tokens dans les composants", () => {
   it("n'utilise pas les couleurs décoratives en couleur de texte", () => {
     for (const file of files) {
       const content = readFileSync(file, "utf8");
-      expect(content, file).not.toMatch(/text-(ochre|logo-green|logo-magenta|logo-grey)(?![-\w])/);
+      expect(content, file).not.toMatch(
+        /(?:text-ochre(?![-\w])|text-logo-(?:green|magenta|grey)(?:-[\w-]+)?(?![-\w]))/,
+      );
     }
   });
 

@@ -1,6 +1,7 @@
 import { ButtonLink } from "~/components/ui/Button";
 import { Container } from "~/components/ui/Container";
 import { DemoBanner } from "~/components/ui/DemoNotice";
+import { MediaFrame } from "~/components/ui/MediaFrame";
 import { Prose } from "~/components/ui/Prose";
 import { formatDate } from "~/lib/format";
 import { buildMeta } from "~/lib/seo";
@@ -29,27 +30,32 @@ export default function ArticleDetail({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <DemoBanner show={article.is_demo} />
-      <article className="py-16">
+      <article className="py-space-xl md:py-20">
         <Container>
-          <p className="text-small text-ink-muted">
-            <time dateTime={article.published_at ?? undefined}>
-              {formatDate(article.published_at)}
-            </time>
-            {article.author_name ? ` · ${article.author_name}` : ""}
-          </p>
-          <h1 className="mt-3 max-w-4xl text-h1 md:text-display">{article.title}</h1>
-          <p className="mt-5 max-w-reading text-lead text-ink-muted">{article.excerpt}</p>
-          {article.cover_image ? (
-            <img
+          <div className="max-w-5xl">
+            <p className="font-code-technical text-code-technical text-on-surface-variant">
+              <time dateTime={article.published_at ?? undefined}>
+                {formatDate(article.published_at)}
+              </time>
+              {article.author_name ? ` · ${article.author_name}` : ""}
+            </p>
+            <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-headline-2xl-mobile md:font-headline-2xl md:text-headline-2xl">
+              {article.title}
+            </h1>
+            <p className="mt-space-md max-w-reading font-body-lg text-body-lg text-on-surface-variant">
+              {article.excerpt}
+            </p>
+            <MediaFrame
               src={article.cover_image}
               alt={article.cover_alt}
-              className="mt-10 aspect-[16/9] w-full max-w-4xl object-cover"
+              aspect="16/9"
+              className="mt-space-xl"
             />
-          ) : null}
-          <div className="mt-10">
-            <Prose text={article.body} />
+            <div className="mt-space-xl max-w-reading">
+              <Prose text={article.body} />
+            </div>
           </div>
-          <div className="mt-12">
+          <div className="mt-space-xl border-t border-outline-variant pt-space-lg">
             <ButtonLink to="/actualites" variant="secondary">
               Toutes les actualités
             </ButtonLink>

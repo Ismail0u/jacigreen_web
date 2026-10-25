@@ -17,7 +17,7 @@ Seuls les contenus `published` dont `published_at` est atteint sont visibles ; u
 ## Pagination
 `?page=2&page_size=20` (maximum 50). Réponse : `{count, next, previous, results}`.
 
-## Dépôt d'une demande
+## Dépôt d'une demande (au niveau du formulaire)
 Champs : `subject` (`general`, `quote`, `training`, `partnership`, `buyback_info`, `other`), `name`, `email`, `organization` (facultatif), `message` (20 à 5 000 caractères), `consent` (doit être `true`), `website` (piège anti-robot : doit rester vide). Réponse 201 `{"detail": "..."}`. Un robot qui remplit `website` reçoit aussi 201 mais rien n'est enregistré. Limite : 5 demandes par heure et par IP (`THROTTLE_CONTACT_RATE`).
 
 ## Erreurs

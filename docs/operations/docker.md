@@ -40,5 +40,21 @@ Jamais automatiques. Exécuter `migrate` explicitement après un `up` ou une mis
 | Migrations | Manuelles | Commande de pré-déploiement ou étape manuelle contrôlée |
 
 ## Variables de production
-**Render (API)** : `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS` (domaine de l'API), `DATABASE_URL`, `CORS_ALLOWED_ORIGINS` (domaine du site), `CSRF_TRUSTED_ORIGINS` (domaine de l'API en `https://`), `DRF_NUM_PROXIES=1`, `FRONTEND_DEPLOY_HOOK_URL`, `CACHE_URL` (cache partagé recommandé). Commande de démarrage : celle de l'image (`gunicorn`). Vérifier les caractéristiques et limites actuelles du plan choisi (mise en veille, durée de vie de la base gratuite) avant de s'y engager.
-**Vercel (site)** : `VITE_API_URL` (URL publique de l'API), `VITE_SITE_URL` (URL finale), `API_INTERNAL_URL` (identique à `VITE_API_URL` : le build doit joindre l'API publique). Créer un Deploy Hook et le renseigner côté Render. Contrôler `npm run check:prerender -- --production --forbid-demo` avant la bascule.
+**Render (API)** : `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS` (nom d’hôte
+public de l’API, sans schéma), `DATABASE_URL`, `CORS_ALLOWED_ORIGINS` (origine
+HTTPS exacte du site, sans joker), `CSRF_TRUSTED_ORIGINS` (origine HTTPS exacte
+de l’API), `DRF_NUM_PROXIES=1`, `FRONTEND_DEPLOY_HOOK_URL`, `CACHE_URL` (cache
+partagé recommandé en multi-workers). Les listes CORS/CSRF restent vides par
+défaut et échouent donc de manière restrictive si elles ne sont pas configurées.
+Commande de démarrage : celle de l'image (`gunicorn`). Vérifier les
+caractéristiques et limites actuelles du plan choisi (mise en veille, durée de
+vie de la base gratuite) avant de s'y engager.
+
+**Vercel (site)** : `VITE_API_URL` (URL HTTPS publique de l'API),
+`VITE_SITE_URL` (URL HTTPS publique définitive du site),
+`API_INTERNAL_URL` (identique à `VITE_API_URL` : le build doit joindre l'API
+publique). Définir ces valeurs explicitement dans l’environnement de production ;
+ne pas réutiliser `localhost` des exemples Compose. Le domaine définitif n’étant
+pas fourni, aucune URL n’est préremplie ici. Créer un Deploy Hook et le
+renseigner côté Render. Contrôler
+`npm run check:prerender -- --production --forbid-demo` avant la bascule.

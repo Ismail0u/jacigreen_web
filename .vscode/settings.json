@@ -5,5 +5,6 @@
   "python.analysis.extraPaths": ["backend"],
   "eslint.workingDirectories": ["frontend"],
   "chat.promptFilesRecommendations": {},
-  "github.copilot.chat.codeGeneration.useInstructionFiles": true
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.commitMessage.addCoCommitters": "never",
 }

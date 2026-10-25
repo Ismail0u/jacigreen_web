@@ -8,7 +8,11 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 const BUILD_DIR = join(import.meta.dirname, "..", "build", "client");
-const SITE_URL = (process.env.VITE_SITE_URL ?? "http://localhost:5173").replace(/\/+$/, "");
+const configuredSiteUrl = process.env.VITE_SITE_URL;
+if (!configuredSiteUrl) {
+  throw new Error("VITE_SITE_URL doit être défini pour générer le sitemap.");
+}
+const SITE_URL = configuredSiteUrl.replace(/\/+$/, "");
 
 function* walk(dir) {
   for (const entry of readdirSync(dir)) {

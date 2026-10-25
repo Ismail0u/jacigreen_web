@@ -22,6 +22,5 @@
 - **Content-Security-Policy** : non définie (à faire) ; `vercel.json` ne contient pas de CSP.
 - **Django Admin** : changer l'URL `/admin/` et activer une double authentification avant la production (à faire).
 - **Notification par email** des demandes de contact : non implémentée ; les demandes sont lues dans l'admin.
-- **Captcha** : non intégré ; le honeypot et la limitation de débit protègent partiellement.
 - **Dépendances** : Dependabot configuré, `pip-audit` / `npm audit` non intégrés à la CI (à faire).
 - `check --deploy` (réglages de production) n'émet qu'un avertissement : `SECURE_HSTS_PRELOAD`, volontairement désactivé.

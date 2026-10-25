@@ -12,12 +12,27 @@ import { join } from "node:path";
 
 const BUILD_DIR = join(import.meta.dirname, "..", "build", "client");
 const API = (process.env.API_INTERNAL_URL ?? process.env.VITE_API_URL ?? "").replace(/\/+$/, "");
-const SITE_URL = (process.env.VITE_SITE_URL ?? "http://localhost:5173").replace(/\/+$/, "");
+const configuredSiteUrl = process.env.VITE_SITE_URL;
+const SITE_URL = (configuredSiteUrl ?? "").replace(/\/+$/, "");
 const FORBID_DEMO = process.argv.includes("--forbid-demo");
 const PRODUCTION = process.argv.includes("--production");
 
 const failures = [];
 const fail = (route, message) => failures.push(`${route} : ${message}`);
+if (!configuredSiteUrl) fail("(configuration)", "VITE_SITE_URL doit être explicitement défini");
+if (PRODUCTION && configuredSiteUrl) {
+  try {
+    const siteUrl = new URL(configuredSiteUrl);
+    if (
+      siteUrl.protocol !== "https:" ||
+      /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(siteUrl.hostname)
+    ) {
+      fail("(configuration)", "VITE_SITE_URL doit être une URL publique HTTPS, pas une URL locale");
+    }
+  } catch {
+    fail("(configuration)", "VITE_SITE_URL n'est pas une URL valide");
+  }
+}
 
 const decode = (text) =>
   text
@@ -62,7 +77,8 @@ function checkPage(route, { noindex = false, expectInH1 } = {}) {
     const h1 = decode(tag(/<h1[^>]*>([\s\S]*?)<\/h1>/) ?? "");
     if (!h1.includes(expectInH1)) fail(route, `le <h1> ne contient pas « ${expectInH1} »`);
   }
-  if (FORBID_DEMO && html.includes("[DÉMO]")) fail(route, "contenu de démonstration présent");
+  if (FORBID_DEMO && /Contenu de démonstration|Démonstration/.test(html))
+    fail(route, "marqueur visible de contenu de démonstration présent");
 }
 
 async function allItems(resource) {
@@ -78,6 +94,19 @@ async function allItems(resource) {
   return items;
 }
 
+function checkNoDemoItems(resource, items, routeForItem) {
+  if (!FORBID_DEMO) return;
+  for (const item of items) {
+    if (item.is_demo !== false) {
+      const identifier = item.slug ?? item.id ?? "élément sans identifiant";
+      fail(
+        routeForItem(item),
+        `${resource}/${identifier} : is_demo doit être false (valeur reçue : ${String(item.is_demo)})`,
+      );
+    }
+  }
+}
+
 const STATIC_ROUTES = [
   "/",
   "/a-propos",
@@ -91,12 +120,20 @@ for (const route of STATIC_ROUTES) checkPage(route);
 checkPage("/mentions-legales", { noindex: true });
 
 if (API) {
-  for (const solution of await allItems("solutions")) {
+  const solutions = await allItems("solutions");
+  checkNoDemoItems("solutions", solutions, (solution) => `/solutions/${solution.slug}`);
+  for (const solution of solutions) {
     checkPage(`/solutions/${solution.slug}`, { expectInH1: solution.name });
   }
-  for (const article of await allItems("articles")) {
+
+  const articles = await allItems("articles");
+  checkNoDemoItems("articles", articles, (article) => `/actualites/${article.slug}`);
+  for (const article of articles) {
     checkPage(`/actualites/${article.slug}`, { expectInH1: article.title });
   }
+
+  checkNoDemoItems("services", await allItems("services"), () => "/services");
+  checkNoDemoItems("projects", await allItems("projects"), () => "/realisations");
 } else {
   fail("(api)", "API_INTERNAL_URL absente : routes dynamiques non vérifiées");
 }

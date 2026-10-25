@@ -3,7 +3,7 @@
 Site institutionnel de JACIGREEN : React + TypeScript (frontend, pré-rendu statique) et Django REST + PostgreSQL (API, administration de contenu), avec Docker Compose.
 
 ## 1. Présentation de JACIGREEN
-Entreprise africaine spécialisée dans la valorisation des ressources naturelles, des déchets organiques et des espèces végétales envahissantes (jacinthe d'eau) : solutions environnementales, énergétiques et agricoles (source : document institutionnel v1.0, publication à confirmer).
+Entreprise africaine spécialisée dans la valorisation des ressources naturelles, des déchets organiques et des espèces végétales envahissantes (jacinthe d'eau) : solutions environnementales, énergétiques et agricoles. Le document institutionnel v1.0 a été autorisé à la publication le 24 octobre 2026 ; les fiches API de démonstration restent séparément non validées.
 
 ## 2. Objectifs du socle
 Fournir une base maintenable, testée et documentée pour développer la Phase 1 (vitrine) puis la Phase 2 (transactionnel) sans réécriture : architecture claire, design system implémenté, SEO vérifié, sécurité de base, CI, et instructions persistantes pour GitHub Copilot.
@@ -17,7 +17,7 @@ Fournir une base maintenable, testée et documentée pour développer la Phase 1
 - Tests (backend,frontend), lint, types, CI, Dependabot, instructions Copilot, 5 agents.
 
 ## 4. Fonctionnalités encore à développer
-Partiellement implémenté : page « à propos » (contenu validé manquant), solutions et services (contenus réels à saisir), pages légales (substitution).
+Partiellement implémenté : pages éditoriales et de catalogue (fiches API de démonstration à remplacer par des contenus validés), mentions légales (informations de l’éditeur à fournir).
 À faire : page Formations, fiche de réalisation, textes légaux, logo et photos réels, notification email des demandes, stockage des médias en production, CSP, double authentification de l'admin, tests de bout en bout en CI, anglais. Phase 2 : commandes, comptes, paiement, rachat de biodigesteur avec pièces jointes, inscriptions. Détail : `docs/project/audit-initial.md` et `docs/adr/0003`.
 
 ## 5. Stack technique
@@ -118,10 +118,10 @@ Lecture seule publique (solutions, services, réalisations, articles), paginatio
 Pré-rendu statique au build (React Router `ssr: false` + `prerender`), métadonnées par page, sitemap, robots.txt, vérification automatisée, reconstruction à chaque publication (Deploy Hook). Détail et limites (soft 404) : `docs/architecture/seo.md`.
 
 ## 24. Gestion des contenus
-Les éditeurs saisissent les contenus dans Django Admin : statut « Publié » (ou date future pour planifier). La publication relance le build du site. Les contenus de démonstration (`is_demo`) ne doivent jamais être publiés : `npm run check:prerender -- --forbid-demo` échoue s'il en reste. Informations à valider : `docs/content/content-register.md`.
+Les éditeurs saisissent les contenus dans Django Admin : statut « Publié » (ou date future pour planifier). La publication relance le build du site. Les contenus de démonstration (`is_demo`) ne doivent jamais atteindre la production : `npm run check:prerender -- --forbid-demo` échoue s'il en reste. Pour la production, fournir également une URL HTTPS publique dans `VITE_SITE_URL` et exécuter `npm run check:prerender -- --production --forbid-demo`. Informations à confirmer : `docs/content/content-register.md`.
 
 ## 25. Règles de sécurité
 Aucun secret dans le code ni dans `VITE_*` ; permissions DRF explicites ; validation serveur ; CORS restreint ; limitation de débit ; honeypot ; `DEBUG=False` en production. Points ouverts (CSP, 2FA admin, cache partagé) : `docs/architecture/security.md`.
 
 ## 26. Préparation au déploiement
-Vercel (frontend) + Render (API et PostgreSQL), domaine chez Hostinger. Variables, commande de démarrage et différences avec le développement : `docs/operations/docker.md`. **Ne pas déployer avant** validation des contenus, de la sécurité et des tests, et vérification des conditions actuelles des offres choisies.
+Vercel (frontend) + Render (API et PostgreSQL), domaine à configurer. Aucune URL de production n’est présumée ; définir `VITE_SITE_URL`, les origines CORS/CSRF et les hôtes autorisés à partir des domaines définitifs. Variables, commande de démarrage et différences avec le développement : `docs/operations/docker.md`. **Ne pas déployer avant** validation des contenus, de la sécurité et des tests, et vérification des conditions actuelles des offres choisies.

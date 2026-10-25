@@ -15,6 +15,14 @@ const setup = () =>
   );
 
 describe("Header", () => {
+  it("utilise le logo JACIGREEN fourni", () => {
+    setup();
+    expect(screen.getByRole("img", { name: "JACIGREEN" })).toHaveAttribute(
+      "src",
+      "/brand/jacigreen.png",
+    );
+  });
+
   it("expose tous les liens de navigation principaux", () => {
     setup();
     for (const item of MAIN_NAV) {
