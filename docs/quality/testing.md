@@ -49,6 +49,16 @@ Revalidation frontend effectuée le 25 octobre 2026 après la dernière réducti
 `build` et `check:prerender` local ont tous réussi. `docker compose config
 --quiet` et un nouveau `git diff --check` ont également réussi.
 
+Le 25 octobre 2026, les routes de détail ont été imbriquées sous des routes de
+catalogue avec `loader` et `clientLoader` parent afin que le pré-rendu fonctionne
+même lorsque l'API ne publie encore aucune fiche. Validation après ce
+changement : format, typecheck, lint et 12 fichiers/64 tests réussis ; build et
+`check:prerender` réussis avec les contenus de l'API locale (13 URL de sitemap,
+dont 3 solutions et 3 articles). Un build et un contrôle de pré-rendu ont aussi
+réussi avec un serveur API simulé renvoyant des catalogues vides (7 URL de
+sitemap, aucune route de détail). Le test vide valide le build/pré-rendu, pas
+l'expérience navigateur avec une API de production vide.
+
 Les messages Django de type 404, 403, 429 et échec réseau apparus pendant les
 tests proviennent des scénarios négatifs attendus ; aucune suite n’a échoué.
 L’avertissement `security.W021` est distinct d’un échec de test. Le domaine

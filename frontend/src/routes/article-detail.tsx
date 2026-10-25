@@ -4,29 +4,15 @@ import { DemoBanner } from "~/components/ui/DemoNotice";
 import { MediaFrame } from "~/components/ui/MediaFrame";
 import { Prose } from "~/components/ui/Prose";
 import { formatDate } from "~/lib/format";
-import { buildMeta } from "~/lib/seo";
-import { getArticle } from "~/services/api/content";
+import { useOutletContext } from "react-router";
 
-import type { Route } from "./+types/article-detail";
+import type { NewsRouteData } from "./news-layout";
 
-export async function loader({ params }: Route.LoaderArgs) {
-  return { article: await getArticle(params.slug) };
-}
-
-export function meta({ loaderData }: Route.MetaArgs) {
-  const article = (loaderData as typeof loaderData | undefined)?.article;
-  if (!article) return [{ title: "Article introuvable | JACIGREEN" }];
-  return buildMeta({
-    title: article.title,
-    description: article.excerpt,
-    path: `/actualites/${article.slug}`,
-    type: "article",
-    image: article.cover_image,
-  });
-}
-
-export default function ArticleDetail({ loaderData }: Route.ComponentProps) {
-  const { article } = loaderData;
+export default function ArticleDetail() {
+  const { article } = useOutletContext<NewsRouteData>();
+  if (!article) {
+    throw new Error("Les données de l’article ne sont pas disponibles.");
+  }
   return (
     <>
       <DemoBanner show={article.is_demo} />

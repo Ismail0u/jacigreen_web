@@ -3,25 +3,15 @@ import { ContentPending } from "~/components/ui/ContentPending";
 import { DemoBanner } from "~/components/ui/DemoNotice";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { ArticleCard } from "~/features/news/ArticleCard";
-import { buildMeta } from "~/lib/seo";
-import { listArticles } from "~/services/api/content";
+import { useOutletContext } from "react-router";
 
-import type { Route } from "./+types/news";
+import type { NewsRouteData } from "./news-layout";
 
-export async function loader() {
-  return { articles: await listArticles() };
-}
-
-export function meta() {
-  return buildMeta({
-    title: "Actualités",
-    description: "Actualités et ressources publiées par JACIGREEN.",
-    path: "/actualites",
-  });
-}
-
-export default function News({ loaderData }: Route.ComponentProps) {
-  const { articles } = loaderData;
+export default function News() {
+  const { articles } = useOutletContext<NewsRouteData>();
+  if (!articles) {
+    throw new Error("Les données de la liste des actualités ne sont pas disponibles.");
+  }
   const categoryLabels = {
     news: "Actualités",
     project: "Projets",

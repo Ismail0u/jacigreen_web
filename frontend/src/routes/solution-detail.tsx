@@ -5,28 +5,15 @@ import { ContentPending } from "~/components/ui/ContentPending";
 import { DemoBanner } from "~/components/ui/DemoNotice";
 import { MediaFrame } from "~/components/ui/MediaFrame";
 import { Prose } from "~/components/ui/Prose";
-import { buildMeta } from "~/lib/seo";
-import { getSolution } from "~/services/api/content";
+import { useOutletContext } from "react-router";
 
-import type { Route } from "./+types/solution-detail";
+import type { SolutionsRouteData } from "./solutions-layout";
 
-export async function loader({ params }: Route.LoaderArgs) {
-  return { solution: await getSolution(params.slug) };
-}
-
-export function meta({ loaderData }: Route.MetaArgs) {
-  const solution = (loaderData as typeof loaderData | undefined)?.solution;
-  if (!solution) return [{ title: "Solution introuvable | JACIGREEN" }];
-  return buildMeta({
-    title: solution.name,
-    description: solution.summary,
-    path: `/solutions/${solution.slug}`,
-    image: solution.cover_image,
-  });
-}
-
-export default function SolutionDetail({ loaderData }: Route.ComponentProps) {
-  const { solution } = loaderData;
+export default function SolutionDetail() {
+  const { solution } = useOutletContext<SolutionsRouteData>();
+  if (!solution) {
+    throw new Error("Les données de la solution ne sont pas disponibles.");
+  }
   const categoryLabels = {
     energy: "Énergie",
     fertilizer: "Fertilisation",
