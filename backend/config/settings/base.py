@@ -75,11 +75,11 @@ TEMPLATES = [
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("DB_CONN_MAX_AGE", default=60)
 
-# En local, on reste sur le comportement standard (schéma "public") et en prod on force le schéma "web" pour toutes les requêtes. Cela permet de séparer les
+# En local, on reste sur le comportement standard (schéma "public").
+# En production, on force le schéma "web" pour toutes les requêtes.
+# Cela permet de séparer les données du schéma public.
 if not DEBUG and DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
-    DATABASES["default"]["OPTIONS"] = {
-        "options": "-c search_path=web,public"
-    }
+    DATABASES["default"]["OPTIONS"] = {"options": "-c search_path=web,public"}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Cache utilisé notamment par la limitation de débit. Par défaut : mémoire locale
