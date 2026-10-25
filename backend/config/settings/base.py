@@ -74,6 +74,12 @@ TEMPLATES = [
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("DB_CONN_MAX_AGE", default=60)
+
+# En local, on reste sur le comportement standard (schéma "public") et en prod on force le schéma "web" pour toutes les requêtes. Cela permet de séparer les
+if not DEBUG and DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql":
+    DATABASES["default"]["OPTIONS"] = {
+        "options": "-c search_path=web,public"
+    }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Cache utilisé notamment par la limitation de débit. Par défaut : mémoire locale
@@ -153,7 +159,6 @@ CORS_ALLOW_METHODS = ["GET", "POST", "OPTIONS"]
 CORS_ALLOW_CREDENTIALS = False
 # CSRF : l'API n'utilise ni cookie ni session (aucune authentification) ; seule
 # l'administration Django (/admin/) s'appuie sur CSRF. Origines de confiance
-# nécessaires derrière un proxy HTTPS (ex. Render).
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 # --- Intégrations ----------------------------------------------------------
