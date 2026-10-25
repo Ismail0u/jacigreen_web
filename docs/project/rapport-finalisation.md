@@ -1,136 +1,142 @@
-# Rapport de finalisation — état au 23 octobre 2026
+# Rapport de finalisation — contenu, sources et validation
 
-## Statut
+**État :** corrections frontend réalisées ; non prêt pour production. Les
+catalogues sont désormais alimentés par l’API uniquement. Les 20 fiches de la
+base locale restent des démonstrations non validées. La reconstruction Docker
+échoue encore sur la résolution DNS lors de l’installation Python.
 
-**NON PRÊT — blocage de configuration de production.** Le build et le pré-rendu
-complet fonctionnent après fixation du host Vite Preview à `127.0.0.1`. Les
-sorties HTML, sitemap, `robots.txt` et fallback sont présents ; le contrôle local
-sans mode production ni garde de démo passe. Le contrôle strict échoue sur 45
-problèmes : 14 canoniques locales, 20 contenus API marqués `is_demo=true` et 11
-pages qui affichent leur avertissement de démonstration. Le domaine public
-n'étant pas documenté, il n'est pas remplacé par une URL supposée : renseigner
-la vraie URL de déploiement et remplacer les données démo par des contenus
-validés avant de refaire le contrôle.
+## Modifications réalisées
 
-Les textes éditoriaux, images, coordonnées et textes juridiques nécessitent encore
-validation ou fourniture par JACIGREEN. Le logo PNG existe ; une variante
-transparente peut être fournie si nécessaire. La fidélité visuelle n'a pas été
-validée par comparaison pixel à pixel.
+- Raccourcissement des pages Accueil et À propos ; suppression des répétitions
+  sur l’origine des textes, des formulations passe-partout et des copies
+  statiques de solutions, services, projets et actualités.
+- Utilisation exclusive de l’API Django pour les listes et détails de
+  solutions, services, réalisations et actualités. Les pages affichent un état
+  vide quand la liste API est vide. L’accueil présente les sélections API.
+- Conservation dans le frontend des contenus institutionnels qui ne sont pas
+  gérés par un endpoint catalogue : positionnement, mission et vision proposées,
+  valeurs, biographie, distinctions, culture, perspectives, identité et chiffres
+  historiques avec réserve.
+- Mise à jour du bandeau de démonstration : les fiches sont qualifiées de
+  « non validées comme contenu éditorial publiable », sans les qualifier à tort
+  de fausses informations.
+- `VITE_SITE_URL` est obligatoire côté frontend ; le sitemap échoue si cette
+  valeur manque. Le contrôle `--production` refuse une URL locale ou non HTTPS.
+  L’URL publique définitive n’étant pas connue, aucune valeur de production
+  n’est inventée. CORS et CSRF restent limités aux origines explicitement
+  configurées ; les paramètres production Django imposent `DEBUG=False` et
+  HTTPS.
+- Mise à jour du registre éditorial, de la matrice, de la documentation SEO et
+  déploiement, du README et du présent rapport.
+- Aucun champ, serializer, endpoint, modèle, migration ou statut de données
+  backend n’a été modifié. Aucun enregistrement n’a été promu.
 
-## Travaux réalisés
+## Vérification des données API
 
-- Ajout de `MediaFrame` avec ratios fixes, dimensions d'image, chargement différé
-  et placeholder décoratif accessible lorsque le fichier validé manque.
-- Ajout du registre `frontend/src/content/media.ts`, de la liste des visuels
-  attendus dans `frontend/public/images/README.md` et du test interdisant les
-  sources externes codées en dur dans les balises image TSX.
-- Utilisation de `MediaFrame` dans les cartes Solution, Réalisation et Actualité,
-  ainsi que dans les fiches Solution et Article.
-- Ajout sur l'accueil d'un visuel de remplacement et d'une section Réalisations
-  alimentée par l'API. Le bandeau de démonstration tient désormais aussi compte
-  des Réalisations présentes sur l'accueil.
-- Ajout d'une section « Formations et transfert d'expertise » dans Services,
-  affichée uniquement si une entrée publiée de l'API correspond à une formation.
-  Aucun modèle `Training` ni contenu de cursus n'a été créé.
-- Mise en page À propos rapprochée de la structure éditoriale avec un média de
-  remplacement ; aucune mission, vision ou valeur n'a été ajoutée.
-- Création du registre de validation des contenus et du plan de finalisation.
-- Lecture complète du document institutionnel et création de
-  `docs/project/matrice-contenu.md`, qui recense chacune de ses sections et son
-  statut, sa destination, sa présence dans le site et ses validations manquantes.
-- Retrait des formulations statiques non validées de la présentation, de la chaîne
-  de valeur, du pied de page et des métadonnées ; les emplacements concernés
-  signalent maintenant l'attente d'une validation institutionnelle.
-- Affichage des descriptions complètes des services depuis l'API et des
-  descriptions de réalisation lorsqu'elles sont renseignées, sans évolution du
-  contrat API.
+Commande de lecture seule exécutée dans le backend : énumération des modèles
+Solution, Service, Project et Article avec `slug`, `status`, `is_demo` et
+`published_at`.
 
-## État des pages et fidélité visuelle
+| Catégorie | Nombre | État observé |
+|---|---:|---|
+| Solutions | 3 | toutes `published`, `is_demo=true` |
+| Services | 8 | toutes `published`, `is_demo=true` |
+| Réalisations | 6 | toutes `published`, `is_demo=true` |
+| Articles | 3 | toutes `published`, `is_demo=true` |
+| **Total** | **20** | **20 démos, 0 contenu API non-démo** |
 
-| Page | État / fidélité | Écarts ou contenus omis |
-|---|---|---|
-| Accueil | Partiellement rapproché de la maquette | Hero à deux colonnes et sections éditoriales ; présentation et chaîne de valeur en attente de validation ; fidélité détaillée non validée. |
-| À propos | Partiellement rapproché | Média de remplacement ; présentation, histoire, mission, vision et valeurs en attente de validation. |
-| Solutions et fiches | Fonctionnelles, améliorées | Données API et visuels de remplacement ; composition de la maquette non reproduite intégralement. |
-| Services / Formations | Fonctionnelles, section Formations conditionnelle | Description complète des entrées API ; aucun catalogue, durée ou session inventé. |
-| Réalisations | Fonctionnelle | Filtre pays conservé, descriptions API accessibles depuis les cartes et visuels de remplacement ; exemples de la maquette non repris. |
-| Actualités et articles | Fonctionnelles | Données API, aucun article fictif ou chiffre de la maquette ajouté ; médias de remplacement. |
-| Contact | Fonctionnel | Formulaire existant inchangé ; aucune coordonnée ou infrastructure non validée affichée. |
-| Mentions légales | Structure neutre `noindex` | Textes juridiques en attente de rédaction et validation. |
-| Page introuvable | Fonctionnelle | Aucun écart fonctionnel identifié pendant le contrôle. |
+Les slugs et la correspondance individuelle avec les §§6, 11, 12, 14 et 15
+sont consignés dans [`../content/content-register.md`](../content/content-register.md).
+Les faits principaux recoupent le document autorisé, mais cela ne confirme pas
+indépendamment l’état « publié », les champs éditoriaux ajoutés, les années de
+certaines fiches ou les dates créées automatiquement par le seed. Aucune
+commande de promotion n’a donc été exécutée. Le contrôle strict reste actif.
 
-## Interactions et médias volontairement omis
+## Résultats des contrôles
 
-- Aucun visuel de maquette Google, lien `googleusercontent`, photographie sans
-  rapport, faux logo ou source externe n'a été utilisé.
-- Les emplacements sans fichier affichent un placeholder ; le remplacement
-  nécessite un visuel officiel et un texte alternatif validé.
-- Coordonnées, adresses, études, certifications, brevets, rendements, chiffres
-  d'impact, clients, projets et témoignages non validés sont omis.
-- Recherche, connexion, sélecteur de langue, newsletter et boutons sans
-  comportement réel ne sont pas ajoutés.
-- La page de reprise de biodigesteur, les commandes, comptes, paiements et autres
-  fonctions de Phase 2 ne sont pas intégrés.
-
-## Contrôles exécutés et résultats réels
-
-| Contrôle | Résultat |
+| Contrôle | Résultat réel |
 |---|---|
-| `npm run lint` dans le conteneur frontend | Réussi |
-| `npm run typecheck` dans le conteneur frontend | Réussi |
-| `npm test` dans le conteneur frontend | Réussi : 11 fichiers, 62 tests |
-| `npm run format:check` dans le conteneur frontend | Réussi |
+| Frontend `npm run format:check` | Réussi après formatage des modifications |
+| Frontend `npm run typecheck` | Réussi |
+| Frontend `npm run lint` | Réussi après correction d’une erreur `no-deprecated` dans le nouveau test ; aucune règle désactivée |
+| Frontend `npm test` | Réussi : 12 fichiers, 64 tests |
+| Frontend `npm run build` | Réussi dans le conteneur frontend déjà présent ; build client/serveur et pré-rendu produits |
+| Frontend `npm run check:prerender` | Réussi : 13 URL de sitemap, HTML, métadonnées, canoniques locales de développement, robots et fallback contrôlés |
+| Frontend `npm run check:prerender -- --production --forbid-demo` | Échec attendu : 46 problèmes. 1 configuration de domaine public HTTPS, 14 canoniques locales, 20 enregistrements `is_demo=true`, 11 pages contenant le marqueur démo. Protection non contournée. |
+| Backend `ruff check .` / `ruff format --check .` | Réussis : aucune erreur ; 60 fichiers déjà formatés |
+| Backend `python manage.py check` | Réussi : aucun problème |
+| Backend `makemigrations --check --dry-run` | Réussi : aucune migration manquante |
+| Backend `spectacular --validate --fail-on-warn` | Réussi : aucun avertissement OpenAPI |
+| Backend `DJANGO_SETTINGS_MODULE=config.settings.test python manage.py test` | Réussi : 47 tests |
+| Django `config.settings.production` avec `manage.py check --deploy` | Code de sortie 0 ; avertissement `security.W021` car HSTS preload est désactivé. C’est intentionnel tant que le domaine n’est pas validé. La commande a utilisé l’environnement Compose de développement, pas un environnement réel de production. |
+| Revalidation frontend après la réduction des mentions légales | Réussie : format, typecheck, lint, 12 fichiers/64 tests, build et contrôle de pré-rendu local |
+| `docker compose config --quiet` | Réussi |
+| Contrôle final `git diff --check` | Réussi |
+| Navigateur : 14 routes × 5 largeurs (360, 390, 768, 1024, 1440 px) | 70 vérifications réussies : un `<h1>`, canonique présente, aucun débordement horizontal ni lien vide |
+| Navigateur : liens internes | 15 destinations uniques vérifiées ; toutes répondent HTTP 200 |
+| Navigateur : erreurs JavaScript/console | Aucune erreur observée sur les 70 ouvertures de pages |
+| Navigateur : menu mobile | Ouverture et fermeture par Échap vérifiées après hydratation à 360 px |
 | `git diff --check` | Réussi |
-| Test spécifique `MediaFrame.test.tsx` | Réussi : 3 tests |
-| Santé de l'API et listes Solutions, Services, Réalisations, Actualités depuis le frontend | Réussi : HTTP 200 |
-| Navigateur : reconstruction précédente, 11 routes et 5 largeurs (360, 390, 768, 1024, 1440 px) | Réussi antérieurement : 55 vérifications, aucun débordement horizontal et un seul `<h1>` par route. Pour ce lot contenu, l'accueil, À propos et Services ont été vérifiés dans le navigateur ; les 11 routes aux 5 largeurs ne sont pas re-testées. |
-| Menu mobile et touche Échap | Réussi : ouverture/fermeture vérifiée à 360 px |
-| Formulaire de contact dans le navigateur | Réussi : erreurs locales accessibles vérifiées sans envoyer ni enregistrer de demande |
-| `npm run build` | Réussi après ajout de `preview.host: "127.0.0.1"` dans `frontend/vite.config.ts`. Cause initiale : Vite liait le preview à `::1`, alors que le client HTTP du pré-rendu résolvait `localhost` vers `127.0.0.1`. |
-| `npm run check:prerender` | Réussi : HTML, canoniques locales, métadonnées, `h1`, sitemap, robots et fallback vérifiés. |
-| `npm run check:prerender -- --forbid-demo` | Échoue sur 31 problèmes : 20 ressources API marquées `is_demo=true` et 11 pages avec avertissement de démonstration. |
-| `npm run check:prerender -- --production --forbid-demo` | Échec : 45 problèmes — 14 canoniques locales, 20 éléments API avec `is_demo=true` et 11 pages avec avertissement de démonstration. Renseigner la vraie URL publique et remplacer les contenus démo par des contenus validés avant de refaire ce contrôle. |
-| Vérifications backend Ruff / migrations / OpenAPI / tests | Non exécutées : aucun fichier backend n'a été modifié. |
-| Comparaison visuelle navigateur vs captures Stitch | Non exécutée pixel à pixel ; seules la structure, les routes, le responsive et le débordement ont été contrôlés. |
-| Envoi réel du formulaire et vérification de stockage | Non exécutés pour ne pas créer de demande de test en base. |
+| Santé des services existants après l’échec Docker | Frontend HTTP 200 ; backend `/api/v1/health/` HTTP 200 ; les trois conteneurs restent en fonctionnement |
+| Comparaison pixel à pixel avec les maquettes Stitch | Non exécutée ; les résultats navigateur ne prouvent pas une fidélité visuelle pixel à pixel |
+| États vides avec une API réellement vide | Non exercés dans le navigateur, car l’API locale contient les 20 fiches de démonstration ; les branches d’état vide sont présentes dans les pages |
 
-## Images à fournir
+Les messages 404, 403, 429 et d’échec réseau observés dans les journaux de
+tests Django correspondent à des scénarios négatifs testés ; les 47 tests sont
+passés.
 
-| Emplacement | Page | Ratio | Taille recommandée |
-|---|---|---:|---:|
-| `homeHero` | `/` | 4:3 | 1600 × 1200 px |
-| `aboutStory` | `/a-propos` | 4:3 | 1200 × 900 px |
-| Couvertures Solutions | `/solutions` et `/` | 4:3 | 1200 × 900 px |
-| Fiche Solution | `/solutions/:slug` | 16:9 | 1600 × 900 px |
-| Couvertures Réalisations | `/realisations` | 4:3 | 1200 × 900 px |
-| Couvertures Actualités | `/actualites` | 4:3 | 1200 × 900 px |
-| Article | `/actualites/:slug` | 16:9 | 1600 × 900 px |
-| Logo | En-tête et pied de page | PNG carré 400 × 400, fond blanc opaque | Fichier fourni : `frontend/public/brand/jacigreen.png` |
+La configuration de production impose `DEBUG=False`, HTTPS et les cookies
+sécurisés. HSTS preload reste désactivé en attendant la confirmation du domaine.
+Les noms d’hôtes de production et les origines CORS/CSRF n’ont pas été testés
+contre des valeurs réelles, qui ne sont pas encore fournies.
 
-Les images éditoriales viennent des champs `cover_image` et `cover_alt` de l'API ;
-le stockage et la diffusion en production restent à configurer. Tout média doit
-être fourni ou validé par JACIGREEN ; ne pas publier un placeholder comme s'il
-s'agissait d'une photographie.
+## Reconstruction Docker — échec réel
 
-## Informations et décisions humaines requises
+Commande relancée :
 
-- Autorisation de publier le document institutionnel et validation des textes
-  descriptifs avant leur éventuelle réintégration dans le frontend (la copie
-  statique non validée a été retirée).
-- Validation des noms, descriptions et maturités de Solutions et Services avant
-  publication ; remplacer les enregistrements de démonstration sans désactiver
-  leur indicateur tant que leur authenticité n'est pas établie.
-- Décisions proposées de l'ADR 0003 : Formations comme section Services, termes
-  Solutions/Produits et motif informatif du rachat.
-- Photos éditoriales ; coordonnées publiques ; mentions légales, politique de
-  confidentialité et CGU à fournir/valider juridiquement.
-- URL canonique de production (`VITE_SITE_URL`). La palette exacte fournie dans
-  la mission est enregistrée et testée ; les rôles UI restent compatibles avec
-  WCAG et les maquettes Stitch.
-- Date de mise en production.
+```text
+docker compose up -d --build
+```
 
-Le registre complet et les règles de publication se trouvent dans
-`docs/content/content-register.md`. Le worktree reste modifié et contient aussi
-des changements préexistants ; ils ont été préservés. Branche :
-`feature/core-backend-frontend`, suivie de `origin/feature/core-backend-frontend`.
-Aucun commit ni push n'a été effectué.
+Résultat : échec après environ 252 secondes. Pendant
+`pip install -r requirements/dev.txt`, pip a réessayé cinq fois de résoudre
+`/simple/django/` et a reçu `Temporary failure in name resolution`, puis
+`Could not find a version that satisfies the requirement Django==5.2.18`.
+L’étape backend `RUN pip install -r requirements/dev.txt` a échoué avec le code
+1 ; la construction frontend a été annulée. **La reconstruction d’image et le
+redémarrage à partir des nouvelles images n’ont pas réussi.** Les validations
+frontend ci-dessus ont utilisé le conteneur existant et son volume de code.
+
+## Fichiers touchés pour cette reprise
+
+- Frontend : `.env.example`, `scripts/check-prerender.mjs`,
+  `scripts/generate-sitemap.mjs`, `src/components/ui/DemoNotice.tsx`,
+  `src/content/institutional.ts`, `src/lib/env.ts`, `src/lib/env.test.ts`,
+  `src/routes/about.tsx`, `contact.tsx`, `home.tsx`, `legal.tsx`, `news.tsx`,
+  `projects.tsx`, `services.tsx`, `solutions.tsx`.
+- Documentation : `README.md`, `docs/architecture/seo.md`,
+  `docs/content/content-register.md`, `docs/operations/docker.md`,
+  `docs/project/audit-qualite-site.md`, `matrice-contenu.md`,
+  `plan-finalisation.md`, `rapport-finalisation.md`,
+  `docs/quality/testing.md`.
+
+Des modifications préexistantes dans le worktree ont été préservées. Aucun
+commit, push ni déploiement n’a été effectué.
+
+## Blocages et actions manuelles
+
+1. Rétablir le DNS/réseau Docker permettant d’accéder au dépôt de paquets, puis
+   rejouer `docker compose up -d --build`. Ne pas considérer l’image actuelle
+   comme reconstruite.
+2. Fournir les URL HTTPS définitives du site et de l’API ; définir
+   `VITE_SITE_URL`, `VITE_API_URL`, `API_INTERNAL_URL`,
+   `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et `CSRF_TRUSTED_ORIGINS` en
+   cohérence avec les hôtes réels.
+3. Faire valider les 20 fiches une par une dans Django Admin ou les remplacer
+   par des fiches éditoriales vérifiées ; ne pas simplement retirer `is_demo`.
+4. Fournir les informations juridiques et les photos éditoriales manquantes.
+5. Après ces actions, reconstruire et exécuter
+   `npm run check:prerender -- --production --forbid-demo`.
+
+La mise en production reste bloquée tant que ces conditions ne sont pas
+satisfaites.

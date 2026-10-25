@@ -15,37 +15,38 @@ Les maquettes sont des références de composition, non des sources factuelles.
 Le dépôt demande explicitement de ne pas reprendre leurs certifications,
 brevets, rendements, coordonnées, études ni autres données inventées
 ([`design/README.md`](../../design/README.md)). Les informations internes du
-document institutionnel ne sont pas automatiquement autorisées à la
-publication.
+document institutionnel ont depuis été autorisées à la publication par le
+propriétaire ; les données d’API doivent néanmoins être évaluées séparément.
 
-## Mise à jour après reconstruction de l'interface
+## État actuel — reprise du 24 octobre 2026
 
-Le frontend conserve React, TypeScript, React Router et les contrats existants
-de l'API. L'en-tête et le pied de page utilisent maintenant le PNG
-`frontend/public/brand/jacigreen.png`, et les pages reprennent les utilitaires
-typographiques, les couleurs et les espacements nommés de `stitch-theme.css`.
-Les compositions sont plus proches des sections Stitch ; les données
-institutionnelles manquantes sont signalées avec des blocs d'attente explicites,
-pas remplacées par des affirmations des maquettes. Aucun visuel éditorial externe
-n'a été ajouté.
+Les routes Accueil, Solutions, Services, Réalisations et Actualités utilisent
+désormais les API comme source de vérité pour les contenus de catalogue ; les
+copies statiques concurrentes ont été retirées. Les états vides sont prévus. La
+page À propos conserve les seuls éléments institutionnels non gérés par ces
+endpoints, en réduisant les répétitions et en maintenant les réserves de la
+source. Les détails sont consignés dans la
+[`matrice-contenu.md`](./matrice-contenu.md).
 
-La vérification navigateur a parcouru 11 routes (dont une fiche Solution et un
-article) aux largeurs 360, 390, 768, 1 024 et 1 440 px : aucun débordement
-horizontal n'a été observé après stabilisation du rendu. Le menu mobile a été
-ouvert puis fermé par Échap ; les liens de catégories Solutions/Actualités
-pointent vers des sections existantes. Une capture de l'accueil mobile a été
-inspectée. Cela ne constitue pas une comparaison pixel à pixel de chaque route.
-Les notes ci-dessous reflètent le code, les références HTML et ces contrôles
-partiels.
+La base locale contient 20 fiches `published` mais `is_demo=true` (3 solutions,
+8 services, 6 réalisations et 3 articles). Leurs slugs sont comparés à la source
+dans le [`content-register.md`](../content/content-register.md). Aucune n’a été
+promue : l’autorisation de publier le document ne vaut pas validation distincte
+du statut éditorial et des champs de chaque fiche.
 
-Validation frontend au dernier contrôle : tests, types, lint et format passent.
-Le build et le pré-rendu passent après configuration de Vite Preview sur
-`127.0.0.1` ; la cause était un bind IPv6 `::1` alors que le client HTTP de
-pré-rendu résolvait `localhost` vers IPv4. `check:prerender` valide les sorties
-locales. Le contrôle strict de production détecte 45 problèmes : 14 canoniques
-locales, 20 enregistrements API de démonstration et 11 pages avec leur
-avertissement rendu. La véritable valeur de `VITE_SITE_URL` et des données
-éditoriales approuvées sont requises avant publication.
+Validation dans les conteneurs existants : format, typecheck, lint, 64 tests
+frontend, build, pré-rendu local ; Ruff, checks Django, migrations, OpenAPI et
+47 tests backend. Contrôle navigateur : 14 routes aux cinq largeurs demandées
+(70 contrôles), 15 destinations internes HTTP 200, aucune erreur JavaScript,
+aucun lien vide ou débordement horizontal. Le menu mobile a été vérifié.
+Comparaison pixel à pixel Stitch non effectuée.
+
+Le contrôle strict de production échoue sur 46 problèmes : URL publique HTTPS
+absente, 14 canoniques locales, 20 fiches `is_demo=true` et 11 pages avec un
+marqueur visible. `docker compose up -d --build` échoue encore pendant
+`pip install` : résolution DNS indisponible pour le dépôt Python, puis Django
+5.2.18 déclaré introuvable. Le build frontend dans le conteneur existant a
+réussi ; la reconstruction des images n’a pas réussi.
 
 ## 1. État des lieux
 
@@ -67,12 +68,11 @@ avertissement rendu. La véritable valeur de `VITE_SITE_URL` et des données
   éléments publiés dont la date de publication est atteinte. Les seeds
   `seed_demo` et `seed_institutional_draft` servent au développement ; le second
   marque explicitement tous ses éléments `is_demo=True`.
-- **État éditorial :** le document de référence est
+- **État éditorial au moment de l'audit initial :** le document de référence est
   [`docs/content/jacigreen-institutionnel.md`](../content/jacigreen-institutionnel.md),
-  document interne v1.0 (2026), et non une autorisation de publication. Le
-  [registre de validation](../content/content-register.md) ne présente aucun
-  contenu comme « validé » : il distingue les éléments à confirmer, à valider,
-  historiques, brouillons ou non publiables.
+  document v1.0 (2026) ; l’autorisation de publication n’avait pas encore été
+  donnée à cette date. Le registre actuel reflète la décision ultérieure du
+  propriétaire.
 - **Rendu et blocage de livraison :** le build et le pré-rendu sont désormais
   réussis après la configuration IPv4 du Preview. Le contrôle local passe ;
   le contrôle strict de production bloque sur les canoniques Compose en
@@ -85,18 +85,22 @@ avertissement rendu. La véritable valeur de `VITE_SITE_URL` et des données
 
 ## 2. Routes et comparaison maquette / code
 
+Les notes sont celles de l’audit visuel antérieur et ne sont pas de nouvelles
+notes de fidélité après la réduction éditoriale. Les écarts décrivent l’état du
+code actuel ; aucune comparaison pixel à pixel n’a été menée pour cette reprise.
+
 | Route | Maquette de référence | Code observé et écarts concrets | Fidélité |
 |---|---|---|---:|
-| `/` | [`accueil/code.html`](../../design/stitch/jacigreen_accueil_institutional/code.html) et [`screen.png`](../../design/stitch/jacigreen_accueil_institutional/screen.png) | Hero en deux colonnes, chaîne de valeur en cinq étapes, cartes API de solutions/projets/articles, appel au contact et bloc réservé aux indicateurs à confirmer. Le logo est intégré et la hiérarchie reprend les utilitaires Stitch. La référence comporte encore davantage de séquences éditoriales, une photo, un portrait et des projets détaillés, impossibles à publier sans sources validées ; le bandeau démo reste visible avec les seeds. | **5/10** |
-| `/a-propos` | [`propos/code.html`](../../design/stitch/jacigreen_propos_notre_histoire/code.html) et [`screen.png`](../../design/stitch/jacigreen_propos_notre_histoire/screen.png) | En-tête, média placeholder et chaîne de valeur structurée ; des sections Histoire/Parcours et Mission/Vision/Valeurs gardent la composition de la référence mais affichent explicitement leur statut à confirmer. La chronologie, le portrait, les valeurs et distinctions de la maquette restent absents car non validés. | **4/10** |
-| `/solutions` | [`solutions/code.html`](../../design/stitch/jacigreen_nos_solutions/code.html) et [`screen.png`](../../design/stitch/jacigreen_nos_solutions/screen.png) | En-tête, navigation par catégories fonctionnelle et sections groupées depuis les catégories API ; les cartes conservent les statuts démo/prototype. Il manque la composition éditoriale avec grande photo et fiches développées ; aucun bénéfice technique de la maquette n'est repris. | **4/10** |
+| `/` | [`accueil/code.html`](../../design/stitch/jacigreen_accueil_institutional/code.html) et [`screen.png`](../../design/stitch/jacigreen_accueil_institutional/screen.png) | Hero en deux colonnes et présentation courte ; trois sections de solutions, réalisations et actualités alimentées exclusivement par l’API, chacune avec état vide. Média de remplacement. La référence a des séquences éditoriales et photos supplémentaires ; le bandeau démo reste visible avec les seeds. | **5/10** |
+| `/a-propos` | [`propos/code.html`](../../design/stitch/jacigreen_propos_notre_histoire/code.html) et [`screen.png`](../../design/stitch/jacigreen_propos_notre_histoire/screen.png) | Présentation, mission/vision/valeurs proposées, biographie, distinctions, culture, perspectives et chiffres historiques avec réserve. Média de remplacement. Les longs récits et répétitions ont été réduits ; aucune comparaison pixel à pixel récente. | **4/10** |
+| `/solutions` | [`solutions/code.html`](../../design/stitch/jacigreen_nos_solutions/code.html) et [`screen.png`](../../design/stitch/jacigreen_nos_solutions/screen.png) | Cartes API uniquement, badges démo/prototype et état vide. Les copies statiques institutionnelles ont été retirées. Pas de navigation groupée par catégorie ni de grande photo de la maquette. | **4/10** |
 | `/solutions/:slug` | [`jacibiogaz/code.html`](../../design/stitch/jacigreen_jacibiogaz_fiche_solution/code.html) et [`screen.png`](../../design/stitch/jacigreen_jacibiogaz_fiche_solution/screen.png) | Hero avec catégorie/maturité, média, description API, CTA devis/retour et zone de documentation technique en attente de validation. La fiche Stitch contient plusieurs tableaux et affirmations de procédés/performance qui restent à vérifier avant publication ; ces détails ne sont pas inventés. | **4/10** |
-| `/services` | La maquette [`formations/code.html`](../../design/stitch/jacigreen_formations_transfert_d_expertise/code.html) est explicitement une référence pour la section Formations de Services, pas une page distincte. | Les services API sont organisés en lignes éditoriales ; le bloc Formations reste présent même sans données et expose un état d'attente. Le programme, les formats, publics et CTA détaillés ne sont pas créés faute de validation et de modèle `Training` approuvé (ADR 0003). | **3/10** |
-| `/realisations` | [`realisations/code.html`](../../design/stitch/jacigreen_exp_riences_r_alisations/code.html) et [`screen.png`](../../design/stitch/jacigreen_exp_riences_r_alisations/screen.png) | Titre, filtre de pays fonctionnel lorsque plusieurs pays sont publiés et cartes avec couvertures/alt API. Les récits, résultats, chiffres et médias des sections Stitch ne sont pas disponibles ; les cartes gardent le badge démo quand nécessaire. | **3/10** |
-| `/actualites` | [`actualites/code.html`](../../design/stitch/jacigreen_actualit_s_ressources/code.html) et [`screen.png`](../../design/stitch/jacigreen_actualit_s_ressources/screen.png) | Les articles sont groupés par catégories API ; des liens d'ancrage fonctionnels remplacent les filtres décoratifs de la référence. La publication phare, la newsletter et les longs extraits ne sont pas ajoutés faute de fonction/contenu validé. | **4/10** |
+| `/services` | La maquette [`formations/code.html`](../../design/stitch/jacigreen_formations_transfert_d_expertise/code.html) est explicitement une référence pour la section Formations de Services, pas une page distincte. | Catalogue API uniquement en lignes éditoriales ; état vide et bandeau démo. Les huit prestations statiques et la section Formation séparée ont été retirées pour éviter une seconde source de vérité. | **3/10** |
+| `/realisations` | [`realisations/code.html`](../../design/stitch/jacigreen_exp_riences_r_alisations/code.html) et [`screen.png`](../../design/stitch/jacigreen_exp_riences_r_alisations/screen.png) | Cartes et filtre de pays alimentés par l’API, avec état vide et badges démo. Les projets institutionnels statiques ont été retirés ; les images restent placeholders si l’API n’a pas de média. | **3/10** |
+| `/actualites` | [`actualites/code.html`](../../design/stitch/jacigreen_actualit_s_ressources/code.html) et [`screen.png`](../../design/stitch/jacigreen_actualit_s_ressources/screen.png) | Articles API groupés par catégorie ; état vide et bandeau démo. Le projet ELLESadAPt et la chronologie ne sont plus dupliqués ici en statique. | **4/10** |
 | `/actualites/:slug` | Aucune fiche d'article n'est maquettée. | Mise en page éditoriale plus hiérarchisée avec date/auteur, titre, extrait, média 16:9, corps via `Prose` et retour à la liste. Cohérence de thème uniquement, pas de comparaison de référence directe. | **5/10*** |
-| `/contact` | [`contact/code.html`](../../design/stitch/jacigreen_contact/code.html) et [`screen.png`](../../design/stitch/jacigreen_contact/screen.png) | Grille formulaire/coordonnées ; le formulaire conserve ses validations, envoi API et états, et l'autre colonne signale précisément les coordonnées manquantes. Les régions, cartes, adresses, délais et certifications de la maquette restent absents car non vérifiés. | **4/10** |
-| `/mentions-legales` | [`legal/code.html`](../../design/stitch/jacigreen_politiques_mentions_l_gales/code.html) et [`screen.png`](../../design/stitch/jacigreen_politiques_mentions_l_gales/screen.png) | Page neutre `noindex` avec bloc de validation, sans texte juridique inventé. L'écart de densité persiste jusqu'à rédaction et validation juridiques. | **3/10** |
+| `/contact` | [`contact/code.html`](../../design/stitch/jacigreen_contact/code.html) et [`screen.png`](../../design/stitch/jacigreen_contact/screen.png) | Grille formulaire/contexte ; formulaire et validation API conservés. Aucune coordonnée publique n’est inventée ; catégories de publics listées sans présumer de clients ou partenaires. | **4/10** |
+| `/mentions-legales` | [`legal/code.html`](../../design/stitch/jacigreen_politiques_mentions_l_gales/code.html) et [`screen.png`](../../design/stitch/jacigreen_politiques_mentions_l_gales/screen.png) | Identité disponible, état des informations juridiques manquantes et `noindex`. Aucun texte légal n’est inventé ; validation juridique nécessaire. | **3/10** |
 | `*` (404) | Aucune maquette dédiée. | Mise en page centrée avec repère 404, explication et lien d'accueil ; cohérence avec les styles et interaction fonctionnelle. Aucune référence dédiée ; statut HTTP/soft 404 reste une limite technique connue. | **6/10*** |
 
 **Notes sans référence directe :** `*` signifie que le score évalue seulement la
@@ -134,10 +138,11 @@ et ne correspond à aucune route actuelle.
 
 Source intégralement consultée :
 [`jacigreen-institutionnel.md`](../content/jacigreen-institutionnel.md).
-Le statut ci-dessous reprend le
-[`content-register.md`](../content/content-register.md) ; « présent dans une
-source » ne signifie pas « validé pour le public ». Aucun statut « validé » n'y
-est attribué.
+Le tableau suivant consigne les lacunes observées lors de l'audit initial,
+antérieur à l'autorisation explicite de publication. Il s’agit d’un état
+historique, pas du statut éditorial actuel. La couverture après intégration est
+décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
+[`content-register.md`](../content/content-register.md).
 
 | Source exacte | Destination pertinente | Statut | Présence actuelle et manque |
 |---|---|---|---|
@@ -233,83 +238,53 @@ est attribué.
 
 ### P0 — Bloque la mise en production
 
-- Renseigner l'URL canonique officielle dans `VITE_SITE_URL`, remplacer les
-  données de démo par du contenu réel et validé, reconstruire et faire passer
-  `check:prerender -- --production --forbid-demo`. Ne pas désactiver
-  `is_demo` sans confirmation factuelle.
-- Faire valider les textes institutionnels proposés (présentation générale,
-  signature et chaîne de valeur), les noms/descriptions publiés via Admin et chaque
-  contenu de démonstration. Aucun contenu `is_demo` ne doit franchir le contrôle
-  de production.
-- Bloquer toute reprise des affirmations, coordonnées, métriques, références,
-  photos ou garanties fictives repérées dans les maquettes.
+- Rétablir la résolution DNS/réseau de Docker vers le dépôt Python puis réussir
+  une nouvelle reconstruction avec `docker compose up -d --build`.
+- Obtenir l’URL publique définitive et configurer explicitement
+  `VITE_SITE_URL`, `VITE_API_URL`, `API_INTERNAL_URL`,
+  `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et
+  `CSRF_TRUSTED_ORIGINS`. Le contrôle de production refuse les canoniques
+  locales ou non HTTPS.
+- Faire valider ou corriger les 20 fiches API, une par une, dans Django Admin.
+  Garder `is_demo=true` sans confirmation ; ne pas utiliser de promotion globale.
 - Fournir et faire valider les informations légales avant lancement ; à défaut,
   conserver la page neutre `noindex` et différer la publication.
 
 ### P1 — Écarts majeurs de crédibilité et d'expérience
 
 - Fournir les photos locales/API avec leurs textes alternatifs validés. La
-  palette exacte est enregistrée dans les tokens ; le PNG existant est documenté
-  et utilisé sans modifier son fond blanc.
-- Après validation éditoriale, rétablir les structures à valeur informative des
-  pages (récit et chronologie À propos ; hiérarchie Solutions ; récits de
-  Réalisations ; publication phare Actualités ; contacts publics vérifiés).
-  Construire ces sections avec les composants déjà présents, sans reprendre le
-  contenu factuel inventé des maquettes.
-- Rendre explicite le périmètre Services/Formations et déterminer si les détails
-  Service/Réalisation sont des routes de Phase 1 ; les boutons/liens retenus
-  doivent mener à un comportement réellement pris en charge.
+  palette et le logo existant sont déjà configurés ; les placeholders restent
+  tant qu’aucun média officiel n’est fourni.
+- Après configuration du domaine et des données, comparer visuellement chaque
+  route aux références Stitch aux largeurs desktop et mobile.
 
 ### P2 — Qualité documentaire et technique
 
-- Vérifier que toute documentation de design restante reste alignée sur les
-  tokens et leurs ratios WCAG recalculés.
-- Ajouter une couverture ciblée des pages, actuellement peu testées unitairement,
-  et maintenir une séparation claire entre les résultats récents, historiques
-  et les contrôles non exécutés.
+- Ajouter une couverture ciblée des pages aux tests frontend et des tests
+  navigateur automatisés sur les parcours critiques.
 - Traiter le soft 404, l'absence d'image Open Graph, la CSP, la sécurisation de
   l'Admin, la limitation de débit distribuée et les notifications de contact en
   fonction des exigences de mise en production.
 
 ### P3 — Finition visuelle
 
-- Une fois les tokens et contenus validés, rapprocher les largeurs, respirations,
-  tailles de titres, compositions asymétriques, états des boutons et pieds de
-  page des écrans Stitch ; vérifier d'abord desktop puis les points de rupture.
-- Ajouter des tests de rendu par page et des captures de comparaison visuelle
-  approuvées. Les captures Stitch disponibles sont étroites/basse résolution ;
-  utiliser, si utile, `design/render-screens.mjs` pour générer des références
-  nettes, sans les prendre pour des sources de contenu.
+- Après comparaison documentée, ajuster uniquement les écarts importants de
+  largeur, respiration, typographie et composition. Ne pas traiter les captures
+  comme source de faits.
 
-## 7. Tests disponibles et contrôles nécessaires
+## 7. Tests et contrôles
 
-### Couverture présente
+Les résultats du 24 octobre 2026 sont consignés dans
+[`quality/testing.md`](../quality/testing.md) et
+[`rapport-finalisation.md`](./rapport-finalisation.md).
 
-- **Frontend :** les tests Vitest (62 tests réussis) couvrent notamment tokens,
-  accessibilité/états du Header, boutons, `MediaFrame`, formulaire, formatage,
-  SEO, client API et état de contenu à valider. La dernière exécution a réussi
-  **62 tests après le dernier changement** ; les pages restent peu couvertes par les tests unitaires.
-- **Backend :** huit modules de tests Django couvrent modèles, API, contact,
-  publication, seeds, Deploy Hook et plateforme. `quality/testing.md` consigne
-  historiquement **41/41 tests** et 93 % de couverture.
-- **Navigateur :** 11 routes ont été vérifiées à 360, 390, 768, 1 024 et
-  1 440 px, sans débordement horizontal après stabilisation. Le menu, Échap et
-  les liens d'ancrage de catégories ont été contrôlés ; aucun envoi de formulaire
-  n'a été effectué. Aucune comparaison pixel à pixel par route n'a été effectuée.
-- **CI/préproduction :** lint, format, types, tests, build et contrôle local du
-  pré-rendu réussissent. Le contrôle strict de production bloque sur la
-  configuration canonique locale et les données marquées démo. Les contrôles
-  Django n'ont pas été relancés.
-
-### Contrôles restant avant livraison
-
-1. Relancer dans l'environnement Compose les contrôles backend (Ruff, `check`,
-   migrations, OpenAPI et tests Django) ; ils ne faisaient pas partie de cette
-   reconstruction frontend.
-2. Fournir `VITE_SITE_URL` de production, reconstruire, puis relancer
-   `npm run check:prerender -- --production --forbid-demo` ; inspecter les
-   routes, métadonnées, slugs, sitemap, `robots.txt` et fallback générés.
-3. Compléter les contrôles navigateur par une comparaison visuelle par route et
-   viewport, vérifier les liens/CTA, le menu/clavier, les images/alt et les états
-   d'erreur/réussite du formulaire sans créer de fausse demande en base.
-4. Revue éditoriale et juridique de chaque contenu et média effectivement publié.
+- Frontend : format, typecheck, lint, 64 tests, build et pré-rendu local réussis
+  dans le conteneur existant.
+- Backend : Ruff, configuration, migration, OpenAPI et 47 tests réussis dans le
+  conteneur existant.
+- Strict production : 46 blocages attendus, décrits plus haut.
+- Docker : reconstruction échouée sur la résolution DNS des paquets Python.
+- Navigateur : 70 vérifications responsive, 15 destinations internes HTTP 200,
+  aucune erreur JS ; aucune comparaison pixel à pixel.
+- Après fourniture des domaines et validation de contenu, rejouer la
+  reconstruction Docker et le contrôle strict avant toute publication.

@@ -1,95 +1,66 @@
-# Matrice de couverture du contenu institutionnel JACIGREEN
+# Matrice de contenu institutionnel JACIGREEN
 
-## Sources et règle de publication
+## Source et règle de publication
 
-- **Source principale :** [`docs/content/jacigreen-institutionnel.md`](../content/jacigreen-institutionnel.md), « Document institutionnel & référentiel d'entreprise », version 1.0 (2026), conversion du document interne fourni par JaciGreen.
-- **Registre faisant autorité :** [`docs/content/content-register.md`](../content/content-register.md).
-- **Format vérifié :** Markdown UTF-8 ; le document comporte un avant-propos, un sommaire, 24 sections numérotées et une fiche d'identité finale. Le fichier a été lu du début à sa dernière section, tableaux, listes et mentions internes compris.
-- **Règle :** la présence d'une information dans le document ne vaut pas autorisation de publication. Les contenus « à confirmer », « à valider », historiques à actualiser ou non validés restent hors des pages publiques tant que JACIGREEN ne les a pas approuvés. Les contenus éditoriaux de solutions, services, réalisations et actualités passent par l'API ; les enregistrements de démonstration portent `is_demo` et ne sont pas des contenus approuvés.
-- **Dossier alternatif :** `docs/contents/` n'existe pas dans le dépôt.
+- Source intégrale : [`docs/content/jacigreen-institutionnel.md`](../content/jacigreen-institutionnel.md),
+  version 1.0 (2026), avant-propos, 24 sections, tableaux/listes et fiche
+  d’identité finale.
+- Le propriétaire a autorisé la publication du document le 24 octobre 2026.
+  Cette autorisation ne rend pas automatiquement authentiques les 20 fiches
+  `is_demo=true` du seed.
+- Les contenus de catalogue sont servis uniquement par les endpoints API
+  existants. Le frontend n’en conserve pas de copie statique.
+- La base locale compte 3 solutions, 8 services, 6 réalisations et 3 articles ;
+  les 20 enregistrements portent `is_demo=true`. Le registre
+  [`content-register.md`](../content/content-register.md) détaille leur
+  comparaison à la source et les validations manquantes.
 
-## Couverture section par section
+## Couverture et destination
 
-| Source | Sujet et informations importantes | Statut du registre | Page de destination / composant | Présence actuelle | Manque, réserve ou action |
-|---|---|---|---|---|---|
-| Avant-propos et sommaire | Source interne compilée depuis plusieurs éléments ; mission/vision/valeurs à valider ; chiffres à actualiser. Le sommaire recense les 24 sujets ci-dessous. | Document interne ; aucune autorisation de publication. | Aucune page publique. Référence éditoriale : cette matrice. | Le registre rappelle le statut ; le frontend ne présente pas l'avant-propos. | Conserver ces réserves et réévaluer toute section avant publication. |
-| §1 Mot de bienvenue | Conviction de transformer des enjeux environnementaux en opportunités ; jacinthe d'eau et économie circulaire. | Présentation générale à confirmer avant publication. | Accueil (`Home`), éventuellement À propos (`About`). | Aucun extrait du récit interne n'est publié ; le hero signale l'attente de validation. | Validation de la présentation générale requise ; ne pas publier le récit interne tel quel sans accord. |
-| §2 Qui est JACIGREEN ? | Présentation de l'entreprise, ressources naturelles, déchets organiques, espèces envahissantes ; domaines environnement, énergie et agriculture ; chaîne de valeur locale. | À confirmer avant publication ; formulations descriptives seulement et relecture requise. | Accueil, À propos et pied de page (`Home`, `About`, `Footer`, `PageHeader`). | La copie statique auparavant utilisée a été retirée ; le site affiche un bloc de validation en attente et des descriptions SEO neutres. | Demander une formulation approuvée avant réintégration. |
-| §3 Genèse (2012) | Origines du questionnement autour du fleuve Niger et de l'environnement ; récit biographique. | Histoire et dates à confirmer. | À propos (`About`), section histoire. | Emplacement `ContentPending` ; aucun détail du récit n'est publié. | Validation des faits, dates et du récit avant rédaction publique. |
-| §4 Prise de conscience et entrepreneuriat | Découvertes de recherches de valorisation ; adaptation au contexte local ; évolution vers l'entrepreneuriat. | Histoire à confirmer. | À propos (`About`), récit chronologique. | Non présent ; couvert par l'emplacement en attente de validation de l'histoire. | Faire valider le récit et ses formulations ; ne pas déduire d'étapes supplémentaires. |
-| §5 Naissance en 2016 | Structuration entrepreneuriale, concours « Parcours Entrepreneur », expérimentation et recherche de solutions. | Dates et récit à confirmer. | À propos (`About`), section histoire. | Non présent ; pas de date ni de concours affiché. | Vérifier les références et obtenir l'autorisation de publication. |
-| §6 Philosophie JACIGREEN | « Une nuisance peut devenir une ressource » ; nuances sur les effets de la jacinthe d'eau ; logique de récupération, transformation et valorisation. | Présentation et chaîne de valeur à confirmer. | Accueil et À propos (`Home`, `About`, composants de chaîne de valeur). | Le slogan et la chaîne de valeur ne sont plus affichés ; `ContentPending` conserve la structure en attente de validation. | Soumettre le texte et la chaîne à validation avant toute publication ; éviter d'énoncer un effet écologique comme généralité sans validation. |
-| §7 Mission | Formulation institutionnelle proposée et domaines de contribution. | À valider par la direction ; le registre indique de ne pas publier. | À propos (`About`), section mission. | `ContentPending` ; aucune formulation de mission affichée. | Validation explicite de la direction. |
-| §8 Vision | Formulation institutionnelle proposée et ambition à long terme. | À valider par la direction ; ne pas publier. | À propos (`About`), section vision. | Emplacement actuellement combiné avec mission et valeurs ; aucune vision affichée. | Validation explicite de la direction et choix d'une formulation publique. |
-| §9 Valeurs | Six valeurs proposées : innovation, impact, durabilité, ancrage local, intégrité, apprentissage continu. | Référentiel proposé à valider par la direction ; ne pas publier. | À propos (`About`), section engagements. | Emplacement `ContentPending` ; valeurs absentes du site. | Validation/formalisation par la direction. |
-| §10 Modèle de création de valeur | Enchaînement problème, récupération, transformation, valorisation, utilisation, impact ; usages et domaines cités. | Chaîne de valeur à confirmer avant publication. | Accueil (résumé) et À propos (détail). | La chaîne de cinq étapes n'est plus rendue ; le bloc d'attente mentionne la validation requise. | Le document énumère six étapes ; valider le modèle et les descriptions avant d'aligner ou d'enrichir le site. Aucun indicateur d'impact à ajouter. |
-| §11 Solutions | JaciBiogaz™ : biodigestion de jacinthe d'eau avec co-substrats possibles (déchets de cuisine, restes alimentaires, résidus agricoles, déjections animales), production de biogaz et produit valorisable en agriculture. JaciGrow™ : biofertilisant ; le document lui attribue aussi des fonctions fongicide et d'activation de fertilité. JaciPur’O™ : prototype dont fonction, protocole, utilisateurs et performances restent à définir. Autres filières citées : compostage, biogaz, vannerie. | Brouillon éditorial ; chaque nom, description, résumé et maturité est à valider. Les contenus de développement doivent être `is_demo`. | `/solutions` et `/solutions/:slug` (`Solutions`, `SolutionCard`, `SolutionDetail`, `Prose`), via API. | Les listes et fiches consomment l'API ; les fiches affichent la description complète. Les données de développement sont signalées comme démo. | Saisir et approuver chaque fiche dans Django Admin avant publication. Faire vérifier les affirmations fonctionnelles de JaciGrow™ ; ne pas déduire de spécifications pour JaciPur’O™. |
-| §12 Services | Installation de kits mix-énergétiques biogaz/photovoltaïque ; dimensionnement, conception et construction de biodigesteurs ; formation ; études d'ingénierie et d'impact environnemental/social ; démarche et stratégie RSE ; R&D/éco-conception fondée sur la nature ; appui, conseil et assistance technique ; vente d'équipements biogaz et irrigation. Aucun format, durée ou session de formation n'est fixé. | À confirmer ; les services doivent être saisis/validés dans l'API. Pas de cursus inventé ni de modèle `Training` sans décision. | `/services` (`Services`, `listServices`, `ServiceEntry`, `Prose`), via API. La formation est une section de cette page. | La page rend maintenant `Service.description` (ou le résumé si la description est vide). Formations sont séparées par titre et restent sous la même route. | Ne montrer que les enregistrements publiés via l'API ; l'absence de service affiche un bloc en attente. |
-| §13 Clients, bénéficiaires et partenaires | Publics cités : particuliers, entreprises, collectivités, ONG, organisations de développement, coopératives agricoles, groupements de producteurs, institutions, établissements scolaires, acteurs agroalimentaires et porteurs de projets. La source ne constitue pas une preuve de relation commerciale ou de partenariat. | Non validé pour publication (clients, bénéficiaires, partenaires). | Éventuellement À propos ou Services, uniquement après validation ; composants `About` / `Services`. | Aucun nom, logo ni liste de publics n'est affiché. | Valider la formulation des publics et toute relation nominative ; ne pas transformer les catégories en références clients. |
-| §14 Expériences et réalisations | Burkina Faso : unité de méthanisation à 2iE et circuit de biofertilisants JaciGrow™ ; chiffres historiques source : 10 000 L de biofertilisant liquide et 5 000 m³ de biogaz. Niger : biodigesteurs dans des sites maraîchers et cantines scolaires de six régions, 2020–2022 ; environ 4 000 bénéficiaires selon la source. Zinder : étude de faisabilité d'un centre projeté à 50 000 t/an. Nigeria : étude à Ondo State avec capacités projetées. Burundi : étude d'unité de bio-méthanisation à Bujumbura, autour du Tanganyika. | Réalisations et chiffres non validés pour publication. | `/realisations` (`Projects`, `ProjectCard`), via API. | La page liste des projets API sous résumé, pays et période ; les contenus de démonstration ont un bandeau/badge. Les descriptions fournies par l'API sont accessibles dans un détail dépliable. | Ne pas créer les projets depuis le document avant preuve/validation et saisie API. Les capacités, projections, bénéficiaires et chiffres restent exclus jusqu'à validation. |
-| §15 ELLESadAPt – Tchad | Le document rapporte une participation en 2025 dans les lacs Léré et Tréné, l'installation d'unités de compostage auprès de trois groupements maraîchers, un financement d'Affaires Mondiales Canada, la mise en œuvre par le consortium Baastel – DID – Noé et une durée de cinq mois ; il décrit aussi des filières envisagées en 2026. | Projet et détails non validés pour publication. | `/realisations` via API ; éventuellement une actualité distincte via API après validation. | Pas de contenu statique ; le seed de développement contient une entrée projet `is_demo`. | Vérifier l'existence, le périmètre, les noms, le financeur, la durée et les filières avec JACIGREEN ; ne pas créer une publication ou un article de presse à partir du document seul. |
-| §16 Impact social et environnemental | La source historique donne environ 5 000 agriculteurs touchés, 300 t de fertilisants chimiques évités, 250 000 L/an de biofertilisants produits via les biodigesteurs et plus de 5 000 t de jacinthe valorisées. Ces valeurs ne sont pas des indicateurs actuels validés. | À actualiser et documenter ; non publiable actuellement. | Accueil ou À propos (`ContentPending`) seulement après approbation et preuve. | L'accueil affiche un bloc `ContentPending` ; aucun indicateur n'est affiché. | Obtenir valeurs datées, méthode, pièces justificatives et validation ; ne reprendre ni les nombres historiques ni une extrapolation. |
-| §17 Reconnaissance et visibilité | Distinctions mentionnées : 2016 (Entrepreneuriat 2iE, SICAD Tchad, African Rethink Awards) ; 2017 (Entrepreneuriat Féminin de la Secrétaire Générale de la Francophonie, « Idées de Génie », Jeune Champion de la Terre des Nations Unies pour l'Environnement – Afrique) ; 2018 (Planet A, Salon National de l'Entrepreneuriat Féminin). | Distinctions non validées pour publication selon le registre. | À propos, section dédiée uniquement après validation. | Aucune distinction affichée. | Vérifier noms exacts, organismes, dates et preuves, puis obtenir validation. |
-| §18 Fondatrice : Mariama Mamane | Fondatrice/directrice selon le document ; récit personnel, licence en Biodiversité et Gestion de l'Environnement (Université Abdou Moumouni, 2013), parcours d'ingénierie Eau et Environnement à 2iE, concours 2016, engagements et actions de sensibilisation. | Biographie et dates à confirmer ; distinctions associées non validées. | À propos (`About`), section biographique. | Emplacement histoire `ContentPending` ; aucune biographie publique. | Validation par la personne concernée/JACIGREEN des diplômes, fonctions, dates et éléments personnels. |
-| §19 Culture de travail | Curiosité, initiative, apprentissage terrain, collaboration, rigueur technique, proposition de solutions et amélioration continue ; contenu destiné aux collaborateurs. | Document interne ; pas de statut de publication publique dans le registre. | Pas de page publique prévue. | Absent du site. | Garder dans la documentation interne ; demander une version publique si besoin. |
-| §20 Guide des collaborateurs | Conseils internes de communication, de confidentialité, de vérification, de validation préalable et de compréhension terrain. | Guide interne, non destiné tel quel au site institutionnel. | Aucune route publique. | Absent du site. | Ne pas exposer ces consignes internes comme contenu de vitrine. |
-| §21 JACIGREEN en quelques secondes | Présentation courte, version longue et signature « Nous avons vu une nuisance… » ; résume l'identité, les solutions, domaines et l'ambition décrits dans d'autres sections. | Présentation générale à confirmer ; signature historique non validée séparément. | Accueil (`Home`) et métadonnées SEO. | Le hero, le pied de page et les métadonnées n'affichent plus les formulations internes ; ils signalent l'attente de validation. La version longue et la signature ne sont pas affichées. | Validation d'une formulation publique courte ; ne pas ajouter la signature sans confirmation. |
-| §22 Chronologie | Repères listés : 2012 (réflexion), 2013 (licence), 2016 (concours/structuration), 2016–2018 (R&D et reconnaissances), 2018 (unité à 2iE), 2020–2022 (Niger), 2022–2023 (études), 2025 (ELLESadAPt), 2026 (filières et prototype). | Dates/récit à confirmer ; événements et projets aussi soumis à leurs statuts propres. | À propos (`About`), chronologie éventuelle. | Aucun événement daté n'est publié ; section `ContentPending`. | Vérifier chaque repère séparément ; les statuts des projets, distinctions et prototypes restent applicables. |
-| §23 Ce que JACIGREEN veut construire demain | Priorités stratégiques citées : documenter et standardiser les solutions, transformer les expériences en offres reproductibles, développer des chaînes de valeur, professionnaliser les outils, mesurer l'impact, structurer la communication, les partenariats et l'organisation. | Stratégie interne ; aucune validation de publication mentionnée. | Aucune route publique définie. | Absent du site. | Conserver en interne sauf validation d'une version publique par la direction. |
-| §24 Conclusion | Synthèse de l'histoire et de l'ambition institutionnelle. | Reprend histoire et présentation générale, qui restent à confirmer. | Accueil ou À propos. | Non présente comme section autonome. | Ne pas ajouter de conclusion redondante ; toute reprise dépend de la validation des faits sous-jacents. |
-| Fiche d'identité (hors numérotation) | Nom, positionnement, ressource historique, solutions, territoires, publics, signature et fondatrice. | Les champs héritent des statuts des sections correspondantes ; la fiche est issue du document interne. | Accueil, À propos et pages éditoriales API selon le champ. | Nom de marque et liens de navigation présents ; le positionnement est partiellement repris dans la copie statique ; aucune signature ni territoire n'est affiché en référence. | Valider chaque champ individuellement. Ne pas reprendre la liste de territoires comme liste de marchés/réalisations publiables. |
+| Source | Sujet et statut | Page/composant | Présence et action |
+|---|---|---|---|
+| Avant-propos | Contexte du référentiel ; mission, vision et valeurs proposées ; chiffres historiques à documenter | Registre éditorial ; À propos | Les formulations proposées sont identifiées ; les chiffres gardent leur réserve. |
+| §1 Mot de bienvenue | Conviction de transformer des problèmes environnementaux en opportunités | Accueil, `home.tsx` | Résumé bref dans le positionnement. |
+| §2 Qui est JACIGREEN ? | Ressources, déchets, jacinthe d’eau, environnement, énergie et agriculture | Accueil, À propos, pied de page, SEO | Positionnement court et expertise publiés ; pas de répétition de provenance. |
+| §§3–5 Genèse, prise de conscience, naissance en 2016 | Parcours de la fondatrice, 2012, études et concours de 2016 | À propos | Parcours résumé dans la biographie. |
+| §6 Philosophie | Nuance sur la jacinthe d’eau et logique de valorisation | Accueil, À propos | Présentation concise ; aucun chiffre ou bénéfice technique ajouté. |
+| §7 Mission | Formulation proposée et applications | À propos | Mission publiée comme proposition ; liste d’applications retirée car elle répétait la mission. |
+| §8 Vision | Formulation proposée et ambition | À propos | Vision publiée comme proposition. |
+| §9 Valeurs | Six valeurs et descriptions | À propos | Six valeurs affichées comme propositions. |
+| §10 Modèle de création de valeur | Étapes de récupération, transformation, valorisation et usages | Accueil | Le résumé d’approche est publié ; les longues listes d’étapes répétées ont été retirées. |
+| §11 Solutions | JaciBiogaz™, JaciGrow™, JaciPur’O™ et voies de valorisation | API `/api/v1/solutions/`, `SolutionCard`, fiche solution | Aucune copie statique. Les 3 fiches de démonstration restent signalées ; leur validation éditoriale individuelle est requise. |
+| §12 Services | Huit prestations | API `/api/v1/services/`, `ServiceEntry` | Aucune copie statique. Les 8 fiches existantes sont `is_demo=true` ; modalités et validation à confirmer. |
+| §13 Publics, bénéficiaires et partenaires | Catégories de publics possibles | Contact | Les catégories restent accessibles ; elles ne sont pas présentées comme clients ou partenaires avérés. |
+| §14 Expériences et réalisations | Expériences au Burkina Faso, au Niger, au Nigeria et au Burundi ; chiffres historiques | API `/api/v1/projects/`, `ProjectCard` | Les doublons statiques sont retirés. Les 6 fiches API restent des démos ; certaines dates/formulations ne sont pas confirmées par la source. |
+| §15 ELLESadAPt – Tchad | Projet, activité, contexte, financement et suite évoquée | API `/api/v1/projects/` et `/api/v1/articles/` | Les versions statiques du projet/article sont retirées. Une fiche vérifiée doit être saisie dans l’API avant affichage comme contenu éditorial. |
+| §16 Impact social et environnemental | Quatre chiffres historiques et demande d’actualisation | À propos | Affichés avec avertissement explicite : non actuels, à dater et documenter. |
+| §17 Reconnaissance et visibilité | Distinctions 2016–2018 | À propos | Huit mentions conservées avec les années de la source. |
+| §18 Fondatrice | Biographie de Mariama Mamane | À propos | Parcours résumé sans ajout de coordonnées ou de résultats. |
+| §§19–20 Culture et guide collaborateurs | Curiosité, initiative, terrain, collaboration, rigueur et confidentialité | À propos | Les principes utiles sont conservés en liste courte ; les consignes spécifiques aux collaborateurs sont omises du site public. |
+| §21 JACIGREEN en quelques secondes | Positionnement synthétique | Accueil, pied de page | Repris dans le texte de présentation. |
+| §22 Chronologie | Repères historiques et réalisations | À propos / API projets | Repères biographiques gardés dans la biographie ; les projets et actualités ne sont pas dupliqués statiquement. |
+| §23 Perspectives | Structuration, documentation, mesure d’impact, partenariats et compétences | À propos | Priorités conservées comme intentions, non comme résultats obtenus. |
+| §24 Conclusion | Récapitulatif de l’ambition et nouvelle étape | À propos | Non reprise en bloc : elle répéterait le positionnement et les perspectives déjà affichés. |
+| Fiche d’identité finale | Positionnement, ressource historique, territoires, fondatrice | Mentions légales | Informations descriptives affichées ; les territoires ne sont pas une preuve de présence commerciale actuelle. |
 
-## État des routes et architecture de contenu
+## Routes et sources effectives
 
-| Route | Données et composants | Couverture actuelle / limite |
-|---|---|---|
-| `/` | `Home`; contenu éditorial via API pour solutions, projets et articles. | Hero et chaîne de valeur signalent l'attente d'approbation. Les cartes API s'affichent si disponibles ; blocs d'attente pour contenu non validé/absent. |
-| `/a-propos` | `About`, `PageHeader`, `MediaFrame`, `ContentPending`. | Positionnement, histoire, biographie, mission/vision/valeurs restent en attente de validation ; aucune formulation du référentiel interne n'est publiée. |
-| `/solutions`, `/solutions/:slug` | `Solutions`, `SolutionCard`, `SolutionDetail`; `listSolutions`/`getSolution`. | API seule ; la fiche affiche le champ description complet. L'état vide est explicite ; les données `is_demo` portent un avis visible. |
-| `/services` | `Services`; `listServices`; section Formations. | API seule et état vide explicite. Description complète affichée, avec résumé en repli si elle est vide. |
-| `/realisations` | `Projects`, `ProjectCard`; `listProjects`; filtre pays. | API seule ; résumé affiché et description optionnelle accessible dans un panneau dépliable. État vide/filtré explicite ; aucune fiche frontend de projet. |
-| `/actualites`, `/actualites/:slug` | `News`, `ArticleCard`, `ArticleDetail`; `listArticles`/`getArticle`. | API seule ; liste d'extraits, détail avec texte intégral. Aucun article statique inventé ; état vide explicite. |
-| `/contact` | `ContactForm`, options conformes à `ContactSubject`; pas de coordonnées publiques. | Champs pris en charge par l'API ; coordonnées affichées en attente de validation. |
-| `/mentions-legales` | `Legal`, `ContentPending`. | Structure neutre `noindex` ; textes juridiques non rédigés. |
-| `*` | `not-found` et ErrorBoundary de l'application. | Route 404 dédiée ; l'ErrorBoundary couvre erreurs API/route sans dévoiler de détail technique. |
+| Route | Contenu statique institutionnel | Contenu éditorial | État |
+|---|---|---|---|
+| `/` | Positionnement bref et approche | Solutions, réalisations et trois actualités récentes depuis l’API | États vides accessibles ; bannière si données démo. |
+| `/a-propos` | Identité, histoire, mission, vision, valeurs, biographie, distinctions, culture, impacts historiques et perspectives | Aucun catalogue | Sections raccourcies ; réserves originales maintenues. |
+| `/solutions` et `/solutions/:slug` | Aucun doublon de fiche | API solutions | 3 fiches locales `is_demo=true`, marqueur visible. |
+| `/services` | Aucun doublon de prestation | API services | 8 fiches locales `is_demo=true`, marqueur visible. |
+| `/realisations` | Aucun projet statique | API projets et filtre existant | 6 fiches locales `is_demo=true`, marqueur visible. |
+| `/actualites` et `/actualites/:slug` | Aucune actualité statique | API articles | 3 articles locaux `is_demo=true`, marqueur visible. |
+| `/contact` | Publics possibles et positionnement | Formulaire API existant | Pas de coordonnées inventées. |
+| `/mentions-legales` | Identité disponible | Mentions juridiques | Informations manquantes signalées, page `noindex`. |
 
-Les routes de liste consomment le contenu publié par l'API ; le composant `DemoBanner`
-signale les enregistrements `is_demo`. Le navigateur de développement a montré des
-enregistrements de démonstration sur l'accueil et Services ; le bandeau et les badges
-étaient visibles. Ces données ne constituent pas une validation et ne doivent pas
-atteindre la production. Les loaders laissent remonter les erreurs API à l'ErrorBoundary
-racine. Les états vides des listes sont présents. Les contenus statiques issus du
-document interne ne doivent pas servir de substitut à des fiches éditoriales validées.
+## Décisions restant à obtenir
 
-## Contenus intégrés, omis et en attente
-
-- **Intégrés via API :** solutions, services, réalisations et actualités sont déjà
-  lus depuis les endpoints existants. Les fiches Solution et Article rendent leur
-  texte détaillé ; `/services` rend `Service.description` et les descriptions de
-  réalisation renseignées sont accessibles depuis leur carte. Aucun modèle ou
-  contrat API supplémentaire n'est requis.
-- **En attente humaine :** présentation générale, chaîne de valeur, histoire et dates,
-  biographie, mission/vision/valeurs, solutions et détails techniques, services,
-  références de projets, ELLESadAPt, impact, distinctions, coordonnées, textes légaux,
-  palette et identité selon les statuts du registre.
-- **Volontairement omis :** consignes internes des §19–20, trajectoire stratégique
-  du §23, chiffres et capacités non validés, financeur/partenaires non confirmés,
-  coordonnées, certifications et contenus de maquettes non vérifiables.
-- **Copie statique suspendue :** les formulations des §2, §6 et §10 ont été retirées
-  des pages publiques et des métadonnées SEO, car le registre demande une
-  confirmation préalable. `src/content/site-copy.ts` a été supprimé ; une copie
-  approuvée pourra être centralisée dans une source frontend lorsque JACIGREEN la
-  fournira.
-
-## Vérifications éditoriales avant publication
-
-1. Faire confirmer par JACIGREEN les formulations publiques de présentation et de
-   chaîne de valeur ; conserver la source et la validation dans le registre.
-2. Valider chaque contenu éditorial dans Django Admin, retirer le statut de démo
-   uniquement après validation et vérifier qu'aucun `is_demo` ne reste au pré-rendu.
-3. Pour chaque projet, vérifier l'existence, le pays, la période, le texte et les
-   éventuelles capacités/chiffres séparément ; le document seul ne suffit pas.
-4. Obtenir des justificatifs datés et une méthode de mesure avant de publier un
-   indicateur, une distinction ou une référence.
-5. Fournir une biographie approuvée, les coordonnées publiques et les textes
-   juridiques validés avant de remplacer les blocs d'attente.
+1. Validation explicite des 20 fiches API, une par une, ou correction/saisie de
+   contenu éditorial vérifié dans Django Admin.
+2. Confirmation des dates des études et des statuts de disponibilité dans les
+   fiches concernées.
+3. URL publique définitive du site et URL publique de l’API.
+4. Coordonnées, textes juridiques et médias éditoriaux officiels.

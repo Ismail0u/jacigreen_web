@@ -1,95 +1,54 @@
 # Plan de finalisation JACIGREEN
 
-État établi par l'audit en lecture seule du 22 octobre 2026. Les statuts décrivent
-le code observé, pas la validation éditoriale ou la préparation à la production.
-Les contenus de l'API restent soumis à validation avant toute publication.
+Mis à jour le 24 octobre 2026 après la séparation des contenus institutionnels
+et des catalogues API. Les modifications restent locales ; aucun commit,
+push ou déploiement n’a été effectué.
 
-## 1. État des pages
+## État actuel
 
-| Page | Route | Maquette | État du code | Écarts principaux observés | Source des données |
-|---|---|---|---|---|---|
-| Accueil | `/` | `jacigreen_accueil_institutional` | incomplet | Hero avec média de remplacement, blocs de présentation en attente de validation, Solutions, Réalisations et Actualités ; fidélité détaillée à vérifier. | API (`solutions`, `projects`, `articles`) ; copie statique à ajouter uniquement après validation |
-| À propos | `/a-propos` | `jacigreen_propos_notre_histoire` | incomplet | Média de remplacement ; présentation, histoire et autres contenus restent en attente de validation. | Document institutionnel interne, sous réserve de validation |
-| Solutions | `/solutions` | `jacigreen_nos_solutions` | incomplet | Liste API et état vide présents ; média de remplacement intégré ; sections éditoriales non validées omises. | API `GET /api/v1/solutions/` |
-| Fiche solution | `/solutions/:slug` | `jacigreen_jacibiogaz_fiche_solution` | incomplet | Chargement API, contenu brut, SEO et média de remplacement présents ; composition plus simple que la maquette. | API `GET /api/v1/solutions/{slug}/` |
-| Services (+ Formations) | `/services` | pas de maquette Services ; écran Formations destiné à une section | incomplet | Liste API présente ; descriptions complètes rendues ; section Formations affichée uniquement si une entrée publiée correspond. Aucun catalogue ni modèle `Training` ajouté. | API `GET /api/v1/services/` |
-| Réalisations | `/realisations` | `jacigreen_exp_riences_r_alisations` | incomplet | Liste, filtre pays via `?pays=` et média de remplacement présents ; description API accessible depuis la carte ; aucune fiche de réalisation dans le frontend (hors périmètre courant). | API `GET /api/v1/projects/` |
-| Actualités | `/actualites` | `jacigreen_actualit_s_ressources` | incomplet | Liste, état vide et médias de remplacement présents ; statistiques, contenu non validé et newsletter de la maquette omis. | API `GET /api/v1/articles/` |
-| Article | `/actualites/:slug` | aucune maquette | incomplet | Loader, SEO, rendu texte et média de remplacement présents ; présentation à harmoniser avec la maquette générale. | API `GET /api/v1/articles/{slug}/` |
-| Contact | `/contact` | `jacigreen_contact` | incomplet | Formulaire avec validation Zod, erreurs serveur, succès et limite API ; coordonnées et liens annexes de la maquette non repris, car non documentés. | Formulaire vers `POST /api/v1/contact-requests/` |
-| Mentions légales | `/mentions-legales` | `jacigreen_politiques_mentions_l_gales` | incomplet | Page neutre `noindex` sans texte juridique inventé ; structure détaillée différée jusqu'à validation juridique. | Texte statique neutre |
-| Page introuvable | `*` | aucune maquette | existe | Page fonctionnelle avec lien d'accueil et `noindex` ; aucun changement fonctionnel requis. | Texte statique |
+| Sujet | État |
+|---|---|
+| Contenu éditorial | Accueil et À propos raccourcis ; répétitions réduites. |
+| Solutions, Services, Réalisations, Actualités | API Django comme source unique côté frontend ; copies statiques supprimées ; états vides présents. |
+| Données locales | 20 fiches publiées mais `is_demo=true` : 3 solutions, 8 services, 6 réalisations, 3 articles. Aucune promotion. |
+| URL canonique | URL Compose `localhost` uniquement en développement. Domaine public définitif inconnu ; `VITE_SITE_URL` est obligatoire et le garde-fou production refuse les hôtes locaux. |
+| Sécurité API production | Django impose `DEBUG=False` et HTTPS en production ; hôtes, origines CORS/CSRF, secret et URLs réels restent à configurer. |
+| Frontend | Format, typecheck, lint, 64 tests, build et pré-rendu local réussis dans le conteneur existant. |
+| Backend | Ruff, checks, migrations, OpenAPI et 47 tests réussis dans le conteneur existant. |
+| Contrôle strict | Échec sur 46 blocages attendus : domaine, canoniques locales et fiches démo. |
+| Reconstruction Docker | Échec DNS lors de `pip install` de Django ; nouvelle image non construite. |
+| Navigateur | 70 vérifications responsive sans débordement ni erreur JavaScript ; 15 liens internes HTTP 200 ; menu mobile testé. |
+| Maquettes Stitch | Pas de comparaison pixel à pixel effectuée. |
 
-### Composants et socle
+## Ordre des actions restantes
 
-| Élément | État du code | Fichiers / constat |
-|---|---|---|
-| Navigation et pied de page | incomplet | `frontend/src/components/layout/Header.tsx`, `Footer.tsx` ; navigation mobile et Échap présents, mais logo officiel absent et présentation à harmoniser. |
-| Composants UI partagés | existe | `frontend/src/components/ui/` : `Button`, `Badge`, `Container`, `DemoNotice`, `EmptyState`, `FormField`, `PageHeader`, `Prose`. |
-| Média de remplacement | incomplet | `MediaFrame`, le registre `frontend/src/content/media.ts` et `frontend/public/images/README.md` existent ; aucun visuel réel n'est encore fourni. |
-| API et loaders | existe | Services centralisés dans `frontend/src/services/api/`; le pré-rendu découvre les slugs d'articles et de solutions. |
-| SEO et pré-rendu | existe | `buildMeta`, routes statiques/dynamiques, sitemap et contrôle `check-prerender` présents. |
-| État du contenu | incomplet | `docs/content/content-register.md` existe désormais ; les validations éditoriales et les décisions de publication restent à obtenir. |
-| Tests frontend | incomplet | Tests de composants, API, SEO et tokens présents ; test de non-référence d'images externes ajouté ; couverture de rendu des pages reste limitée. |
-| Backend / données | existe | API versionnée, modèles éditoriaux, permissions explicites, seeds de brouillon/démo et tests présents. Aucune modification backend justifiée à ce stade. |
-| Déploiement / CI | existe | Compose, CI et scripts de contrôle présents ; l'exécution des commandes reste à vérifier dans l'environnement de travail. |
+### P0 — Prérequis avant production
 
-## 2. Ordre d'exécution
+1. Rétablir l’accès DNS/réseau depuis Docker au dépôt Python puis rejouer
+   `docker compose up -d --build`.
+2. Obtenir les URL définitives du site et de l’API. Configurer explicitement
+   `VITE_SITE_URL`, `VITE_API_URL`, `API_INTERNAL_URL`,
+   `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et
+   `CSRF_TRUSTED_ORIGINS`. Ne pas deviner de domaine.
+3. Faire valider chaque fiche API existante ou saisir le contenu corrigé dans
+   Django Admin. Garder `is_demo=true` jusqu’à confirmation ; ne pas lancer une
+   promotion en masse.
+4. Après validation des données et des variables, reconstruire puis exécuter
+   `npm run check:prerender -- --production --forbid-demo`.
+5. Obtenir et vérifier les mentions légales, la politique de confidentialité,
+   les conditions d’utilisation et les coordonnées publiques.
 
-Les cases cochées signalent un travail réalisé. « Existe », « incomplet » et
-« manquant » qualifient l'état initial relevé pendant l'audit.
+### P1 — Contenus et direction artistique
 
-### Phase 1 — Audit
+1. Fournir des photographies institutionnelles et les visuels API avec textes
+   alternatifs approuvés ; conserver les placeholders jusque-là.
+2. Réaliser une comparaison visuelle page par page aux captures Stitch après
+   configuration du navigateur et des contenus définitifs.
 
-- [x] Lire les instructions, ADR, architecture, contenus, scripts, composants, routes, API et tests.
-- [x] Relever la correspondance route / maquette / source de données.
-- [x] Vérifier les médias locaux : logo fourni et utilisé ; photographies éditoriales à fournir.
+## Contrôles déjà exécutés
 
-### Phase 2 — Plan
-
-- [x] Consigner l'état des pages, composants, sources et écarts dans ce document.
-- [x] Créer `docs/content/content-register.md` sans transformer un document interne en validation publique.
-- [x] Lire intégralement le document institutionnel et créer `docs/project/matrice-contenu.md` avec le statut, la destination, la présence actuelle et les validations manquantes pour chaque section.
-
-### Phase 3 — Conception et composants communs
-
-- [x] Réutiliser les tokens, `buildMeta`, les services API, les loaders et les composants UI existants.
-- [x] Créer `MediaFrame`, centraliser les emplacements dans `frontend/src/content/media.ts` et documenter les visuels à fournir dans `frontend/public/images/README.md`.
-- [x] Remplacer les images conditionnelles des cartes et fiches par le composant média, sans URL externe ni emplacement cassé.
-- [x] Ajouter un test Vitest interdisant les sources d'images externes dans les composants TSX.
-
-### Phase 4 — Pages et cohérence
-
-- [ ] Accueil — incomplet : rapprocher les sections de la maquette en conservant uniquement les contenus vérifiables.
-- [ ] À propos — incomplet : harmoniser la structure ; ne pas publier mission, vision, valeurs ou histoire sans validation.
-- [ ] Solutions et fiche — incomplet : intégrer les médias de remplacement et améliorer la hiérarchie visuelle sans inventer de données.
-- [ ] Services et section Formations — incomplet : utiliser les contenus API validés ; ne créer ni catalogue fictif ni modèle `Training`.
-- [ ] Réalisations — incomplet : conserver le filtre pays et améliorer la présentation sans publier d'exemples inventés.
-- [ ] Actualités et article — incomplet : conserver les données API ; exclure chiffres, études, newsletter et contenus fictifs.
-- [ ] Contact — incomplet : conserver les champs API, validation, honeypot, erreurs et confirmation ; omettre les coordonnées non documentées.
-- [ ] Mentions légales, page introuvable et états vides/erreurs — incomplet / existe : vérifier les balises, le `noindex`, la navigation et la cohérence visuelle.
-- [ ] Passe globale — vérifier accessibilité, navigation clavier, responsive, contraste, liens et absence de débordement.
-- [x] Retirer des pages publiques la copie statique des sections 2, 6 et 10 tant que sa publication n'est pas validée ; maintenir des blocs d'attente.
-- [x] Rendre les descriptions de services et les descriptions renseignées des réalisations depuis les champs API existants, sans changer le contrat.
-
-### Phases 5–6 — Vérification et correction
-
-- [x] Lint, format, types et tests frontend exécutés avec succès (62 tests).
-- [x] Build et contrôle local du pré-rendu : réussite après fixation explicite du host Preview IPv4 ; `check:prerender` passe. Le contrôle strict détecte 14 canoniques locales, 20 enregistrements API marqués démo et les avertissements rendus sur 11 pages.
-- [ ] Si le backend change : exécuter Ruff, `makemigrations --check`, OpenAPI et les tests backend.
-- [x] Rechercher les contenus et URL d'images interdits dans `frontend/src` ; seuls le test de garde et des pourcentages CSS génériques correspondent à la recherche textuelle.
-- [x] Vérifier en navigateur 11 routes aux cinq largeurs demandées, le menu mobile/Échap et la validation locale du formulaire ; ces routes et largeurs ne sont pas toutes re-testées dans cette passe de clôture.
-
-### Phase 7 — Rapport
-
-- [x] Rédiger `docs/project/rapport-finalisation.md` avec les pages, écarts, médias à fournir, décisions humaines, tests et limites constatés.
-
-## 3. Décisions humaines et limites relevées
-
-- Le document institutionnel est interne et sa publication est à confirmer ; son registre de validation référencé est absent.
-- Décisions encore proposées dans `docs/adr/0003` : Formations en section Services, taxonomie Solutions/Produits et traitement du rachat informatif.
-- La palette exacte fournie est enregistrée dans `frontend/src/styles/tokens.css` et testée ; le logo `frontend/public/brand/jacigreen.png` est présent (PNG carré, fond blanc opaque).
-- Les textes juridiques, coordonnées publiques, date de mise en production et autorisation de publier le document institutionnel restent à fournir/valider.
-- L'URL canonique réelle de production doit être renseignée dans `VITE_SITE_URL`, puis le contrôle de pré-rendu en mode production doit être relancé.
-- Les coordonnées, certifications, brevets, rendements, chiffres d'impact, études, noms de clients et contenus des visuels de maquettes ne sont pas des sources publiables.
-- Le dépôt contient des modifications préexistantes dans `docs/adr/0005-palette-et-tokens.md`, `docs/architecture/api.md`, `docs/architecture/security.md`, `docs/development/contributing.md` et un fichier `COPILOT_START.md` non suivi ; ils n'ont pas été modifiés pendant l'audit.
+Les commandes et résultats précis sont consignés dans
+[`rapport-finalisation.md`](./rapport-finalisation.md) et
+[`quality/testing.md`](../quality/testing.md). Les conteneurs testés étaient
+ceux déjà présents ; la reconstruction interrompue par DNS ne les a pas
+remplacés.
