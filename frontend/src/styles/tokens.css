@@ -1,9 +1,4 @@
 /*
- * SOURCE UNIQUE DE VÉRITÉ DU DESIGN SYSTEM JACIGREEN.
- * Tailwind CSS v4 génère les classes utilitaires (bg-brand, text-ink-muted, ...) à
- * partir de ce bloc @theme. Aucune valeur de couleur ne doit être écrite en dur dans
- * les composants. Les contrastes des paires de couleurs ci-dessous sont vérifiés par
- * src/styles/tokens.test.ts (objectif WCAG 2.2 AA).
  *
  * Palette de marque fournie comme officielle : ses valeurs sont conservées exactement ci-dessous.
  * Les couleurs de base de l'interface restent alignées sur le code des maquettes Stitch; les couleurs

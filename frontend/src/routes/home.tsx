@@ -6,6 +6,7 @@ import { Container } from "~/components/ui/Container";
 import { ContentPending } from "~/components/ui/ContentPending";
 import { DemoBanner } from "~/components/ui/DemoNotice";
 import { MediaFrame } from "~/components/ui/MediaFrame";
+import { positioning } from "~/content/institutional";
 import { MEDIA } from "~/content/media";
 import { buildMeta, organizationJsonLd } from "~/lib/seo";
 import { listLatestArticles, listProjects, listSolutions } from "~/services/api/content";
@@ -25,7 +26,7 @@ export function meta() {
   return [
     ...buildMeta({
       title: "JACIGREEN",
-      description: "Présentation institutionnelle de JACIGREEN en attente de validation.",
+      description: positioning.short,
       path: "/",
     }),
     organizationJsonLd(),
@@ -46,14 +47,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               JACIGREEN
             </p>
             <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-headline-2xl-mobile text-on-primary md:font-headline-2xl md:text-headline-2xl">
-              Présentation institutionnelle
+              Transformer les défis environnementaux en ressources
             </h1>
-            <div className="mt-space-lg max-w-reading">
-              <ContentPending>
-                La présentation de l'organisation et de ses activités sera publiée après validation
-                institutionnelle.
-              </ContentPending>
-            </div>
+            <p className="mt-space-md font-label-md text-label-md font-semibold text-on-primary/90">
+              {positioning.tagline}
+            </p>
+            <p className="mt-space-lg max-w-reading font-body-lg text-body-lg text-on-primary/90">
+              {positioning.short}
+            </p>
             <div className="mt-space-xl flex flex-wrap gap-space-md">
               <ButtonLink to="/solutions" variant="accent">
                 Découvrir nos solutions
@@ -78,22 +79,19 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </Container>
       </section>
 
-      <section className="py-space-xl md:py-20" aria-labelledby="demarche">
-        <Container>
-          <div className="grid grid-cols-1 gap-gutter lg:grid-cols-[0.8fr_1.2fr]">
-            <div>
-              <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
-                Présentation
-              </p>
-              <h2 id="demarche" className="mt-2 max-w-lg font-headline-xl text-headline-xl">
-                Positionnement et chaîne de valeur
-              </h2>
-            </div>
-            <ContentPending>
-              Les formulations de présentation et les étapes de la chaîne de valeur issues du
-              référentiel interne attendent une validation avant publication.
-            </ContentPending>
+      <section className="py-space-xl md:py-20" aria-labelledby="approche">
+        <Container className="grid grid-cols-1 gap-gutter lg:grid-cols-[0.7fr_1.3fr]">
+          <div>
+            <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
+              Notre approche
+            </p>
+            <h2 id="approche" className="mt-2 max-w-lg font-headline-xl text-headline-xl">
+              Valoriser les ressources disponibles localement
+            </h2>
           </div>
+          <p className="max-w-reading font-body-lg text-body-lg text-on-surface-variant">
+            {positioning.expertise}
+          </p>
         </Container>
       </section>
 
@@ -105,14 +103,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           <div className="flex flex-wrap items-end justify-between gap-space-md">
             <div>
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
-                Expertise
+                Solutions
               </p>
               <h2 id="solutions" className="mt-2 font-headline-xl text-headline-xl">
-                Nos solutions
+                Solutions publiées
               </h2>
             </div>
             <ButtonLink to="/solutions" variant="secondary">
-              Explorer les solutions <span aria-hidden="true">→</span>
+              Toutes les solutions <span aria-hidden="true">→</span>
             </ButtonLink>
           </div>
           {solutions.length > 0 ? (
@@ -123,9 +121,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </div>
           ) : (
             <div className="mt-space-xl">
-              <ContentPending>
-                Les solutions seront affichées après publication de contenus validés.
-              </ContentPending>
+              <ContentPending>Aucune solution n’est actuellement publiée.</ContentPending>
             </div>
           )}
         </Container>
@@ -136,14 +132,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           <div className="flex flex-wrap items-end justify-between gap-space-md">
             <div>
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
-                Sur le terrain
+                Réalisations
               </p>
-              <h2 id="realisations" className="mt-2 max-w-3xl font-headline-xl text-headline-xl">
-                Réalisations et projets
+              <h2 id="realisations" className="mt-2 font-headline-xl text-headline-xl">
+                Projets publiés
               </h2>
             </div>
             <ButtonLink to="/realisations" variant="secondary">
-              Voir les réalisations <span aria-hidden="true">→</span>
+              Toutes les réalisations <span aria-hidden="true">→</span>
             </ButtonLink>
           </div>
           {projects.length > 0 ? (
@@ -154,52 +150,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </div>
           ) : (
             <div className="mt-space-xl">
-              <ContentPending>
-                Les réalisations seront présentées dès qu'elles auront été validées.
-              </ContentPending>
+              <ContentPending>Aucune réalisation n’est actuellement publiée.</ContentPending>
             </div>
           )}
-        </Container>
-      </section>
-
-      <section className="on-dark bg-primary-container py-space-xl text-on-primary md:py-20">
-        <Container className="grid grid-cols-1 items-center gap-gutter md:grid-cols-[1fr_auto]">
-          <div>
-            <p className="font-label-md text-label-md font-semibold text-on-primary uppercase">
-              Un projet ou une question ?
-            </p>
-            <h2 className="mt-2 max-w-3xl font-headline-xl text-headline-xl text-on-primary">
-              Échanger autour de votre besoin
-            </h2>
-            <p className="mt-space-md max-w-reading font-body-md text-body-md text-on-primary/90">
-              Le formulaire de contact permet de préciser votre demande et de la transmettre à
-              JACIGREEN.
-            </p>
-          </div>
-          <ButtonLink
-            to="/contact"
-            variant="secondary"
-            className="w-fit border-on-primary text-on-primary hover:bg-on-primary hover:text-primary-container"
-          >
-            Nous contacter <span aria-hidden="true">→</span>
-          </ButtonLink>
-        </Container>
-      </section>
-
-      <section className="py-space-xl md:py-20" aria-labelledby="impact">
-        <Container className="grid grid-cols-1 items-start gap-gutter lg:grid-cols-[0.7fr_1.3fr]">
-          <div>
-            <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
-              Informations institutionnelles
-            </p>
-            <h2 id="impact" className="mt-2 font-headline-xl text-headline-xl">
-              Données d'impact et reconnaissances
-            </h2>
-          </div>
-          <ContentPending>
-            Les indicateurs, partenariats ou distinctions éventuellement publiés nécessitent des
-            sources vérifiables et une validation préalable.
-          </ContentPending>
         </Container>
       </section>
 
@@ -229,9 +182,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </div>
           ) : (
             <div className="mt-space-xl">
-              <ContentPending>
-                Les actualités apparaîtront après publication de contenus validés.
-              </ContentPending>
+              <ContentPending>Aucune actualité n’est actuellement publiée.</ContentPending>
             </div>
           )}
         </Container>

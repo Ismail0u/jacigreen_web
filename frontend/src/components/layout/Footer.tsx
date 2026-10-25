@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 
 import { Container } from "~/components/ui/Container";
+import { positioning } from "~/content/institutional";
 import { MAIN_NAV, SITE_NAME } from "~/lib/site";
 
 import { BrandLogo } from "./BrandLogo";
@@ -15,7 +16,10 @@ export function Footer() {
               <BrandLogo />
             </Link>
             <p className="mt-3 max-w-reading text-body-sm text-on-surface-variant">
-              Présentation institutionnelle en cours de validation.
+              {positioning.short}
+            </p>
+            <p className="mt-3 font-body-sm text-magenta-text italic">
+              {positioning.tagline} · « {positioning.signature} »
             </p>
           </div>
           <nav aria-label="Navigation du pied de page" className="lg:col-span-2">

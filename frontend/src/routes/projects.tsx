@@ -17,7 +17,7 @@ export async function loader() {
 export function meta() {
   return buildMeta({
     title: "Réalisations",
-    description: "Consultez les réalisations publiées par JACIGREEN.",
+    description: "Projets et réalisations publiés par JACIGREEN.",
     path: "/realisations",
   });
 }
@@ -26,19 +26,25 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
   const { projects } = loaderData;
   const [params, setParams] = useSearchParams();
   const country = params.get("pays");
-  const countries = [...new Map(projects.map((p) => [p.country, p.country_label])).entries()];
+  const countries = [
+    ...new Map(projects.map((project) => [project.country, project.country_label])),
+  ];
   const visible = country ? projects.filter((project) => project.country === country) : projects;
 
   return (
     <>
       <DemoBanner show={projects.some((project) => project.is_demo)} />
-      <PageHeader eyebrow="Réalisations" title="Nos réalisations" />
+      <PageHeader
+        eyebrow="Réalisations"
+        title="Projets et réalisations"
+        intro="Les réalisations publiées par JACIGREEN sont présentées ici."
+      />
       <section className="py-space-xl md:py-20">
         <Container>
           {countries.length > 1 ? (
             <div
               role="group"
-              aria-label="Filtrer par pays"
+              aria-label="Filtrer les réalisations par pays"
               className="mb-space-xl flex flex-wrap gap-space-sm"
             >
               <button
@@ -74,8 +80,9 @@ export default function Projects({ loaderData }: Route.ComponentProps) {
             </div>
           ) : (
             <ContentPending>
-              Aucune réalisation à afficher pour ce filtre. Les projets seront publiés après
-              validation des informations.
+              {projects.length === 0
+                ? "Aucune réalisation n’est actuellement publiée."
+                : "Aucune réalisation ne correspond à ce filtre."}
             </ContentPending>
           )}
         </Container>
