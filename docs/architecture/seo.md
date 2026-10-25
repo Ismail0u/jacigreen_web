@@ -10,10 +10,19 @@ Pour chaque page : `<title>`, `meta description`, lien canonique, Open Graph (`o
 Django appelle le Deploy Hook Vercel à chaque publication, dépublication ou suppression d'un contenu publié : le site est reconstruit en quelques minutes.
 
 ## Variables
-`VITE_SITE_URL` (URL canonique, **obligatoire et non locale en production**), `API_INTERNAL_URL` / `VITE_API_URL` (API lue au build).
+`VITE_SITE_URL` (URL canonique, **obligatoire** ; URL HTTPS publique définitive
+en production), `API_INTERNAL_URL` / `VITE_API_URL` (API lue au build). Les
+valeurs localhost du fichier d’exemple et de Compose ne conviennent qu’au
+développement. Aucun domaine de production n’est présumé.
 
 ## Vérification
-`npm run build && npm run check:prerender [-- --production --forbid-demo]` contrôle : présence du HTML de chaque route (y compris tous les slugs de l'API), balises, canoniques, `noindex`, sitemap, robots.txt, absence de contenu de démonstration. Voir `docs/quality/testing.md` pour les résultats.
+`npm run build && npm run check:prerender [-- --production --forbid-demo]`
+contrôle : présence du HTML de chaque route (y compris tous les slugs de l'API),
+balises, canoniques, `noindex`, sitemap, `robots.txt` et absence de contenu de
+démonstration. Le mode `--production` exige une URL HTTPS non locale ; le mode
+`--forbid-demo` rejette chaque enregistrement dont `is_demo` n’est pas
+explicitement `false` et tout marqueur de démonstration rendu. Voir
+`docs/quality/testing.md` pour les résultats.
 
 ## Limites connues
 - Soft 404 : une URL inconnue reçoit la page « introuvable » avec le statut 200 (`noindex`).

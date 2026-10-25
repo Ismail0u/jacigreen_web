@@ -12,12 +12,27 @@ import { join } from "node:path";
 
 const BUILD_DIR = join(import.meta.dirname, "..", "build", "client");
 const API = (process.env.API_INTERNAL_URL ?? process.env.VITE_API_URL ?? "").replace(/\/+$/, "");
-const SITE_URL = (process.env.VITE_SITE_URL ?? "http://localhost:5173").replace(/\/+$/, "");
+const configuredSiteUrl = process.env.VITE_SITE_URL;
+const SITE_URL = (configuredSiteUrl ?? "").replace(/\/+$/, "");
 const FORBID_DEMO = process.argv.includes("--forbid-demo");
 const PRODUCTION = process.argv.includes("--production");
 
 const failures = [];
 const fail = (route, message) => failures.push(`${route} : ${message}`);
+if (!configuredSiteUrl) fail("(configuration)", "VITE_SITE_URL doit être explicitement défini");
+if (PRODUCTION && configuredSiteUrl) {
+  try {
+    const siteUrl = new URL(configuredSiteUrl);
+    if (
+      siteUrl.protocol !== "https:" ||
+      /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(siteUrl.hostname)
+    ) {
+      fail("(configuration)", "VITE_SITE_URL doit être une URL publique HTTPS, pas une URL locale");
+    }
+  } catch {
+    fail("(configuration)", "VITE_SITE_URL n'est pas une URL valide");
+  }
+}
 
 const decode = (text) =>
   text

@@ -20,5 +20,9 @@ export function getApiBaseUrl(): string {
 
 /** URL publique du site (liens canoniques, Open Graph, sitemap). */
 export function getSiteUrl(): string {
-  return trimTrailingSlash(import.meta.env.VITE_SITE_URL ?? "http://localhost:5173");
+  const url = import.meta.env.VITE_SITE_URL;
+  if (!url) {
+    throw new Error("VITE_SITE_URL n'est pas défini (voir frontend/.env.example).");
+  }
+  return trimTrailingSlash(url);
 }

@@ -1,4 +1,4 @@
-/** Données de navigation et d'identité du site (aucune information institutionnelle non validée). */
+/** Données de navigation et identité de marque du site. */
 
 export const SITE_NAME = "JACIGREEN";
 
