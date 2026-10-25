@@ -56,6 +56,7 @@ commande de promotion n’a donc été exécutée. Le contrôle strict reste act
 
 | Contrôle | Résultat réel |
 |---|---|
+| Vercel `Invalid route exports ... loader` | Corrigé dans le code : les loaders de fiches sont portés par les parents toujours pré-rendus ; les `clientLoader` parent servent les chemins de détail non pré-rendus. La correction doit être fusionnée dans la branche suivie par Vercel ; aucun déploiement n’a été déclenché. |
 | Frontend `npm run format:check` | Réussi après formatage des modifications |
 | Frontend `npm run typecheck` | Réussi |
 | Frontend `npm run lint` | Réussi après correction d’une erreur `no-deprecated` dans le nouveau test ; aucune règle désactivée |
@@ -70,6 +71,7 @@ commande de promotion n’a donc été exécutée. Le contrôle strict reste act
 | Backend `DJANGO_SETTINGS_MODULE=config.settings.test python manage.py test` | Réussi : 47 tests |
 | Django `config.settings.production` avec `manage.py check --deploy` | Code de sortie 0 ; avertissement `security.W021` car HSTS preload est désactivé. C’est intentionnel tant que le domaine n’est pas validé. La commande a utilisé l’environnement Compose de développement, pas un environnement réel de production. |
 | Revalidation frontend après la réduction des mentions légales | Réussie : format, typecheck, lint, 12 fichiers/64 tests, build et contrôle de pré-rendu local |
+| Vercel `Invalid route exports ... loader` (reproduction/correction) | Les routes de détail exportaient un loader et n'étaient valides que si leurs slugs étaient présents dans les chemins pré-rendus. Les loaders ont été déplacés sur les parents toujours pré-rendus, avec un clientLoader pour les chemins dynamiques hors du pré-rendu. Typecheck, lint, 64 tests, build et contrôle réussis avec API locale peuplée ; build/contrôle également réussis avec API simulée vide. |
 | `docker compose config --quiet` | Réussi |
 | Contrôle final `git diff --check` | Réussi |
 | Navigateur : 14 routes × 5 largeurs (360, 390, 768, 1024, 1440 px) | 70 vérifications réussies : un `<h1>`, canonique présente, aucun débordement horizontal ni lien vide |
@@ -77,9 +79,11 @@ commande de promotion n’a donc été exécutée. Le contrôle strict reste act
 | Navigateur : erreurs JavaScript/console | Aucune erreur observée sur les 70 ouvertures de pages |
 | Navigateur : menu mobile | Ouverture et fermeture par Échap vérifiées après hydratation à 360 px |
 | `git diff --check` | Réussi |
+| Tests de build catalogue après correction | Réussis avec l’API locale peuplée (3 solutions, 3 articles), et avec une API simulée vide (7 URL de sitemap, aucune route détail) ; `check:prerender` passe dans les deux scénarios. |
 | Santé des services existants après l’échec Docker | Frontend HTTP 200 ; backend `/api/v1/health/` HTTP 200 ; les trois conteneurs restent en fonctionnement |
 | Comparaison pixel à pixel avec les maquettes Stitch | Non exécutée ; les résultats navigateur ne prouvent pas une fidélité visuelle pixel à pixel |
 | États vides avec une API réellement vide | Non exercés dans le navigateur, car l’API locale contient les 20 fiches de démonstration ; les branches d’état vide sont présentes dans les pages |
+| Déploiement Vercel | Non exécuté depuis ce workspace ; la correction doit être poussée/fusionnée dans la branche configurée par le projet Vercel avant de pouvoir vérifier le déploiement. |
 
 Les messages 404, 403, 429 et d’échec réseau observés dans les journaux de
 tests Django correspondent à des scénarios négatifs testés ; les 47 tests sont
