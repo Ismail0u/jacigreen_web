@@ -1,6 +1,6 @@
 # Dépendances d'exécution (versions fixées le 15 octobre 2026).
 # Django 5.2 est une version LTS (support de sécurité jusqu'en avril 2028).
-Django==5.2.18
+Django==6.1.2
 djangorestframework==3.18.3
 drf-spectacular==0.30.0
 drf-spectacular-sidecar==2026.10.1
