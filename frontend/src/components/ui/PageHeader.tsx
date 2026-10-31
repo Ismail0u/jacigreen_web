@@ -15,7 +15,7 @@ export function PageHeader({ eyebrow, title, intro }: PageHeaderProps) {
             {eyebrow}
           </p>
         ) : null}
-        <h1 className="mt-2 max-w-5xl font-headline-xl-mobile text-headline-xl-mobile md:font-headline-2xl md:text-headline-2xl">
+        <h1 className="text-fluid-heading mt-2 max-w-5xl font-headline-xl-mobile md:font-headline-2xl">
           {title}
         </h1>
         {intro ? (
