@@ -52,6 +52,14 @@
 
   --text-display: 3.25rem; /* titre éditorial d'accueil */
   --text-display--line-height: 1.1;
+  --text-fluid-heading: clamp(2.25rem, 5vw, 3.5rem);
+  --text-fluid-heading--line-height: 1.12;
+  --text-fluid-heading--letter-spacing: -0.03em;
+  --text-fluid-heading--font-weight: 700;
+  --text-fluid-section-heading: clamp(1.75rem, 3.6vw, 2.5rem);
+  --text-fluid-section-heading--line-height: 1.2;
+  --text-fluid-section-heading--letter-spacing: -0.025em;
+  --text-fluid-section-heading--font-weight: 700;
   --text-h1: 2.5rem;
   --text-h1--line-height: 1.15;
   --text-h2: 1.875rem;
