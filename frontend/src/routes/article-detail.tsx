@@ -25,7 +25,7 @@ export default function ArticleDetail() {
               </time>
               {article.author_name ? ` · ${article.author_name}` : ""}
             </p>
-            <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-headline-2xl-mobile md:font-headline-2xl md:text-headline-2xl">
+            <h1 className="text-fluid-heading mt-space-md max-w-4xl font-headline-2xl-mobile md:font-headline-2xl">
               {article.title}
             </h1>
             <p className="mt-space-md max-w-reading font-body-lg text-body-lg text-on-surface-variant">

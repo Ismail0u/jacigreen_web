@@ -13,11 +13,12 @@ interface MediaRegistry {
   aboutStory: MediaPlacement;
 }
 
-/** Emplacements visuels éditoriaux. Les sources restent vides jusqu'à réception d'images validées. */
+/** Emplacements visuels éditoriaux, distincts des médias fournis par les catalogues API. */
 export const MEDIA: MediaRegistry = {
   homeHero: {
     page: "/",
-    alt: "",
+    src: "/images/jacigreen-biofertilisant-niger.webp",
+    alt: "Un biofertilisant est recueilli dans un bassin sur un site maraîcher au Niger.",
     aspect: "4/3",
     icon: "eco",
   },
