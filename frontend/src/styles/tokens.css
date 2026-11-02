@@ -99,4 +99,8 @@
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --duration-fast: 150ms;
   --duration-base: 220ms;
+  --duration-entrance: 700ms;
+  --duration-interaction: 260ms;
+  --spacing-cluster-frame: 0.375rem;
+  --shadow-editorial-card: 0 12px 32px rgb(23 58 44 / 0.18);
 }
