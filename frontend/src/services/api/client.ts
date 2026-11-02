@@ -35,10 +35,19 @@ export interface RequestOptions {
   signal?: AbortSignal;
 }
 
+function normalizeAbortReason(reason: unknown, fallback: Error): Error {
+  if (reason instanceof Error) {
+    return reason;
+  }
+  return fallback instanceof DOMException ? fallback : new DOMException("Aborted", "AbortError");
+}
+
 function retryDelay(attempt: number, signal?: AbortSignal): Promise<void> {
   const delay = 250 * 2 ** attempt + Math.floor(Math.random() * 250);
   if (signal?.aborted) {
-    return Promise.reject(signal.reason ?? new DOMException("Aborted", "AbortError"));
+    return Promise.reject(
+      normalizeAbortReason(signal.reason, new DOMException("Aborted", "AbortError")),
+    );
   }
 
   return new Promise((resolve, reject) => {
@@ -49,7 +58,9 @@ function retryDelay(attempt: number, signal?: AbortSignal): Promise<void> {
     const abort = () => {
       clearTimeout(timer);
       signal?.removeEventListener("abort", abort);
-      reject(signal?.reason ?? new DOMException("Aborted", "AbortError"));
+      reject(
+        normalizeAbortReason(signal?.reason, new DOMException("Aborted", "AbortError")),
+      );
     };
     const timer = setTimeout(finish, delay);
     signal?.addEventListener("abort", abort, { once: true });
@@ -95,7 +106,9 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
         signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
       });
     } catch (error) {
-      if (signal?.aborted) throw signal.reason ?? error;
+      if (signal?.aborted) {
+        throw normalizeAbortReason(signal.reason, error instanceof Error ? error : new Error("Aborted"));
+      }
 
       const requestError = timeout.aborted
         ? new ApiError(0, "timeout_error", "Le serveur met trop de temps à répondre.")

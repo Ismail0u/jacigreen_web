@@ -86,9 +86,13 @@ describe("apiFetch", () => {
     vi.spyOn(AbortSignal, "timeout").mockReturnValue(
       AbortSignal.abort(new DOMException("timeout", "TimeoutError")),
     );
-    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) =>
-      Promise.reject(init?.signal?.reason),
-    );
+    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
+      const reason =
+        init?.signal?.reason instanceof Error
+          ? init.signal.reason
+          : new DOMException("timeout", "TimeoutError");
+      return Promise.reject(reason);
+    });
     vi.stubGlobal("fetch", fetchMock);
     await expect(apiFetch("/x/")).rejects.toMatchObject({
       status: 0,
@@ -101,9 +105,13 @@ describe("apiFetch", () => {
     const controller = new AbortController();
     const abortError = new DOMException("aborted", "AbortError");
     controller.abort(abortError);
-    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) =>
-      Promise.reject(init?.signal?.reason),
-    );
+    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
+      const reason =
+        init?.signal?.reason instanceof Error
+          ? init.signal.reason
+          : new DOMException("aborted", "AbortError");
+      return Promise.reject(reason);
+    });
     vi.stubGlobal("fetch", fetchMock);
     await expect(apiFetch("/x/", { signal: controller.signal })).rejects.toMatchObject({
       name: "AbortError",
