@@ -45,6 +45,7 @@ export function RouteErrorState({ error }: { error: unknown }) {
       error.status >= 500 ||
       error.code === "invalid_response");
   const retrying = revalidator.state !== "idle";
+  const retryLabel = retrying ? "Nouvelle tentative…" : "Réessayer";
 
   if (retrying) {
     return (
@@ -82,11 +83,13 @@ export function RouteErrorState({ error }: { error: unknown }) {
           <div className="mt-8 flex flex-wrap gap-space-md">
             {canRetry ? (
               <Button
-                onClick={() => revalidator.revalidate()}
+                onClick={() => {
+                  void revalidator.revalidate();
+                }}
                 disabled={retrying}
                 aria-live="polite"
               >
-                {retrying ? "Nouvelle tentative…" : "Réessayer"}
+                {retryLabel}
               </Button>
             ) : null}
             <ButtonLink to="/" variant="secondary">

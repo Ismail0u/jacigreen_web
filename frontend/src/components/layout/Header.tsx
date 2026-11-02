@@ -58,7 +58,7 @@ export function Header() {
             className="inline-flex size-11 items-center justify-center border border-primary-container text-primary-container md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
-            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={open ? "Fermer" : "Menu"}
             onClick={() => {
               setOpenPath(open ? null : pathname);
             }}
