@@ -35,13 +35,6 @@ export function meta() {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { solutions, articles, projects } = loaderData;
   const hasDemo = [...solutions, ...articles, ...projects].some((item) => item.is_demo);
-  const principles = [
-    "Accessibilité",
-    "Responsive",
-    "Performance",
-    "Ergonomie",
-    "UX & IHM",
-  ];
 
   return (
     <>
@@ -61,17 +54,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <p className="mt-space-lg max-w-reading font-body-lg text-body-lg text-on-primary/90">
               {positioning.short}
             </p>
-
-            <div className="mt-space-xl flex flex-wrap gap-2">
-              {principles.map((item) => (
-                <span
-                  key={item}
-                  className="inline-flex items-center rounded-full border border-white/20 bg-white/8 px-3 py-1.5 font-label-md text-label-md text-on-primary/90 backdrop-blur-sm"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
 
             <div className="mt-space-xl flex flex-wrap gap-space-md">
               <ButtonLink to="/solutions" variant="accent">
