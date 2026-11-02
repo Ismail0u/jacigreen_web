@@ -11,7 +11,9 @@
 
 | Token | Taille / interligne | Usage |
 |---|---|---|
-| `text-display` | 52 px / 1,1 | Titre d'accueil (≥ 768 px) |
+| `text-display` | 52 px / 1,1 | Titres éditoriaux |
+| `text-fluid-heading` | clamp(36 px, 5 vw, 56 px) / 1,12 | Titres principaux (accueil, pages et détails) |
+| `text-fluid-section-heading` | clamp(28 px, 3,6 vw, 40 px) / 1,2 | Titres de section de l'accueil et états de route |
 | `text-h1` … `text-h3` | 40, 30, 22 px | Titres de page, section, carte |
 | `text-lead` | 19 px / 1,65 | Introductions |
 | `text-body` | 16 px / 1,65 | Texte courant (maquettes : 15 px) |
