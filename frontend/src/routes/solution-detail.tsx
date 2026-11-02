@@ -26,7 +26,7 @@ export default function SolutionDetail() {
       <article className="py-space-xl md:py-20">
         <Container>
           <div className="grid grid-cols-1 gap-gutter lg:grid-cols-[1fr_0.9fr] lg:items-center">
-            <div>
+            <div className="solution-hero__copy">
               <div className="flex flex-wrap gap-2">
                 <Badge>{categoryLabels[solution.category]}</Badge>
                 {solution.maturity === "prototype" ? (
@@ -48,13 +48,16 @@ export default function SolutionDetail() {
                 </ButtonLink>
               </div>
             </div>
-            <MediaFrame
-              src={solution.cover_image}
-              alt={solution.cover_alt}
-              aspect="16/9"
-              icon={solution.category === "energy" ? "solar_power" : "eco"}
-              className="max-w-4xl"
-            />
+            <div className="solution-hero__media">
+              <MediaFrame
+                src={solution.cover_image}
+                alt={solution.cover_alt}
+                aspect="16/9"
+                icon={solution.category === "energy" ? "solar_power" : "eco"}
+                priority
+                className="max-w-4xl"
+              />
+            </div>
           </div>
           <div className="mt-space-xl border-t border-outline-variant pt-space-xl">
             <h2 className="mb-space-lg font-headline-xl text-headline-xl">

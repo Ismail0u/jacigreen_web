@@ -13,7 +13,7 @@ function period(project: Project): string {
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="border-t-2 border-on-tertiary-container bg-surface-container-lowest pb-space-lg">
+    <article className="editorial-card border-t-2 border-on-tertiary-container bg-surface-container-lowest pb-space-lg">
       <MediaFrame
         src={project.cover_image}
         alt={project.cover_alt}
