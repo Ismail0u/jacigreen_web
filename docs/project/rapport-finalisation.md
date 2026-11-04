@@ -5,6 +5,46 @@ catalogues sont désormais alimentés par l’API uniquement. Les 20 fiches de l
 base locale restent des démonstrations non validées. La reconstruction Docker
 échoue encore sur la résolution DNS lors de l’installation Python.
 
+## Reprise UX/API — changements et contrôles de cette révision
+
+- Le client API distingue les erreurs réseau, les délais dépassés et les
+  réponses illisibles. Les GET retentent une seule fois après une erreur
+  temporaire ou une réponse 502/503/504 ; les POST ne sont jamais rejoués.
+- Les pages conservent le cadre du site en cas d’erreur de chargement, exposent
+  une action de reprise et montrent un squelette pendant celle-ci. Les
+  chargements de navigation ont un indicateur accessible.
+- Les titres principaux et les titres de sections de l’accueil utilisent les
+  nouveaux tokens fluides ; les valeurs restent centralisées dans
+  `frontend/src/styles/tokens.css`.
+- Le hero de l’accueil utilise une photo locale fournie dans le dépôt. Un
+  dérivé WebP de 1800 × 1350 px (321 246 octets) a été généré ; le fichier
+  source de 6 759 204 octets n’a pas été modifié. Les autres photos n’ont pas
+  été publiées faute de vérification individuelle de leur provenance.
+- Fichiers modifiés pour cette reprise : `frontend/src/services/api/client.ts`,
+  `frontend/src/services/api/client.test.ts`,
+  `frontend/src/components/ui/RouteStatus.tsx`,
+  `frontend/src/components/ui/PageHeader.tsx`,
+  `frontend/src/layouts/site-layout.tsx`, `frontend/src/root.tsx`,
+  `frontend/src/routes/home.tsx`, `frontend/src/routes/solution-detail.tsx`,
+  `frontend/src/routes/article-detail.tsx`, `frontend/src/content/media.ts`,
+  `frontend/src/styles/app.css`, `frontend/src/styles/tokens.css`,
+  `frontend/public/images/README.md`,
+  `frontend/public/images/jacigreen-biofertilisant-niger.webp`,
+  `docs/architecture/design-system.md`, `docs/quality/testing.md` et le
+  présent rapport. Aucun changement backend.
+
+| Contrôle sur cette révision | Résultat |
+|---|---|
+| `git diff --check` | Réussi |
+| `npm run format:check`, `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:prerender` | Non exécutés : Node.js et npm sont absents du poste (`npm: commande introuvable`, code 127) ; aucun conteneur Compose frontend n’est en cours d’exécution. |
+| Découverte des tests VS Code | Non disponible : aucun contrôleur de test enregistré dans cette session. |
+| Vérification des problèmes de l’éditeur | L’éditeur signale `Unknown at rule @theme` dans `tokens.css`. Cette syntaxe Tailwind existait déjà ; faute de build, elle n’a pas pu être revalidée par le pipeline CSS du projet. |
+| Vérification visuelle navigateur | Non exécutée : aucun serveur frontend n’est lancé dans cet environnement. |
+
+Les contrôles passés et résultats historiques ci-dessous ne certifient pas les
+modifications UX/API de cette reprise. Aucun contrôle de production n’a été
+exécuté sur cette révision.
+
 ## Modifications réalisées
 
 - Raccourcissement des pages Accueil et À propos ; suppression des répétitions

@@ -20,7 +20,29 @@ Compose et dans `frontend/.env.example` sont réservées au développement. Le m
 `--production` exige une URL HTTPS non locale ; `--forbid-demo` refuse les fiches
 `is_demo=true` et les marqueurs de démonstration rendus.
 
+## Résilience API et chargement
+
+Le client centralisé applique un délai maximal de 10 secondes à chaque requête.
+Les GET peuvent être retentés une seule fois après une erreur réseau, un délai
+dépassé ou une réponse HTTP 502, 503 ou 504, avec une attente courte et aléatoire.
+Les POST ne sont jamais rejoués automatiquement ; l'annulation du demandeur est
+préservée. Les réponses JSON illisibles sont signalées comme erreurs et ne sont
+pas converties en listes ou objets vides.
+
+Pendant une navigation API, le layout annonce le chargement. En cas d'échec, il
+conserve l'en-tête et le pied de page, distingue une ressource introuvable d'une
+panne temporaire et propose une reprise pour les erreurs réessayables. Un état
+squelette accessible accompagne la nouvelle tentative. Un catalogue vide reste
+distinct d'une erreur de chargement.
+
 ## Résultats vérifiés le 24 octobre 2026
+
+> Les résultats historiques ci-dessous ne certifient pas les modifications
+> UX/API décrites dans le rapport de finalisation. Pour cette reprise, les
+> scripts frontend n'ont pas pu être lancés : Node.js/npm et les conteneurs
+> Compose sont absents de l'environnement courant. `git diff --check` est le
+> seul contrôle de commande réussi sur ces changements ; la validation visuelle
+> et le build restent à effectuer.
 
 | Contrôle | Résultat |
 |---|---|

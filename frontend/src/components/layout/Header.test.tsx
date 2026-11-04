@@ -19,7 +19,7 @@ describe("Header", () => {
     setup();
     expect(screen.getByRole("img", { name: "JACIGREEN" })).toHaveAttribute(
       "src",
-      "/brand/jacigreen.png",
+      "/brand/jacigreen-logo.png",
     );
   });
 

@@ -7,7 +7,7 @@ import type { ArticleSummary } from "~/types/api";
 
 export function ArticleCard({ article }: { article: ArticleSummary }) {
   return (
-    <article className="group border-t-2 border-primary-container pt-space-md pb-space-lg">
+    <article className="editorial-card group border-t-2 border-primary-container pt-space-md pb-space-lg">
       <MediaFrame
         src={article.cover_image}
         alt={article.cover_alt}

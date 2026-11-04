@@ -55,14 +55,43 @@ export function Header() {
           </div>
           <button
             type="button"
-            className="inline-flex min-h-11 items-center border border-primary-container px-4 font-display text-small font-semibold text-primary-container md:hidden"
+            className="inline-flex size-11 items-center justify-center border border-primary-container text-primary-container md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
+            aria-label={open ? "Fermer" : "Menu"}
             onClick={() => {
               setOpenPath(open ? null : pathname);
             }}
           >
-            {open ? "Fermer" : "Menu"}
+            {open ? (
+              /* Icône Croix (Close) */
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              /* Icône Hamburger */
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            )}
           </button>
         </div>
       </Container>

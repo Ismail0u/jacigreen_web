@@ -5,9 +5,8 @@ import { ButtonLink } from "~/components/ui/Button";
 import { Container } from "~/components/ui/Container";
 import { ContentPending } from "~/components/ui/ContentPending";
 import { DemoBanner } from "~/components/ui/DemoNotice";
-import { MediaFrame } from "~/components/ui/MediaFrame";
+import { HomeHeroCluster } from "~/components/home/HomeHeroCluster";
 import { positioning } from "~/content/institutional";
-import { MEDIA } from "~/content/media";
 import { buildMeta, organizationJsonLd } from "~/lib/seo";
 import { listLatestArticles, listProjects, listSolutions } from "~/services/api/content";
 
@@ -42,12 +41,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <DemoBanner show={hasDemo} />
       <section className="on-dark bg-primary-container py-space-xl text-on-primary md:py-20">
         <Container className="grid grid-cols-1 items-center gap-gutter lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <div className="py-4 md:py-8">
+          <div className="home-hero__copy py-4 md:py-8">
             <p className="font-label-md text-label-md font-semibold text-on-primary uppercase">
               JACIGREEN
             </p>
-            <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-headline-2xl-mobile text-on-primary md:font-headline-2xl md:text-headline-2xl">
-              Transformer les défis environnementaux en ressources
+            <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-fluid-heading text-on-primary md:font-headline-2xl">
+              Transformer les défis environnementaux en ressources utiles
             </h1>
             <p className="mt-space-md font-label-md text-label-md font-semibold text-on-primary/90">
               {positioning.tagline}
@@ -55,6 +54,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <p className="mt-space-lg max-w-reading font-body-lg text-body-lg text-on-primary/90">
               {positioning.short}
             </p>
+
             <div className="mt-space-xl flex flex-wrap gap-space-md">
               <ButtonLink to="/solutions" variant="accent">
                 Découvrir nos solutions
@@ -68,14 +68,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </ButtonLink>
             </div>
           </div>
-          <MediaFrame
-            src={MEDIA.homeHero.src}
-            alt={MEDIA.homeHero.alt}
-            aspect={MEDIA.homeHero.aspect}
-            icon={MEDIA.homeHero.icon}
-            priority
-            className="border-on-primary/20 bg-on-primary/10"
-          />
+          <HomeHeroCluster />
         </Container>
       </section>
 
@@ -85,7 +78,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
               Notre approche
             </p>
-            <h2 id="approche" className="mt-2 max-w-lg font-headline-xl text-headline-xl">
+            <h2 id="approche" className="mt-2 max-w-lg font-headline-xl text-fluid-section-heading">
               Valoriser les ressources disponibles localement
             </h2>
           </div>
@@ -105,7 +98,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
                 Solutions
               </p>
-              <h2 id="solutions" className="mt-2 font-headline-xl text-headline-xl">
+              <h2 id="solutions" className="mt-2 font-headline-xl text-fluid-section-heading">
                 Solutions publiées
               </h2>
             </div>
@@ -134,7 +127,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
                 Réalisations
               </p>
-              <h2 id="realisations" className="mt-2 font-headline-xl text-headline-xl">
+              <h2 id="realisations" className="mt-2 font-headline-xl text-fluid-section-heading">
                 Projets publiés
               </h2>
             </div>
@@ -166,7 +159,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
                 Actualités
               </p>
-              <h2 id="actualites" className="mt-2 font-headline-xl text-headline-xl">
+              <h2 id="actualites" className="mt-2 font-headline-xl text-fluid-section-heading">
                 Publications récentes
               </h2>
             </div>

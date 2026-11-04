@@ -12,6 +12,7 @@ describe("apiFetch", () => {
   });
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   it("appelle l'URL de base normalisée et renvoie le JSON", async () => {
@@ -55,14 +56,75 @@ describe("apiFetch", () => {
     });
   });
 
-  it("gère une réponse d'erreur sans corps JSON", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("boom", { status: 502 })));
-    await expect(apiFetch("/x/")).rejects.toMatchObject({ status: 502, code: "http_error" });
+  it("réessaie une fois une réponse temporaire sur GET", async () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response("indisponible", { status: 503 }))
+      .mockResolvedValueOnce(json({ ok: true }));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(apiFetch("/x/")).resolves.toEqual({ ok: true });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
-  it("signale une erreur réseau sans exposer de détail technique", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("fetch failed")));
-    await expect(apiFetch("/x/")).rejects.toMatchObject({ status: 0, code: "network_error" });
+  it("réessaie une fois les erreurs réseau des GET puis signale l'échec", async () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const fetchMock = vi
+      .fn()
+      .mockRejectedValueOnce(new TypeError("fetch failed"))
+      .mockRejectedValueOnce(new TypeError("fetch failed"));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(apiFetch("/x/")).rejects.toMatchObject({
+      status: 0,
+      code: "network_error",
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("distingue un délai dépassé d'une erreur réseau", async () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    vi.spyOn(AbortSignal, "timeout").mockReturnValue(
+      AbortSignal.abort(new DOMException("timeout", "TimeoutError")),
+    );
+    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
+      const reason =
+        init?.signal?.reason instanceof Error
+          ? init.signal.reason
+          : new DOMException("timeout", "TimeoutError");
+      return Promise.reject(reason);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(apiFetch("/x/")).rejects.toMatchObject({
+      status: 0,
+      code: "timeout_error",
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("préserve l'annulation du demandeur sans la convertir en erreur réseau", async () => {
+    const controller = new AbortController();
+    const abortError = new DOMException("aborted", "AbortError");
+    controller.abort(abortError);
+    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
+      const reason =
+        init?.signal?.reason instanceof Error
+          ? init.signal.reason
+          : new DOMException("aborted", "AbortError");
+      return Promise.reject(reason);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(apiFetch("/x/", { signal: controller.signal })).rejects.toMatchObject({
+      name: "AbortError",
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("signale une réponse JSON illisible au lieu de renvoyer une valeur vide", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("{", { status: 200 })));
+    await expect(apiFetch("/x/")).rejects.toMatchObject({
+      status: 200,
+      code: "invalid_response",
+    });
   });
 
   it("envoie le corps en JSON pour un POST", async () => {
@@ -72,6 +134,16 @@ describe("apiFetch", () => {
     const init = fetchMock.mock.calls[0]?.[1] as RequestInit;
     expect(init.method).toBe("POST");
     expect(init.body).toBe('{"a":1}');
+  });
+
+  it("ne rejoue pas un POST après une erreur réseau", async () => {
+    const fetchMock = vi.fn().mockRejectedValue(new TypeError("fetch failed"));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(apiFetch("/x/", { method: "POST", body: { a: 1 } })).rejects.toMatchObject({
+      status: 0,
+      code: "network_error",
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
 

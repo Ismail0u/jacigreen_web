@@ -23,7 +23,7 @@ export function SolutionCard({ solution }: { solution: SolutionSummary }) {
           : "eco";
 
   return (
-    <article className="relative flex h-full flex-col border-t-2 border-on-tertiary-container bg-surface-container-lowest pb-space-lg transition-colors focus-within:outline focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-focus hover:bg-surface-container-low">
+    <article className="editorial-card relative flex h-full flex-col border-t-2 border-on-tertiary-container bg-surface-container-lowest pb-space-lg focus-within:outline focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-focus hover:bg-surface-container-low">
       <MediaFrame
         src={solution.cover_image}
         alt={solution.cover_alt}
