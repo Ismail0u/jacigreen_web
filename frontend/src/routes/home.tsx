@@ -45,7 +45,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <p className="font-label-md text-label-md font-semibold text-on-primary uppercase">
               JACIGREEN
             </p>
-            <h1 className="text-fluid-heading mt-space-md max-w-4xl font-headline-2xl-mobile text-on-primary md:font-headline-2xl">
+            <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-fluid-heading text-on-primary md:font-headline-2xl">
               Transformer les défis environnementaux en ressources utiles
             </h1>
             <p className="mt-space-md font-label-md text-label-md font-semibold text-on-primary/90">
@@ -78,7 +78,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
               Notre approche
             </p>
-            <h2 id="approche" className="text-fluid-section-heading mt-2 max-w-lg font-headline-xl">
+            <h2 id="approche" className="mt-2 max-w-lg font-headline-xl text-fluid-section-heading">
               Valoriser les ressources disponibles localement
             </h2>
           </div>
@@ -98,7 +98,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
                 Solutions
               </p>
-              <h2 id="solutions" className="text-fluid-section-heading mt-2 font-headline-xl">
+              <h2 id="solutions" className="mt-2 font-headline-xl text-fluid-section-heading">
                 Solutions publiées
               </h2>
             </div>
@@ -127,7 +127,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
                 Réalisations
               </p>
-              <h2 id="realisations" className="text-fluid-section-heading mt-2 font-headline-xl">
+              <h2 id="realisations" className="mt-2 font-headline-xl text-fluid-section-heading">
                 Projets publiés
               </h2>
             </div>
@@ -159,7 +159,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
                 Actualités
               </p>
-              <h2 id="actualites" className="text-fluid-section-heading mt-2 font-headline-xl">
+              <h2 id="actualites" className="mt-2 font-headline-xl text-fluid-section-heading">
                 Publications récentes
               </h2>
             </div>

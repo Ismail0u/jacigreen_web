@@ -4,9 +4,7 @@ interface BrandLogoProps {
 
 export function BrandLogo({ className = "" }: BrandLogoProps) {
   return (
-    <div
-      className={`flex h-16 w-auto items-center overflow-hidden md:h-18 ${className}`}
-    >
+    <div className={`flex h-16 w-auto items-center overflow-hidden md:h-18 ${className}`}>
       <img
         src="/brand/jacigreen-logo.png"
         alt="JACIGREEN"

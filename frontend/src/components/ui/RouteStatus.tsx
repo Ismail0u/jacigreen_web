@@ -9,7 +9,10 @@ export function RoutePendingIndicator({ active }: { active: boolean }) {
 
   return (
     <div className="relative z-30 h-1 overflow-hidden bg-surface-container-low" aria-live="polite">
-      <div aria-hidden="true" className="route-progress absolute inset-y-0 left-0 w-full bg-accent" />
+      <div
+        aria-hidden="true"
+        className="route-progress absolute inset-y-0 left-0 w-full bg-accent"
+      />
       <span className="sr-only" role="status">
         Chargement de la page en cours.
       </span>
@@ -49,11 +52,7 @@ export function RouteErrorState({ error }: { error: unknown }) {
 
   if (retrying) {
     return (
-      <section
-        className="py-20"
-        aria-label="Nouvelle tentative de chargement"
-        aria-busy="true"
-      >
+      <section className="py-20" aria-label="Nouvelle tentative de chargement" aria-busy="true">
         <Container>
           <p className="sr-only" role="status">
             Nouvelle tentative de chargement en cours.
@@ -76,7 +75,7 @@ export function RouteErrorState({ error }: { error: unknown }) {
           <p className="font-label-md text-label-md font-semibold text-ochre-text uppercase">
             {notFound ? "Page indisponible" : "Service momentanément indisponible"}
           </p>
-          <h1 id="route-error-title" className="text-fluid-section-heading mt-3 font-headline-xl">
+          <h1 id="route-error-title" className="mt-3 font-headline-xl text-fluid-section-heading">
             {title}
           </h1>
           <p className="mt-4 text-lead text-ink-muted">{message}</p>

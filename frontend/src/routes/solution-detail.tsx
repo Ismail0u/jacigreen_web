@@ -33,7 +33,7 @@ export default function SolutionDetail() {
                   <Badge tone="prototype">En prototypage</Badge>
                 ) : null}
               </div>
-              <h1 className="text-fluid-heading mt-space-md font-headline-2xl-mobile md:font-headline-2xl">
+              <h1 className="mt-space-md font-headline-2xl-mobile text-fluid-heading md:font-headline-2xl">
                 {solution.name}
               </h1>
               {solution.tagline ? (

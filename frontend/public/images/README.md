@@ -5,9 +5,9 @@ peuvent être utilisées lorsqu'elles sont contextualisées et adaptées à leur
 emplacement. Les autres photos ne doivent pas être réutilisées sans vérification
 de leur provenance et de leurs droits.
 
-| Fichier servi                         | Source locale                                                | Emplacement | Ratio | Taille |
-| ------------------------------------- | ------------------------------------------------------------ | ----------- | ----: | -----: |
-| `jacigreen-biofertilisant-niger.webp` | `Logo et Images/Collecte Biofertilisant Site Maraicher Niger.jpeg` | `/`         |   4:3 |  321 Ko |
+| Fichier servi                         | Source locale                                                      | Emplacement | Ratio | Taille |
+| ------------------------------------- | ------------------------------------------------------------------ | ----------- | ----: | -----: |
+| `jacigreen-biofertilisant-niger.webp` | `Logo et Images/Collecte Biofertilisant Site Maraicher Niger.jpeg` | `/`         |   4:3 | 321 Ko |
 
 Le fichier WebP est une version optimisée (1800 × 1350 px) ; l'original fourni
 est conservé sans modification. Le texte alternatif décrit la scène visible.

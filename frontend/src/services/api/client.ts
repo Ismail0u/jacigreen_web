@@ -58,9 +58,7 @@ function retryDelay(attempt: number, signal?: AbortSignal): Promise<void> {
     const abort = () => {
       clearTimeout(timer);
       signal?.removeEventListener("abort", abort);
-      reject(
-        normalizeAbortReason(signal?.reason, new DOMException("Aborted", "AbortError")),
-      );
+      reject(normalizeAbortReason(signal?.reason, new DOMException("Aborted", "AbortError")));
     };
     const timer = setTimeout(finish, delay);
     signal?.addEventListener("abort", abort, { once: true });
@@ -107,7 +105,10 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
       });
     } catch (error) {
       if (signal?.aborted) {
-        throw normalizeAbortReason(signal.reason, error instanceof Error ? error : new Error("Aborted"));
+        throw normalizeAbortReason(
+          signal.reason,
+          error instanceof Error ? error : new Error("Aborted"),
+        );
       }
 
       const requestError = timeout.aborted
@@ -128,11 +129,7 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
       throw requestError;
     }
 
-    if (
-      method === "GET" &&
-      RETRYABLE_STATUSES.has(response.status) &&
-      attempt + 1 < attempts
-    ) {
+    if (method === "GET" && RETRYABLE_STATUSES.has(response.status) && attempt + 1 < attempts) {
       if (response.body) await response.body.cancel();
       await retryDelay(attempt, signal);
       continue;
