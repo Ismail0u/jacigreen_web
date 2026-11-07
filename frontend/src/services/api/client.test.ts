@@ -5,12 +5,20 @@ import { ApiError, apiFetch, fetchAllPages } from "./client";
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
+const page = <T>(results: T[], next: string | null = null) => ({
+  count: results.length,
+  next,
+  previous: null,
+  results,
+});
+
 describe("apiFetch", () => {
   beforeEach(() => {
     vi.stubEnv("VITE_API_URL", "https://api.exemple.test/");
     delete process.env.API_INTERNAL_URL;
   });
   afterEach(() => {
+    vi.useRealTimers();
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
@@ -82,23 +90,60 @@ describe("apiFetch", () => {
   });
 
   it("distingue un délai dépassé d'une erreur réseau", async () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
-    vi.spyOn(AbortSignal, "timeout").mockReturnValue(
-      AbortSignal.abort(new DOMException("timeout", "TimeoutError")),
+    vi.useFakeTimers();
+    const fetchMock = vi.fn(
+      (_url: RequestInfo | URL, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener(
+            "abort",
+            () => {
+              reject(new DOMException("Aborted", "AbortError"));
+            },
+            {
+              once: true,
+            },
+          );
+        }),
     );
-    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
-      const reason =
-        init?.signal?.reason instanceof Error
-          ? init.signal.reason
-          : new DOMException("timeout", "TimeoutError");
-      return Promise.reject(reason);
-    });
     vi.stubGlobal("fetch", fetchMock);
-    await expect(apiFetch("/x/")).rejects.toMatchObject({
+    const request = apiFetch("/x/", { timeoutMs: 25 });
+    const assertion = expect(request).rejects.toMatchObject({
       status: 0,
       code: "timeout_error",
     });
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    await vi.advanceTimersByTimeAsync(25);
+    await assertion;
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("applique le délai configuré aussi à la lecture du corps", async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
+      const response = json({ ok: true });
+      vi.spyOn(response, "json").mockImplementation(
+        () =>
+          new Promise<unknown>((_resolve, reject) => {
+            init?.signal?.addEventListener(
+              "abort",
+              () => {
+                reject(new DOMException("Aborted", "AbortError"));
+              },
+              {
+                once: true,
+              },
+            );
+          }),
+      );
+      return Promise.resolve(response);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const request = apiFetch("/x/", { timeoutMs: 25 });
+    const assertion = expect(request).rejects.toMatchObject({
+      status: 0,
+      code: "timeout_error",
+    });
+    await vi.advanceTimersByTimeAsync(25);
+    await assertion;
   });
 
   it("préserve l'annulation du demandeur sans la convertir en erreur réseau", async () => {
@@ -145,6 +190,16 @@ describe("apiFetch", () => {
     });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+
+  it("ne rejoue pas une erreur client", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(json({ error: {} }, 400));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(apiFetch("/x/")).rejects.toMatchObject({
+      status: 400,
+      code: "http_error",
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("fetchAllPages", () => {
@@ -152,13 +207,27 @@ describe("fetchAllPages", () => {
     vi.stubEnv("VITE_API_URL", "https://api.exemple.test");
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(
-        json({ results: [1, 2], next: "https://api.exemple.test/api/v1/s/?page=2" }),
-      )
-      .mockResolvedValueOnce(json({ results: [3], next: null }));
+      .mockResolvedValueOnce(json(page([1, 2], "https://api.exemple.test/api/v1/s/?page=2")))
+      .mockResolvedValueOnce(json(page([3])));
     vi.stubGlobal("fetch", fetchMock);
     await expect(fetchAllPages<number>("/api/v1/s/")).resolves.toEqual([1, 2, 3]);
     expect(fetchMock).toHaveBeenCalledTimes(2);
-    vi.unstubAllGlobals();
+    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://api.exemple.test/api/v1/s/?page_size=50");
+    expect(fetchMock.mock.calls[1]?.[0]).toBe("https://api.exemple.test/api/v1/s/?page=2");
+  });
+
+  it("signale une enveloppe incompatible plutôt qu'une erreur de propagation", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(json({ results: "invalid" })));
+    await expect(fetchAllPages<number>("/api/v1/s/")).rejects.toMatchObject({
+      status: 200,
+      code: "invalid_response",
+    });
+  });
+
+  it("ajoute la taille de page sans dupliquer une valeur existante", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(json(page([1])));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(fetchAllPages<number>("/api/v1/s/?page_size=10")).resolves.toEqual([1]);
+    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://api.exemple.test/api/v1/s/?page_size=10");
   });
 });

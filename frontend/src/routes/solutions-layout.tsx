@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import { buildMeta } from "~/lib/seo";
 import { getSolution, listSolutions } from "~/services/api/content";
 
+import type { ShouldRevalidateFunctionArgs } from "react-router";
 import type { SolutionDetail, SolutionSummary } from "~/types/api";
 import type { Route } from "./+types/solutions-layout";
 
@@ -24,6 +25,14 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return loadSolutionsRouteData(params);
 }
 clientLoader.hydrate = true as const;
+
+export function shouldRevalidate({
+  currentParams,
+  nextParams,
+  defaultShouldRevalidate,
+}: ShouldRevalidateFunctionArgs) {
+  return currentParams.slug !== nextParams.slug || defaultShouldRevalidate;
+}
 
 export function meta({ loaderData }: Route.MetaArgs) {
   if (loaderData.solution) {

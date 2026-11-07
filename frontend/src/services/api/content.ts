@@ -6,7 +6,7 @@ import type {
   SolutionDetail,
   SolutionSummary,
 } from "~/types/api";
-import { apiFetch, fetchAllPages } from "./client";
+import { apiFetch, fetchAllPages, fetchPage } from "./client";
 
 export const listSolutions = () => fetchAllPages<SolutionSummary>("/api/v1/solutions/");
 export const getSolution = (slug: string) =>
@@ -21,8 +21,6 @@ export const getArticle = (slug: string) =>
 
 /** Les trois contenus les plus récents, pour la page d'accueil. */
 export async function listLatestArticles(limit = 3): Promise<ArticleSummary[]> {
-  const page = await apiFetch<{ results: ArticleSummary[] }>(
-    `/api/v1/articles/?page_size=${limit}`,
-  );
+  const page = await fetchPage<ArticleSummary>(`/api/v1/articles/?page_size=${limit}`);
   return page.results;
 }
