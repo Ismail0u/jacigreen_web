@@ -70,3 +70,31 @@ et les performances restent applicables.
 - Photographies institutionnelles et médias associés aux fiches.
 - Confirmation des dates et résultats de projets lorsqu’ils sont présentés
   comme des faits observés plutôt que comme des éléments issus du seed.
+
+## Informations légales à compléter par le propriétaire
+
+La page `/mentions-legales` est un projet de rédaction non indexé et non validé
+juridiquement. Les sources du projet nomment JACIGREEN et documentent des
+activités au Niger, mais ne permettent pas d’établir le pays d’immatriculation,
+la forme juridique ou l’identité légale de l’éditeur. Ne pas déduire le droit
+applicable du fuseau horaire, des lieux d’activité ou des biographies publiées.
+
+| Information à fournir ou confirmer | État vérifié dans le projet | Action requise |
+|---|---|---|
+| Dénomination sociale et nom commercial | Seul le nom « JACIGREEN » utilisé par le site est connu | Fournir l’extrait ou document officiel et confirmer la relation entre les noms |
+| Forme juridique, pays d’établissement et droit applicable | Non documentés | Confirmer auprès du propriétaire ; faire valider les textes selon le pays concerné |
+| Siège social et adresse postale | Non documentés | Fournir l’adresse officielle et confirmer si elle peut être publiée |
+| Numéro d’immatriculation et identifiants fiscaux/professionnels applicables | Non documentés | Fournir les numéros pertinents ou confirmer qu’ils ne sont pas applicables |
+| Responsable de publication | Non désigné dans les sources consultées | Nommer la personne et confirmer la fonction à afficher |
+| Coordonnées publiques | Pas d’adresse email, de numéro de téléphone ni d’adresse publique fournis ; le formulaire de contact est disponible | Fournir et valider les coordonnées à publier |
+| Hébergeur du site et de l’API | Les URL communiquées utilisent les domaines Vercel et Render ; fournisseur contractuel, entité, adresse et déploiement réel non confirmés | Vérifier les contrats et la configuration en production ; renseigner les mentions exigées localement |
+| Responsable du traitement et base juridique du formulaire | Le formulaire exige un consentement ; le statut juridique du responsable et la base applicable ne sont pas déterminés | Confirmer l’entité responsable et faire valider la base juridique |
+| Données, destinataires et transferts | Champs collectés et stockage API/admin décrits dans la page de travail ; sous-traitants, régions d’hébergement et transferts non vérifiés | Confirmer le cheminement des données et les prestataires réels |
+| Durée de conservation et procédure d’exercice des droits | Non documentées | Définir les durées, le canal de contact et l’autorité compétente selon le droit applicable |
+| Cookies, traceurs et journaux des prestataires | Aucun outil analytique ni écriture de stockage navigateur trouvé dans le code frontend ; services hébergés non audités | Vérifier les cookies techniques, journaux et intégrations dans les environnements hébergés |
+| Droits sur les contenus et médias | Provenance de certaines photos et droits associés non vérifiés | Confirmer les titulaires et conserver les autorisations |
+| Conditions d’utilisation et date de publication | Pas de texte approuvé | Faire valider les conditions et dater la version publiée |
+
+La page ne doit pas être retirée du `noindex` ni présentée comme définitive avant
+complétion de ces éléments et validation par JACIGREEN et un conseil juridique
+compétent dans le pays d’établissement confirmé.

@@ -101,7 +101,7 @@ finalisation. Aucune comparaison pixel à pixel n’a été menée pour cette re
 | `/actualites` | [`actualites/code.html`](../../design/stitch/jacigreen_actualit_s_ressources/code.html) et [`screen.png`](../../design/stitch/jacigreen_actualit_s_ressources/screen.png) | Articles API groupés par catégorie, cartes compactées et état vide ; badge démo conditionnel. Le projet ELLESadAPt et la chronologie ne sont plus dupliqués ici en statique. | **4/10** |
 | `/actualites/:slug` | Aucune fiche d'article n'est maquettée. | Mise en page éditoriale plus hiérarchisée avec date/auteur, titre, extrait, média 16:9, corps via `Prose` et retour à la liste. Cohérence de thème uniquement, pas de comparaison de référence directe. | **5/10*** |
 | `/contact` | [`contact/code.html`](../../design/stitch/jacigreen_contact/code.html) et [`screen.png`](../../design/stitch/jacigreen_contact/screen.png) | Grille formulaire/contexte ; formulaire et validation API conservés. Aucune coordonnée publique n’est inventée ; catégories de publics listées sans présumer de clients ou partenaires. | **4/10** |
-| `/mentions-legales` | [`legal/code.html`](../../design/stitch/jacigreen_politiques_mentions_l_gales/code.html) et [`screen.png`](../../design/stitch/jacigreen_politiques_mentions_l_gales/screen.png) | Identité disponible, état des informations juridiques manquantes et `noindex`. Aucun texte légal n’est inventé ; validation juridique nécessaire. | **3/10** |
+| `/mentions-legales` | [`legal/code.html`](../../design/stitch/jacigreen_politiques_mentions_l_gales/code.html) et [`screen.png`](../../design/stitch/jacigreen_politiques_mentions_l_gales/screen.png) | Projet de mentions structuré et `noindex` ; l’identité juridique et les informations administratives restent à fournir. Aucun droit national n’est présumé ; validation juridique nécessaire. | **3/10** |
 | `*` (404) | Aucune maquette dédiée. | Mise en page centrée avec repère 404, explication et lien d'accueil ; cohérence avec les styles et interaction fonctionnelle. Aucune référence dédiée ; statut HTTP/soft 404 reste une limite technique connue. | **6/10*** |
 
 **Notes sans référence directe :** `*` signifie que le score évalue seulement la
@@ -215,9 +215,11 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
    du mot « formation » dans le titre ; il n'existe ni modèle dédié ni décision
    produit confirmée. Conserver cette limite tant que le périmètre n'est pas
    tranché.
-4. **Page légale provisoire :** les mentions, politique et CGU sont absentes. La
-   page neutre `noindex` est préférable à la maquette inventée, mais doit être
-   remplacée par des textes validés avant ouverture publique.
+4. **Page légale provisoire :** un projet de mentions structurées est désormais
+   présent, mais l’identité de l’éditeur, les informations de confidentialité
+   et les conditions d’utilisation restent à compléter et à valider. La page
+   demeure `noindex` jusqu’à validation par JACIGREEN et un conseil juridique
+   compétent dans le pays d’établissement confirmé.
 5. **SEO :** les mentions légales et la 404 sont `noindex`, mais une URL inconnue
    reçoit un statut 200 (soft 404). Aucune image `og:image` par défaut n'est
    publiée. Ces limites sont documentées dans
@@ -245,8 +247,9 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
   `VITE_API_URL`, `API_INTERNAL_URL`, `DJANGO_ALLOWED_HOSTS`,
   `CORS_ALLOWED_ORIGINS` et `CSRF_TRUSTED_ORIGINS` sont configurés avec les URL
   communiquées.
-- Fournir et faire valider les informations légales avant lancement ; à défaut,
-  conserver la page neutre `noindex` et différer la publication.
+- Fournir et faire valider les informations légales avant lancement ; conserver
+  la page de travail `noindex` jusqu’à l’approbation et différer la publication
+  légale si les éléments manquent.
 
 ### P1 — Écarts majeurs de crédibilité et d'expérience
 

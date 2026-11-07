@@ -1,6 +1,6 @@
 # Plan de finalisation JACIGREEN
 
-Mis à jour le 6 novembre 2026 après l’exécution des phases 2 et 3 de la
+Mis à jour le 7 novembre 2026 après l’exécution des phases 4 à 6 de la
 finalisation du socle. Aucun commit, push ni déploiement n’a été effectué.
 
 ## Avancement des phases
@@ -10,9 +10,9 @@ finalisation du socle. Aucun commit, push ni déploiement n’a été effectué.
 | 1 — Diagnostic | Terminée | Contrats API, routes, contenu, UI et informations juridiques examinés. |
 | 2 — Stabilisation API et React Router | Terminée | Timeouts différenciés, retries GET limités, pagination validée, erreurs explicites, revalidation des routes Solutions/Actualités et parcours SPA contrôlés. |
 | 3 — Refonte UI/UX | Terminée pour le périmètre de la vitrine | Cartes compactées, hero responsive unifié, carrousel mobile contrôlable, palette/contrastes testés, interactions et 11 routes vérifiées à 10 largeurs. Les captures Stitch n’ont pas été comparées pixel à pixel. |
-| 4 — Nettoyage | À poursuivre | Revue transversale des composants, styles, imports et éléments inutilisés. |
-| 5 — Mentions légales et sécurité | Partielle | Formulaire et contrôles applicatifs vérifiés ; les données juridiques et de confidentialité doivent encore être fournies par JACIGREEN. |
-| 6 — QA et validation finale | En cours | Tests et pré-rendu passent ; restent la reconstruction Docker fraîche, la configuration hébergée réelle et la revue humaine/juridique. |
+| 4 — Nettoyage | Terminée pour les contrôles statiques | ESLint/TypeScript strict et Ruff ne signalent aucun import/local inutilisé ; aucune suppression de composant, style ou dépendance n’a pu être justifiée par des usages vérifiables. Les fichiers sources ne contiennent pas de marqueurs TODO/FIXME ni d’appels de debug repérés. |
+| 5 — Mentions légales et sécurité | Projet rédigé, validation propriétaire requise | Page structurée et `noindex`, sans identité juridique inventée ; liste des pièces administratives ajoutée au registre. Le formulaire de contact est testé et la revue dédiée n’a trouvé aucune vulnérabilité dans son périmètre. |
+| 6 — QA et validation finale | Contrôles locaux terminés ; production non certifiée | ESLint, format, TypeScript, 83 tests frontend, build, pré-rendu strict, Ruff, contrôles Django/OpenAPI et 47 tests backend passent. Restent la reconstruction Docker fraîche, la vérification des variables hébergées, la revue juridique et l’évaluation de performance réelle. |
 
 La « phase 2 » ci-dessus est la phase de stabilisation technique du mandat.
 Elle n’implémente pas les fonctionnalités transactionnelles de la Phase 2
@@ -33,7 +33,7 @@ hors périmètre selon les instructions du dépôt.
 | Build Vite | Réussi avec `API_INTERNAL_URL=http://backend:8000`. Le build lançant Render directement depuis le conteneur a échoué sur un délai de connexion réseau. |
 | Tests | Frontend : 83 tests ; backend : 47 tests, lors des derniers contrôles consignés dans le rapport. |
 | Reconstruction Docker | `docker compose up -d --build` avait échoué sur la résolution DNS du dépôt Python ; l’image fraîche reste à reconstruire et vérifier. |
-| Prêt pour production | Non certifié : configuration réelle Vercel/Render à vérifier, données juridiques manquantes, reconstruction d’image et revue finale non réalisées. |
+| Prêt pour production | Non certifié : configuration réelle Vercel/Render à vérifier, informations légales et politique de confidentialité à compléter, reconstruction d’image fraîche et revue juridique non réalisées. |
 
 Les commandes et résultats détaillés sont consignés dans
 [`rapport-finalisation.md`](./rapport-finalisation.md) et
@@ -61,3 +61,6 @@ existants utilisés pour les validations avec une image fraîchement reconstruit
 6. Après vérification des variables hébergées, exécuter
    `npm run check:prerender -- --production --forbid-demo` et une vérification
    de préproduction avec la reconstruction fraîche.
+7. Évaluer le budget frontend sur un environnement représentatif : le build
+   actuel émet notamment une police Material Symbols de 1 138,40 kB ; aucun
+   audit Lighthouse/Core Web Vitals n’a encore été effectué.

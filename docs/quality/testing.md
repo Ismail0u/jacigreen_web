@@ -36,7 +36,7 @@ panne temporaire et propose une reprise pour les erreurs réessayables. Un état
 squelette accessible accompagne la nouvelle tentative. Un catalogue vide reste
 distinct d'une erreur de chargement.
 
-## Résultats vérifiés le 6 novembre 2026
+## Résultats vérifiés le 7 novembre 2026
 
 | Contrôle | Résultat |
 |---|---|
@@ -44,7 +44,7 @@ distinct d'une erreur de chargement.
 | Frontend `typecheck` | Réussi |
 | Frontend `lint` | Réussi, aucune règle désactivée |
 | Frontend `npm test` | 15 fichiers, 83 tests réussis |
-| Frontend `build` | Réussi dans le conteneur frontend existant avec `API_INTERNAL_URL=http://backend:8000` et les URL publiques communiquées |
+| Frontend `build` | Réussi dans le conteneur frontend existant avec `API_INTERNAL_URL=http://backend:8000`, `VITE_SITE_URL=https://jacigreen-web-rho.vercel.app` et `VITE_API_URL=https://jacigreen-web.onrender.com` |
 | `check:prerender` | Réussi ; HTML, métadonnées, canoniques, sitemap, `robots.txt` et fallback contrôlés |
 | `check:prerender -- --production --forbid-demo` | Réussi avec `VITE_SITE_URL=https://jacigreen-web-rho.vercel.app`, `VITE_API_URL=https://jacigreen-web.onrender.com` et l’API locale correspondante |
 | Backend Ruff lint/format | Réussi ; 60 fichiers déjà formatés |
@@ -58,11 +58,14 @@ distinct d'une erreur de chargement.
 | Détail inexistant | Les routes solution/article affichent l’état « Contenu introuvable » et ne proposent pas de retry pour un 404 |
 | Interactions | Menu mobile s’ouvre et ferme avec Échap ; filtre Niger réduit le catalogue à ses 2 projets ; validation contact signale les champs invalides et ne déclenche aucun POST |
 | Carrousel | Contrôles restent visibles à 320 px ; les trois images se chargent ; réduction des animations et contrôles clavier couverts par tests |
+| Mentions légales | Page de travail rendue dans le navigateur à 320, 390, 768 et 1440 px : un seul `<h1>`, aucun débordement horizontal ; `noindex` confirmé par le contrôle de pré-rendu |
+| Formulaire de contact — sécurité | Revue de sécurité dédiée : aucune vulnérabilité identifiée dans le périmètre revu. Tests frontend/backend couvrent validation, consentement, honeypot, rate limiting, écriture seule et erreurs |
+| Mesure de bundle | `entry.client` : 403,47 kB (122,57 kB gzip) ; formulaire : 121,94 kB (37,81 kB gzip) ; police Material Symbols : 1 138,40 kB. Aucun audit Lighthouse/Core Web Vitals n’a été exécuté |
 | Build distant Render | Connexion sortante vers Render expirée depuis le conteneur ; les vérifications faites depuis l’hôte répondent HTTP 200. Pré-rendu et build ont été validés sur l’API locale dont les slugs et statuts correspondent à ceux de l’API distante |
 | Liens internes | 15 destinations uniques ont été vérifiées historiquement, toutes HTTP 200 |
 | `git diff --check` | Réussi |
 
-Le 6 novembre 2026, `format:check`, `typecheck`, `lint`, 15 fichiers/83 tests,
+Le 7 novembre 2026, `format:check`, `typecheck`, `lint`, 15 fichiers/83 tests,
 `build`, `check:prerender` et le contrôle strict ont réussi dans les conteneurs
 existants. `git diff --check` passe également.
 

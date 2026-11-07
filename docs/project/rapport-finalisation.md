@@ -8,6 +8,144 @@ restent documentées. Les URL publiques communiquées répondent en HTTP 200 et
 le pré-rendu de production est validé. Plusieurs informations juridiques
 restent à fournir.
 
+## Rapport final des phases 4 à 6 — 7 novembre 2026
+
+### A. Diagnostic initial
+
+- Les erreurs visibles sur les fiches Solutions/Actualités ne provenaient pas
+  d’un format de réponse API incompatible : la revalidation du loader parent
+  React Router ne suivait pas le changement de slug. La liste restait donc
+  périmée malgré des réponses API valides.
+- Les données juridiques de l’éditeur, le pays d’immatriculation et le contact
+  public ne sont pas établis par les sources du dépôt. Les activités au Niger
+  ne permettent pas de déduire le pays d’établissement légal.
+- Le formulaire avait déjà des contrôles frontend/backend, un honeypot et une
+  limitation de débit ; les paramètres opérationnels de proxy/cache restent à
+  confirmer dans l’environnement hébergé.
+
+### B. Corrections API
+
+- Le client de [`frontend/src/services/api/client.ts`](../../frontend/src/services/api/client.ts)
+  applique des délais distincts, un retry limité aux GET transitoires, valide
+  les réponses paginées et rend les erreurs de parsing/réseau explicites.
+- Les layouts
+  [`solutions-layout.tsx`](../../frontend/src/routes/solutions-layout.tsx) et
+  [`news-layout.tsx`](../../frontend/src/routes/news-layout.tsx) revalident
+  leurs données au changement de slug. Les tests de transition SPA et de 404
+  sont passés.
+- Les contrats liste/détail concordent avec DRF ; les listes de développement
+  locale et distante vérifiées précédemment comptaient 20 ressources aux
+  slugs/statuts `is_demo` concordants.
+
+### C. Corrections UI/UX
+
+- Les cartes Solutions, Réalisations et Actualités ont été compactées.
+- Le hero garde un seul `<h1>`, avec une présentation desktop et un carrousel
+  mobile contrôlable, compatible avec `prefers-reduced-motion`.
+- La vérification responsive antérieure a couvert 11 routes × 10 largeurs
+  (110 contrôles). La nouvelle page légale a été rendue à 320, 390, 768 et
+  1440 px, avec un `<h1>` et sans débordement horizontal.
+- Une comparaison pixel à pixel avec les maquettes Stitch n’a pas été réalisée.
+
+### D. Nettoyage
+
+- ESLint strict, `noUnusedLocals`/`noUnusedParameters` TypeScript et Ruff ne
+  signalent aucun import ou local inutilisé. Les recherches ciblées n’ont
+  relevé aucun marqueur TODO/FIXME ni appel de debug dans les sources examinées.
+- Aucun composant, style ou paquet n’a été supprimé : aucun élément mort n’a
+  été confirmé par un usage complet. Une suppression spéculative aurait été
+  plus risquée qu’utile.
+
+### E. Mentions légales
+
+- [`frontend/src/routes/legal.tsx`](../../frontend/src/routes/legal.tsx)
+  contient désormais un projet structuré couvrant l’éditeur, l’hébergement,
+  la propriété intellectuelle, la responsabilité éditoriale, les données
+  personnelles et le formulaire, les cookies/traceurs, les conditions
+  d’utilisation et la mise à jour. La page reste `noindex` et indique qu’elle
+  n’est pas validée juridiquement.
+- Les seuls éléments présentés comme établis sont ceux vérifiables dans le
+  projet : nom affiché, champs du formulaire, stockage/lecture par l’API et
+  absence d’outil analytique implémenté dans le frontend. Aucun droit national
+  n’est choisi, le pays d’établissement étant inconnu.
+- La liste de validation propriétaire se trouve dans
+  [`docs/content/content-register.md`](../content/content-register.md) :
+  identité et forme juridique, pays, adresse, immatriculation, responsable de
+  publication, coordonnées, hébergeur contractuel, responsable de traitement,
+  base juridique, sous-traitants, conservation, droits et cookies réels.
+- Cette rédaction est un brouillon à soumettre au propriétaire et à un conseil
+  compétent dans le pays confirmé ; elle ne constitue pas un avis juridique.
+
+### F. Tests
+
+| Vérification | Résultat | Détails |
+|---|---|---|
+| ESLint | PASS | `npm run lint`, exécuté dans le conteneur frontend après les changements |
+| Prettier | PASS | `npm run format:check`, exécuté après les changements frontend |
+| TypeScript | PASS | `npm run typecheck` |
+| Tests frontend | PASS | 15 fichiers, 83 tests |
+| Build frontend | PASS | Build Vite et pré-rendu avec URLs publiques, API interne locale et conteneur existant |
+| Pré-rendu | PASS | Contrôle local et `--production --forbid-demo` avec les URL communiquées |
+| Ruff lint/format backend | PASS | `ruff check .` et `ruff format --check .` |
+| Django check / migrations | PASS | `manage.py check` ; `makemigrations --check --dry-run` sans changement |
+| Tests backend | PASS | 47 tests Django |
+| Tests API / OpenAPI | PASS | Tests endpoints inclus dans la suite ; schéma valide avec `--fail-on-warn` |
+| Routes | PASS | Pré-rendu, métadonnées/canoniques et sitemap vérifiés ; tests des transitions SPA et routes inexistantes |
+| Responsive | PASS | 110 contrôles antérieurs sur 11 routes ; page légale vérifiée à 4 largeurs |
+| Sécurité du contact | PASS | Revue dédiée : aucune vulnérabilité identifiée dans le périmètre revu. Tests du consentement, de la validation, du honeypot, de la limite et de la non-lecture API |
+
+La configuration de préproduction hébergée et une reconstruction Docker fraîche
+ne sont pas certifiées. Le build annonce un bundle d’entrée de 403,47 kB
+(122,57 kB gzip) et une police Material Symbols de 1 138,40 kB ; Lighthouse et
+les Core Web Vitals n’ont pas été mesurés.
+
+### G. Fichiers modifiés pour les phases 4 à 6
+
+- [`frontend/src/routes/legal.tsx`](../../frontend/src/routes/legal.tsx) :
+  projet de mentions légales structuré, explicite sur les données manquantes.
+- [`docs/content/content-register.md`](../content/content-register.md) :
+  checklist des informations administratives et de confidentialité à obtenir.
+- [`docs/architecture/security.md`](../architecture/security.md) : contrôles
+  du formulaire, couverture de tests et limites d’exploitation documentés.
+- [`README.md`](../../README.md) : description de l’état réel du contenu API et
+  de la page légale corrigée.
+- [`docs/quality/testing.md`](../quality/testing.md), le présent rapport et
+  [`plan-finalisation.md`](./plan-finalisation.md) : résultats et actions
+  restantes mis à jour.
+
+### H. Points restant à traiter
+
+1. Obtenir et faire valider les informations de la checklist légale, notamment
+   le pays d’établissement, puis compléter la politique de confidentialité et
+   les conditions d’utilisation. Ne pas retirer `noindex` avant validation.
+2. Vérifier les variables, hôtes, origines CORS/CSRF, cookies et prestataires
+   réellement configurés dans Vercel/Render.
+3. Rétablir le DNS/réseau de build Docker et reconstruire une image fraîche ;
+   la dernière reconstruction consignée a échoué sur la résolution DNS du
+   registre Python.
+4. Confirmer le cache partagé et le nombre de proxys de confiance pour que le
+   rate limiting par IP reste effectif en production multi-workers.
+5. Vérifier les droits/provenance des photos et effectuer la revue visuelle
+   humaine des pages face aux maquettes.
+6. Mesurer les Core Web Vitals et examiner l’optimisation de la police
+   Material Symbols volumineuse.
+7. Finaliser les mesures préproduction documentées dans
+   [`security.md`](../architecture/security.md), notamment CSP et protection
+   renforcée de l’Admin.
+
+### I. État final
+
+- **Fonctionnel localement :** oui, sur les conteneurs existants.
+- **Testé :** oui, suites frontend/backend, contrôles statiques, build et
+  pré-rendu strict réussis ; responsive vérifié selon les matrices consignées.
+- **Prêt pour revue humaine :** oui, y compris le brouillon légal et la
+  checklist propriétaire.
+- **Prêt pour préproduction :** non certifié tant que la configuration
+  hébergée et l’image Docker fraîche n’ont pas été vérifiées.
+- **Prêt pour production :** non ; les informations juridiques, la revue
+  légale, la configuration hébergée, la reconstruction et les vérifications
+  opérationnelles restent à compléter.
+
 ## Reprise UX/API — changements et contrôles de cette révision
 
 - Le client API distingue les erreurs réseau, les délais dépassés et les
