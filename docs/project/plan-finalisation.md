@@ -1,54 +1,63 @@
 # Plan de finalisation JACIGREEN
 
-Mis à jour le 24 octobre 2026 après la séparation des contenus institutionnels
-et des catalogues API. Les modifications restent locales ; aucun commit,
-push ou déploiement n’a été effectué.
+Mis à jour le 6 novembre 2026 après l’exécution des phases 2 et 3 de la
+finalisation du socle. Aucun commit, push ni déploiement n’a été effectué.
 
-## État actuel
+## Avancement des phases
+
+| Phase | État | Résultat |
+|---|---|---|
+| 1 — Diagnostic | Terminée | Contrats API, routes, contenu, UI et informations juridiques examinés. |
+| 2 — Stabilisation API et React Router | Terminée | Timeouts différenciés, retries GET limités, pagination validée, erreurs explicites, revalidation des routes Solutions/Actualités et parcours SPA contrôlés. |
+| 3 — Refonte UI/UX | Terminée pour le périmètre de la vitrine | Cartes compactées, hero responsive unifié, carrousel mobile contrôlable, palette/contrastes testés, interactions et 11 routes vérifiées à 10 largeurs. Les captures Stitch n’ont pas été comparées pixel à pixel. |
+| 4 — Nettoyage | À poursuivre | Revue transversale des composants, styles, imports et éléments inutilisés. |
+| 5 — Mentions légales et sécurité | Partielle | Formulaire et contrôles applicatifs vérifiés ; les données juridiques et de confidentialité doivent encore être fournies par JACIGREEN. |
+| 6 — QA et validation finale | En cours | Tests et pré-rendu passent ; restent la reconstruction Docker fraîche, la configuration hébergée réelle et la revue humaine/juridique. |
+
+La « phase 2 » ci-dessus est la phase de stabilisation technique du mandat.
+Elle n’implémente pas les fonctionnalités transactionnelles de la Phase 2
+produit (commandes, comptes, paiement ou rachat avec pièces jointes), qui restent
+hors périmètre selon les instructions du dépôt.
+
+## État vérifié
 
 | Sujet | État |
 |---|---|
-| Contenu éditorial | Accueil et À propos raccourcis ; répétitions réduites. |
-| Solutions, Services, Réalisations, Actualités | API Django comme source unique côté frontend ; copies statiques supprimées ; états vides présents. |
-| Données locales | 20 fiches publiées mais `is_demo=true` : 3 solutions, 8 services, 6 réalisations, 3 articles. Aucune promotion. |
-| URL canonique | URL Compose `localhost` uniquement en développement. Domaine public définitif inconnu ; `VITE_SITE_URL` est obligatoire et le garde-fou production refuse les hôtes locaux. |
-| Sécurité API production | Django impose `DEBUG=False` et HTTPS en production ; hôtes, origines CORS/CSRF, secret et URLs réels restent à configurer. |
-| Frontend | Format, typecheck, lint, 64 tests, build et pré-rendu local réussis dans le conteneur existant. |
-| Backend | Ruff, checks, migrations, OpenAPI et 47 tests réussis dans le conteneur existant. |
-| Contrôle strict | Échec sur 46 blocages attendus : domaine, canoniques locales et fiches démo. |
-| Reconstruction Docker | Échec DNS lors de `pip install` de Django ; nouvelle image non construite. |
-| Navigateur | 70 vérifications responsive sans débordement ni erreur JavaScript ; 15 liens internes HTTP 200 ; menu mobile testé. |
-| Maquettes Stitch | Pas de comparaison pixel à pixel effectuée. |
+| Catalogues et contrats API | Les 20 fiches (3 solutions, 8 services, 6 réalisations, 3 articles) renvoyées localement et à distance ont des slugs et valeurs `is_demo` concordants ; toutes sont `is_demo=false`. Les contrôles `published` et `published_at` relèvent des filtres côté API. |
+| Client API | GET : délai par défaut 20 s et une nouvelle tentative au maximum sur erreur réseau ou HTTP 502/503/504 ; timeout non rejoué. POST : 10 s, jamais rejoué. Schémas paginés, liens API et cycles validés. |
+| Routes Solutions/Actualités | Le loader parent recharge ses données quand le slug change ; tests unitaires et navigation SPA liste/détail/retour/autre fiche passent. |
+| Responsive | 11 routes vérifiées à 320, 360, 375, 390, 430, 768, 1024, 1280, 1440 et 1920 px : 110 contrôles sans débordement horizontal ni erreur JavaScript. |
+| Interactions | Menu mobile et Échap, filtre des réalisations, erreurs de validation du contact et route de détail inexistante vérifiés. Aucun POST n’a été envoyé pendant le contrôle navigateur. |
+| Pré-rendu | Contrôle local réussi. Contrôle strict de production réussi avec les URL communiquées et l’API locale, dont les slugs/statuts correspondent à l’API distante. |
+| URL communiquées | Frontend `https://jacigreen-web-rho.vercel.app/`, API `https://jacigreen-web.onrender.com/api/v1/`; les sondes navigateur/API exécutées depuis l’hôte répondent HTTP 200. |
+| Build Vite | Réussi avec `API_INTERNAL_URL=http://backend:8000`. Le build lançant Render directement depuis le conteneur a échoué sur un délai de connexion réseau. |
+| Tests | Frontend : 83 tests ; backend : 47 tests, lors des derniers contrôles consignés dans le rapport. |
+| Reconstruction Docker | `docker compose up -d --build` avait échoué sur la résolution DNS du dépôt Python ; l’image fraîche reste à reconstruire et vérifier. |
+| Prêt pour production | Non certifié : configuration réelle Vercel/Render à vérifier, données juridiques manquantes, reconstruction d’image et revue finale non réalisées. |
 
-## Ordre des actions restantes
-
-### P0 — Prérequis avant production
-
-1. Rétablir l’accès DNS/réseau depuis Docker au dépôt Python puis rejouer
-   `docker compose up -d --build`.
-2. Obtenir les URL définitives du site et de l’API. Configurer explicitement
-   `VITE_SITE_URL`, `VITE_API_URL`, `API_INTERNAL_URL`,
-   `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et
-   `CSRF_TRUSTED_ORIGINS`. Ne pas deviner de domaine.
-3. Faire valider chaque fiche API existante ou saisir le contenu corrigé dans
-   Django Admin. Garder `is_demo=true` jusqu’à confirmation ; ne pas lancer une
-   promotion en masse.
-4. Après validation des données et des variables, reconstruire puis exécuter
-   `npm run check:prerender -- --production --forbid-demo`.
-5. Obtenir et vérifier les mentions légales, la politique de confidentialité,
-   les conditions d’utilisation et les coordonnées publiques.
-
-### P1 — Contenus et direction artistique
-
-1. Fournir des photographies institutionnelles et les visuels API avec textes
-   alternatifs approuvés ; conserver les placeholders jusque-là.
-2. Réaliser une comparaison visuelle page par page aux captures Stitch après
-   configuration du navigateur et des contenus définitifs.
-
-## Contrôles déjà exécutés
-
-Les commandes et résultats précis sont consignés dans
+Les commandes et résultats détaillés sont consignés dans
 [`rapport-finalisation.md`](./rapport-finalisation.md) et
-[`quality/testing.md`](../quality/testing.md). Les conteneurs testés étaient
-ceux déjà présents ; la reconstruction interrompue par DNS ne les a pas
-remplacés.
+[`quality/testing.md`](../quality/testing.md). Ne pas confondre les conteneurs
+existants utilisés pour les validations avec une image fraîchement reconstruite.
+
+## Actions restantes
+
+1. Rétablir l’accès DNS/réseau depuis Docker au dépôt Python et réussir
+   `docker compose up -d --build`.
+2. Vérifier les variables réellement configurées dans Vercel/Render :
+   `VITE_SITE_URL=https://jacigreen-web-rho.vercel.app`,
+   `VITE_API_URL=https://jacigreen-web.onrender.com` (sans `/api/v1`),
+   `API_INTERNAL_URL`, `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et
+   `CSRF_TRUSTED_ORIGINS`.
+3. Obtenir l’identité juridique enregistrée, l’adresse, le responsable de
+   publication, les coordonnées publiques, l’hébergeur et les informations
+   nécessaires à la politique de confidentialité. Ne rien compléter par
+   supposition.
+4. Fournir et approuver les photographies institutionnelles et les médias
+   associés aux fiches ; la provenance et les textes alternatifs doivent être
+   confirmés.
+5. Effectuer une revue visuelle humaine des pages comparée aux captures Stitch ;
+   la QA responsive ne constitue pas une comparaison pixel à pixel.
+6. Après vérification des variables hébergées, exécuter
+   `npm run check:prerender -- --production --forbid-demo` et une vérification
+   de préproduction avec la reconstruction fraîche.

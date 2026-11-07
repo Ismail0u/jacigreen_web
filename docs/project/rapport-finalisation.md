@@ -1,15 +1,25 @@
 # Rapport de finalisation — contenu, sources et validation
 
 **État :** corrections frontend réalisées ; non prêt pour production. Les
-catalogues sont désormais alimentés par l’API uniquement. Les 20 fiches de la
-base locale restent des démonstrations non validées. La reconstruction Docker
-échoue encore sur la résolution DNS lors de l’installation Python.
+catalogues sont alimentés par l’API uniquement. L’API locale expose 20 fiches
+issues du seed avec `is_demo=false`, conformément à l’autorisation du
+propriétaire ; les réserves sur les dates techniques, études et projections
+restent documentées. Les URL publiques communiquées répondent en HTTP 200 et
+le pré-rendu de production est validé. Plusieurs informations juridiques
+restent à fournir.
 
 ## Reprise UX/API — changements et contrôles de cette révision
 
 - Le client API distingue les erreurs réseau, les délais dépassés et les
-  réponses illisibles. Les GET retentent une seule fois après une erreur
-  temporaire ou une réponse 502/503/504 ; les POST ne sont jamais rejoués.
+  réponses illisibles. Les GET expirent à 20 s et retentent une seule fois
+  après une erreur réseau ou HTTP 502/503/504 ; les délais dépassés ne sont pas
+  rejoués. Les POST expirent à 10 s et ne sont jamais rejoués.
+- Les réponses paginées et leurs liens sont validés ; les cycles de pagination
+  sont détectés.
+- Les layouts Solutions et Actualités rechargent leurs données lorsqu’un slug
+  enfant change, afin que le contexte transmis aux fiches soit à jour.
+- Le hero de l’accueil utilise un seul `<h1>` partagé entre les vues mobile et
+  desktop ; le carrousel mobile respecte les préférences de mouvement.
 - Les pages conservent le cadre du site en cas d’erreur de chargement, exposent
   une action de reprise et montrent un squelette pendant celle-ci. Les
   chargements de navigation ont un indicateur accessible.
@@ -18,8 +28,9 @@ base locale restent des démonstrations non validées. La reconstruction Docker
   `frontend/src/styles/tokens.css`.
 - Le hero de l’accueil utilise une photo locale fournie dans le dépôt. Un
   dérivé WebP de 1800 × 1350 px (321 246 octets) a été généré ; le fichier
-  source de 6 759 204 octets n’a pas été modifié. Les autres photos n’ont pas
-  été publiées faute de vérification individuelle de leur provenance.
+  source de 6 759 204 octets n’a pas été modifié. Le hero réutilise les photos
+  locales du dépôt ; leur provenance individuelle n’a pas été revérifiée dans
+  cette reprise et aucun nouveau média n’a été ajouté.
 - Fichiers modifiés pour cette reprise : `frontend/src/services/api/client.ts`,
   `frontend/src/services/api/client.test.ts`,
   `frontend/src/components/ui/RouteStatus.tsx`,
@@ -36,14 +47,13 @@ base locale restent des démonstrations non validées. La reconstruction Docker
 | Contrôle sur cette révision | Résultat |
 |---|---|
 | `git diff --check` | Réussi |
-| `npm run format:check`, `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:prerender` | Non exécutés : Node.js et npm sont absents du poste (`npm: commande introuvable`, code 127) ; aucun conteneur Compose frontend n’est en cours d’exécution. |
-| Découverte des tests VS Code | Non disponible : aucun contrôleur de test enregistré dans cette session. |
-| Vérification des problèmes de l’éditeur | L’éditeur signale `Unknown at rule @theme` dans `tokens.css`. Cette syntaxe Tailwind existait déjà ; faute de build, elle n’a pas pu être revalidée par le pipeline CSS du projet. |
-| Vérification visuelle navigateur | Non exécutée : aucun serveur frontend n’est lancé dans cet environnement. |
+| `npm run format:check`, `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:prerender` | Rejoués dans le conteneur frontend ; résultats détaillés ci-dessous. |
+| Vérification des problèmes de l’éditeur | Non collectée ; le build Vite/Tailwind et les validations TypeScript ont réussi. |
+| Vérification navigateur de cette révision | Routes SPA Solutions et Actualités, ainsi que l’accueil mobile/desktop, vérifiés ; détails ci-dessous. |
 
-Les contrôles passés et résultats historiques ci-dessous ne certifient pas les
-modifications UX/API de cette reprise. Aucun contrôle de production n’a été
-exécuté sur cette révision.
+Le contrôle de production avec `--production --forbid-demo` a été rejoué après
+communication des URL publiques ; il passe avec l’API locale, dont les slugs
+et valeurs `is_demo` correspondent à ceux de l’API distante.
 
 ## Modifications réalisées
 
@@ -57,15 +67,16 @@ exécuté sur cette révision.
   gérés par un endpoint catalogue : positionnement, mission et vision proposées,
   valeurs, biographie, distinctions, culture, perspectives, identité et chiffres
   historiques avec réserve.
-- Mise à jour du bandeau de démonstration : les fiches sont qualifiées de
-  « non validées comme contenu éditorial publiable », sans les qualifier à tort
-  de fausses informations.
+- Le bandeau de démonstration est réservé aux entrées `is_demo=true` et ne les
+  qualifie pas de fausses informations ; il n’apparaît pas pour les 20 fiches
+  locales actuelles, toutes `is_demo=false`.
 - `VITE_SITE_URL` est obligatoire côté frontend ; le sitemap échoue si cette
   valeur manque. Le contrôle `--production` refuse une URL locale ou non HTTPS.
-  L’URL publique définitive n’étant pas connue, aucune valeur de production
-  n’est inventée. CORS et CSRF restent limités aux origines explicitement
-  configurées ; les paramètres production Django imposent `DEBUG=False` et
-  HTTPS.
+  Les URL publiques communiquées ont été utilisées pour le contrôle de
+  production, sans modifier la configuration de déploiement. `VITE_API_URL`
+  doit contenir l’origine de l’API, sans `/api/v1/`. CORS et CSRF restent
+  limités aux origines explicitement configurées ; les paramètres production
+  Django imposent `DEBUG=False` et HTTPS.
 - Mise à jour du registre éditorial, de la matrice, de la documentation SEO et
   déploiement, du README et du présent rapport.
 - Aucun champ, serializer, endpoint, modèle, migration ou statut de données
@@ -73,48 +84,49 @@ exécuté sur cette révision.
 
 ## Vérification des données API
 
-Commande de lecture seule exécutée dans le backend : énumération des modèles
-Solution, Service, Project et Article avec `slug`, `status`, `is_demo` et
-`published_at`.
+Commandes de lecture seule exécutées sur l’API locale : liste paginée des
+ressources Solutions, Services, Réalisations et Articles.
 
 | Catégorie | Nombre | État observé |
 |---|---:|---|
-| Solutions | 3 | toutes `published`, `is_demo=true` |
-| Services | 8 | toutes `published`, `is_demo=true` |
-| Réalisations | 6 | toutes `published`, `is_demo=true` |
-| Articles | 3 | toutes `published`, `is_demo=true` |
-| **Total** | **20** | **20 démos, 0 contenu API non-démo** |
+| Solutions | 3 | toutes `is_demo=false` |
+| Services | 8 | toutes `is_demo=false` |
+| Réalisations | 6 | toutes `is_demo=false` |
+| Articles | 3 | toutes `is_demo=false` |
+| **Total** | **20** | **20 fiches API non-démo** |
 
 Les slugs et la correspondance individuelle avec les §§6, 11, 12, 14 et 15
 sont consignés dans [`../content/content-register.md`](../content/content-register.md).
-Les faits principaux recoupent le document autorisé, mais cela ne confirme pas
-indépendamment l’état « publié », les champs éditoriaux ajoutés, les années de
-certaines fiches ou les dates créées automatiquement par le seed. Aucune
-commande de promotion n’a donc été exécutée. Le contrôle strict reste actif.
+Le cahier des charges autorise l’utilisation des contenus issus du seed. Les
+réserves sur les dates créées automatiquement, les études, projections et
+performances restent indiquées dans le registre.
 
 ## Résultats des contrôles
 
 | Contrôle | Résultat réel |
 |---|---|
 | Vercel `Invalid route exports ... loader` | Corrigé dans le code : les loaders de fiches sont portés par les parents toujours pré-rendus ; les `clientLoader` parent servent les chemins de détail non pré-rendus. La correction doit être fusionnée dans la branche suivie par Vercel ; aucun déploiement n’a été déclenché. |
-| Frontend `npm run format:check` | Réussi après formatage des modifications |
+| Frontend `npm run format:check` | Réussi |
 | Frontend `npm run typecheck` | Réussi |
-| Frontend `npm run lint` | Réussi après correction d’une erreur `no-deprecated` dans le nouveau test ; aucune règle désactivée |
-| Frontend `npm test` | Réussi : 12 fichiers, 64 tests |
-| Frontend `npm run build` | Réussi dans le conteneur frontend déjà présent ; build client/serveur et pré-rendu produits |
-| Frontend `npm run check:prerender` | Réussi : 13 URL de sitemap, HTML, métadonnées, canoniques locales de développement, robots et fallback contrôlés |
-| Frontend `npm run check:prerender -- --production --forbid-demo` | Échec attendu : 46 problèmes. 1 configuration de domaine public HTTPS, 14 canoniques locales, 20 enregistrements `is_demo=true`, 11 pages contenant le marqueur démo. Protection non contournée. |
+| Frontend `npm run lint` | Réussi |
+| Frontend `npm test` | Réussi : 15 fichiers, 83 tests |
+| Frontend `npm run build` | Réussi dans le conteneur frontend existant ; build client/serveur et pré-rendu produits |
+| Frontend `npm run check:prerender` | Réussi : HTML, métadonnées, canoniques de développement, sitemap, robots et fallback contrôlés |
+| Frontend `npm run check:prerender -- --production --forbid-demo` | Réussi avec les URL communiquées et l’API locale ; aucune erreur de canonique ou de marqueur démo. Les slugs et valeurs `is_demo` des 20 ressources correspondent à l’API distante. |
+| Frontend build utilisant directement l’API Render distante | Échec dans le conteneur par dépassement du délai de connexion à `jacigreen-web.onrender.com:443` ; les appels de vérification effectués depuis l’hôte répondent HTTP 200. Build relancé avec l’API locale équivalente, sans déploiement. |
 | Backend `ruff check .` / `ruff format --check .` | Réussis : aucune erreur ; 60 fichiers déjà formatés |
 | Backend `python manage.py check` | Réussi : aucun problème |
 | Backend `makemigrations --check --dry-run` | Réussi : aucune migration manquante |
 | Backend `spectacular --validate --fail-on-warn` | Réussi : aucun avertissement OpenAPI |
-| Backend `DJANGO_SETTINGS_MODULE=config.settings.test python manage.py test` | Réussi : 47 tests |
-| Django `config.settings.production` avec `manage.py check --deploy` | Code de sortie 0 ; avertissement `security.W021` car HSTS preload est désactivé. C’est intentionnel tant que le domaine n’est pas validé. La commande a utilisé l’environnement Compose de développement, pas un environnement réel de production. |
-| Revalidation frontend après la réduction des mentions légales | Réussie : format, typecheck, lint, 12 fichiers/64 tests, build et contrôle de pré-rendu local |
-| Vercel `Invalid route exports ... loader` (reproduction/correction) | Les routes de détail exportaient un loader et n'étaient valides que si leurs slugs étaient présents dans les chemins pré-rendus. Les loaders ont été déplacés sur les parents toujours pré-rendus, avec un clientLoader pour les chemins dynamiques hors du pré-rendu. Typecheck, lint, 64 tests, build et contrôle réussis avec API locale peuplée ; build/contrôle également réussis avec API simulée vide. |
+| Backend `python manage.py test` | Réussi : 47 tests |
+| Django `config.settings.production` avec `manage.py check --deploy` | Code de sortie 0 ; avertissement `security.W021` car HSTS preload est désactivé. La commande a utilisé l’environnement Compose de développement, pas un environnement réel de production ; confirmer la couverture des sous-domaines avant d’activer le preload. |
+| Étape antérieure — revalidation frontend après la réduction des mentions légales | À cette étape : format, typecheck, lint, 12 fichiers/64 tests, build et contrôle de pré-rendu local réussis. Les validations les plus récentes sont résumées en tête du rapport. |
+| Vercel `Invalid route exports ... loader` (reproduction/correction) | Les routes de détail exportaient un loader et n'étaient valides que si leurs slugs étaient présents dans les chemins pré-rendus. Les loaders ont été déplacés sur les parents toujours pré-rendus, avec un clientLoader pour les chemins dynamiques hors du pré-rendu. Lors de cette correction : typecheck, lint, 64 tests, build et contrôle réussis avec API locale peuplée ; build/contrôle également réussis avec API simulée vide. |
 | `docker compose config --quiet` | Réussi |
 | Contrôle final `git diff --check` | Réussi |
-| Navigateur : 14 routes × 5 largeurs (360, 390, 768, 1024, 1440 px) | 70 vérifications réussies : un `<h1>`, canonique présente, aucun débordement horizontal ni lien vide |
+| Navigateur : SPA Solutions et Actualités | Liste → fiche, fiche → liste et fiche → autre fiche vérifiés ; les titres correspondent aux slugs, aucune erreur JavaScript. |
+| Navigateur : accueil (320, 390, 768, 1024 et 1440 px) | Un seul `<h1>` visible ; carrousel seulement sous 1024 px ; aucune largeur avec débordement ; commandes visibles à 320 px ; les trois photos se chargent ; aucune erreur JavaScript. |
+| Navigateur : 14 routes × 5 largeurs (360, 390, 768, 1024, 1440 px) | 70 vérifications historiques : canonique présente, aucun débordement horizontal ni lien vide. |
 | Navigateur : liens internes | 15 destinations uniques vérifiées ; toutes répondent HTTP 200 |
 | Navigateur : erreurs JavaScript/console | Aucune erreur observée sur les 70 ouvertures de pages |
 | Navigateur : menu mobile | Ouverture et fermeture par Échap vérifiées après hydratation à 360 px |
@@ -122,7 +134,7 @@ commande de promotion n’a donc été exécutée. Le contrôle strict reste act
 | Tests de build catalogue après correction | Réussis avec l’API locale peuplée (3 solutions, 3 articles), et avec une API simulée vide (7 URL de sitemap, aucune route détail) ; `check:prerender` passe dans les deux scénarios. |
 | Santé des services existants après l’échec Docker | Frontend HTTP 200 ; backend `/api/v1/health/` HTTP 200 ; les trois conteneurs restent en fonctionnement |
 | Comparaison pixel à pixel avec les maquettes Stitch | Non exécutée ; les résultats navigateur ne prouvent pas une fidélité visuelle pixel à pixel |
-| États vides avec une API réellement vide | Non exercés dans le navigateur, car l’API locale contient les 20 fiches de démonstration ; les branches d’état vide sont présentes dans les pages |
+| États vides avec une API réellement vide | Non exercés dans le navigateur ; l’API locale contient 20 fiches publiées et les branches d’état vide restent présentes dans les pages. |
 | Déploiement Vercel | Non exécuté depuis ce workspace ; la correction doit être poussée/fusionnée dans la branche configurée par le projet Vercel avant de pouvoir vérifier le déploiement. |
 
 Les messages 404, 403, 429 et d’échec réseau observés dans les journaux de
@@ -130,9 +142,10 @@ tests Django correspondent à des scénarios négatifs testés ; les 47 tests so
 passés.
 
 La configuration de production impose `DEBUG=False`, HTTPS et les cookies
-sécurisés. HSTS preload reste désactivé en attendant la confirmation du domaine.
-Les noms d’hôtes de production et les origines CORS/CSRF n’ont pas été testés
-contre des valeurs réelles, qui ne sont pas encore fournies.
+sécurisés. HSTS preload reste désactivé ; confirmer la couverture des
+sous-domaines avant activation. Les URL publiques répondent, mais les
+paramètres d’hôtes autorisés et les origines CORS/CSRF réels n’ont pas été
+inspectés dans Vercel/Render.
 
 ## Reconstruction Docker — échec réel
 
@@ -163,6 +176,20 @@ frontend ci-dessus ont utilisé le conteneur existant et son volume de code.
   `docs/project/audit-qualite-site.md`, `matrice-contenu.md`,
   `plan-finalisation.md`, `rapport-finalisation.md`,
   `docs/quality/testing.md`.
+- Suivi de cette reprise : `frontend/src/services/api/client.ts`,
+  `frontend/src/services/api/client.test.ts`,
+  `frontend/src/services/api/content.ts`,
+  `frontend/src/components/home/MobileHeroCarousel.tsx`,
+  `frontend/src/components/home/MobileHeroCarousel.test.tsx`,
+  `frontend/src/features/news/ArticleCard.tsx`,
+  `frontend/src/features/projects/ProjectCard.tsx`,
+  `frontend/src/features/solutions/SolutionCard.tsx`,
+  `frontend/src/routes/home.tsx`,
+  `frontend/src/routes/news-layout.tsx`,
+  `frontend/src/routes/solutions-layout.tsx`,
+  `frontend/src/routes/layout-revalidation.test.ts`,
+  `docs/architecture/api.md`, `docs/content/content-register.md` et le
+  présent rapport.
 
 Des modifications préexistantes dans le worktree ont été préservées. Aucun
 commit, push ni déploiement n’a été effectué.
@@ -172,15 +199,14 @@ commit, push ni déploiement n’a été effectué.
 1. Rétablir le DNS/réseau Docker permettant d’accéder au dépôt de paquets, puis
    rejouer `docker compose up -d --build`. Ne pas considérer l’image actuelle
    comme reconstruite.
-2. Fournir les URL HTTPS définitives du site et de l’API ; définir
-   `VITE_SITE_URL`, `VITE_API_URL`, `API_INTERNAL_URL`,
-   `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et `CSRF_TRUSTED_ORIGINS` en
-   cohérence avec les hôtes réels.
-3. Faire valider les 20 fiches une par une dans Django Admin ou les remplacer
-   par des fiches éditoriales vérifiées ; ne pas simplement retirer `is_demo`.
-4. Fournir les informations juridiques et les photos éditoriales manquantes.
-5. Après ces actions, reconstruire et exécuter
-   `npm run check:prerender -- --production --forbid-demo`.
+2. Vérifier la configuration réelle des environnements Vercel/Render :
+   `VITE_SITE_URL=https://jacigreen-web-rho.vercel.app`,
+   `VITE_API_URL=https://jacigreen-web.onrender.com` (sans `/api/v1`),
+   `API_INTERNAL_URL`, `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et
+   `CSRF_TRUSTED_ORIGINS` en cohérence avec les hôtes réels.
+3. Fournir les informations juridiques et les photos éditoriales manquantes.
+4. Après vérification des variables de production dans Vercel/Render, relancer
+   `npm run check:prerender -- --production --forbid-demo` avec ces valeurs.
 
 La mise en production reste bloquée tant que ces conditions ne sont pas
 satisfaites.

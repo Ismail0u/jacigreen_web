@@ -17,6 +17,14 @@ Seuls les contenus `published` dont `published_at` est atteint sont visibles ; u
 ## Pagination
 `?page=2&page_size=20` (maximum 50). Réponse : `{count, next, previous, results}`.
 
+## Comportement du client frontend
+Le client central valide la forme des pages et limite les liens de pagination à
+`/api/v1/`, en détectant les cycles. Les requêtes GET expirent après 20 secondes
+et peuvent être rejouées une seule fois après une erreur réseau ou HTTP 502,
+503 ou 504 ; les délais dépassés ne sont pas rejoués. Les POST expirent après
+10 secondes et ne sont jamais rejoués. `timeoutMs` permet de remplacer le délai
+par défaut pour un appel.
+
 ## Dépôt d'une demande (au niveau du formulaire)
 Champs : `subject` (`general`, `quote`, `training`, `partnership`, `buyback_info`, `other`), `name`, `email`, `organization` (facultatif), `message` (20 à 5 000 caractères), `consent` (doit être `true`), `website` (piège anti-robot : doit rester vide). Réponse 201 `{"detail": "..."}`. Un robot qui remplit `website` reçoit aussi 201 mais rien n'est enregistré. Limite : 5 demandes par heure et par IP (`THROTTLE_CONTACT_RATE`).
 
