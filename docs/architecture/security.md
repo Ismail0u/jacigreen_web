@@ -9,13 +9,30 @@
 | CORS limité aux origines du frontend, méthodes GET/POST/OPTIONS, sans identifiants | `settings/base.py` |
 | CSRF : l'API n'utilise ni cookie ni session (aucune authentification) ; seul `/admin/` s'appuie sur CSRF | `settings/base.py` |
 | Permissions DRF : défaut `IsAuthenticated`, `AllowAny` déclaré vue par vue | `REST_FRAMEWORK`, vues |
-| Validation serveur systématique et contraintes en base | serializers, modèles |
-| Limitation de débit (120/min anonyme, 5/h pour le contact) | `ScopedRateThrottle`, `AnonRateThrottle` |
-| Honeypot du formulaire de contact | `apps/contact/views.py` |
-| Données personnelles : jamais lisibles via l'API, jamais journalisées | `apps/contact` |
+| Validation frontend et serveur des champs du contact, consentement obligatoire et contraintes en base | `contact-schema.ts`, `apps/contact/serializers.py`, modèle |
+| Limitation de débit globale anonyme (120/min) et limitée au contact (5/h) | `AnonRateThrottle`, `ScopedRateThrottle` |
+| Honeypot : réponse de succès neutre, demande non enregistrée | `apps/contact/views.py` |
+| Demandes en écriture seule via l'API, consultation dans l'admin uniquement | `apps/contact/views.py`, `apps/contact/admin.py` |
+| Données personnelles : aucune lecture via l'API ; aucun log dédié au contenu des demandes identifié dans le parcours applicatif | `apps/contact` |
 | Texte brut rendu par React (pas de HTML injecté) | `Prose`, ESLint |
 | Aucun secret dans `VITE_*`, `.env.example` sans valeur réelle, utilisateur non privilégié dans les images | frontend, Docker |
 | En-têtes HTTP du frontend (Vercel) | `frontend/vercel.json` |
+
+## Formulaire de contact — vérification
+
+Le formulaire vérifie côté client l’objet autorisé, les longueurs du nom,
+organisation et message, l’adresse email et le consentement. L’API revalide les
+champs avant l’enregistrement ; la validation serveur demeure l’autorité. Le
+champ honeypot n’est pas montré aux utilisateurs et, s’il est renseigné, la
+réponse reste identique à un envoi accepté sans créer de demande. Les tests
+couvrent le dépôt valide, le consentement, les sujets et valeurs invalides,
+l’absence d’exposition en lecture, le honeypot et la limite de débit.
+
+Le code vérifié ne configure pas de notification email automatique. La durée
+de conservation, le responsable de traitement, la base juridique, les
+destinataires et les modalités d’exercice des droits restent à définir avant
+publication de la politique de confidentialité ; voir le
+[`registre éditorial`](../content/content-register.md).
 
 ## Limites et points d'attention
 - **Limitation de débit par IP** : derrière Render, définir `DRF_NUM_PROXIES=1`, sinon toutes les requêtes semblent venir du proxy. Avec plusieurs workers, le compteur est par processus : définir `CACHE_URL` vers un cache partagé (Redis, par exemple).

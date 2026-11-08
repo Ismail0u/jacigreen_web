@@ -13,15 +13,15 @@ function period(project: Project): string {
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="editorial-card border-t-2 border-on-tertiary-container bg-surface-container-lowest pb-space-lg">
+    <article className="editorial-card flex h-full flex-col border-t-2 border-on-tertiary-container bg-surface-container-lowest pb-space-md">
       <MediaFrame
         src={project.cover_image}
         alt={project.cover_alt}
-        aspect="4/3"
+        aspect="3/2"
         icon="agriculture"
         className="border-0"
       />
-      <div className="flex flex-wrap items-center gap-space-sm px-space-lg pt-space-lg">
+      <div className="flex flex-wrap items-center gap-space-sm px-space-md pt-space-md">
         <Badge>{project.country_label}</Badge>
         <DemoBadge show={project.is_demo} />
         {period(project) ? (
@@ -30,12 +30,14 @@ export function ProjectCard({ project }: { project: Project }) {
           </span>
         ) : null}
       </div>
-      <h3 className="mt-space-md px-space-lg font-headline-md text-headline-md">{project.title}</h3>
-      <p className="mt-space-md px-space-lg font-body-md text-body-md text-on-surface-variant">
+      <h3 className="mt-space-md line-clamp-2 px-space-md font-headline-md text-headline-md">
+        {project.title}
+      </h3>
+      <p className="mt-space-md line-clamp-3 px-space-md font-body-md text-body-md text-on-surface-variant">
         {project.summary}
       </p>
       {project.description.trim() ? (
-        <details className="mt-space-md px-space-lg">
+        <details className="mt-space-md px-space-md">
           <summary className="min-h-11 cursor-pointer py-2 font-label-md text-label-md font-semibold text-primary-container underline-offset-4 hover:underline">
             Lire la description détaillée
           </summary>

@@ -3,7 +3,7 @@
 Site institutionnel de JACIGREEN : React + TypeScript (frontend, pré-rendu statique) et Django REST + PostgreSQL (API, administration de contenu), avec Docker Compose.
 
 ## 1. Présentation de JACIGREEN
-Entreprise africaine spécialisée dans la valorisation des ressources naturelles, des déchets organiques et des espèces végétales envahissantes (jacinthe d'eau) : solutions environnementales, énergétiques et agricoles. Le document institutionnel v1.0 a été autorisé à la publication le 24 octobre 2026 ; les fiches API de démonstration restent séparément non validées.
+JACIGREEN développe des solutions environnementales, énergétiques et agricoles autour de la valorisation des ressources naturelles et des déchets organiques. Le document institutionnel v1.0 et les fiches API recensées ont été autorisés à la publication ; les réserves éditoriales et les données juridiques manquantes sont consignées dans `docs/content/content-register.md`.
 
 ## 2. Objectifs du socle
 Fournir une base maintenable, testée et documentée pour développer la Phase 1 (vitrine) puis la Phase 2 (transactionnel) sans réécriture : architecture claire, design system implémenté, SEO vérifié, sécurité de base, CI, et instructions persistantes pour GitHub Copilot.
@@ -11,13 +11,13 @@ Fournir une base maintenable, testée et documentée pour développer la Phase 1
 ## 3. Fonctionnalités déjà implémentées
 - API publique en lecture seule : solutions, services, réalisations, actualités ; dépôt de demandes de contact (consentement, honeypot, limitation de débit).
 - Django Admin : publication/brouillon, publication planifiée, filtres, recherche.
-- Frontend : accueil, à propos, solutions (liste, fiche), services, réalisations (filtre par pays), actualités (liste, article), contact/devis, mentions légales (substitution), page introuvable.
+- Frontend : accueil, à propos, solutions (liste, fiche), services, réalisations (filtre par pays), actualités (liste, article), contact/devis, projet de mentions légales (`noindex`, à compléter et valider), page introuvable.
 - Pré-rendu HTML complet, métadonnées SEO, sitemap, robots.txt, Deploy Hook de reconstruction.
 - Design system (tokens, contrastes testés), accessibilité de base, responsive.
 - Tests (backend,frontend), lint, types, CI, Dependabot, instructions Copilot, 5 agents.
 
 ## 4. Fonctionnalités encore à développer
-Partiellement implémenté : pages éditoriales et de catalogue (fiches API de démonstration à remplacer par des contenus validés), mentions légales (informations de l’éditeur à fournir).
+Partiellement implémenté : pages éditoriales et de catalogue ; projet de mentions légales non validé, informations administratives à fournir.
 À faire : page Formations, fiche de réalisation, textes légaux, logo et photos réels, notification email des demandes, stockage des médias en production, CSP, double authentification de l'admin, tests de bout en bout en CI, anglais. Phase 2 : commandes, comptes, paiement, rachat de biodigesteur avec pièces jointes, inscriptions. Détail : `docs/project/audit-initial.md` et `docs/adr/0003`.
 
 ## 5. Stack technique

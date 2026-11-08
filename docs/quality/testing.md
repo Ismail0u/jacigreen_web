@@ -22,12 +22,13 @@ Compose et dans `frontend/.env.example` sont réservées au développement. Le m
 
 ## Résilience API et chargement
 
-Le client centralisé applique un délai maximal de 10 secondes à chaque requête.
-Les GET peuvent être retentés une seule fois après une erreur réseau, un délai
-dépassé ou une réponse HTTP 502, 503 ou 504, avec une attente courte et aléatoire.
-Les POST ne sont jamais rejoués automatiquement ; l'annulation du demandeur est
-préservée. Les réponses JSON illisibles sont signalées comme erreurs et ne sont
-pas converties en listes ou objets vides.
+Le client centralisé applique un délai maximal de 20 secondes aux GET et de
+10 secondes aux POST, configurable par requête. Les GET peuvent être retentés
+une seule fois après une erreur réseau ou HTTP 502, 503 ou 504 ; les timeouts,
+les autres statuts et les POST ne sont pas rejoués. L'annulation du demandeur
+est préservée. Les réponses JSON illisibles sont signalées comme erreurs et ne
+sont pas converties en listes ou objets vides. Les pages DRF et leurs liens
+sont validés ; un cycle de pagination échoue explicitement.
 
 Pendant une navigation API, le layout annonce le chargement. En cas d'échec, il
 conserve l'en-tête et le pied de page, distingue une ressource introuvable d'une
@@ -35,56 +36,50 @@ panne temporaire et propose une reprise pour les erreurs réessayables. Un état
 squelette accessible accompagne la nouvelle tentative. Un catalogue vide reste
 distinct d'une erreur de chargement.
 
-## Résultats vérifiés le 24 octobre 2026
-
-> Les résultats historiques ci-dessous ne certifient pas les modifications
-> UX/API décrites dans le rapport de finalisation. Pour cette reprise, les
-> scripts frontend n'ont pas pu être lancés : Node.js/npm et les conteneurs
-> Compose sont absents de l'environnement courant. `git diff --check` est le
-> seul contrôle de commande réussi sur ces changements ; la validation visuelle
-> et le build restent à effectuer.
+## Résultats vérifiés le 7 novembre 2026
 
 | Contrôle | Résultat |
 |---|---|
 | Frontend `format:check` | Réussi |
 | Frontend `typecheck` | Réussi |
 | Frontend `lint` | Réussi, aucune règle désactivée |
-| Frontend `npm test` | 12 fichiers, 64 tests réussis |
-| Frontend `build` | Réussi dans le conteneur frontend déjà présent |
-| `check:prerender` | Réussi ; 13 URL de sitemap, HTML, métadonnées, canoniques locales de développement, `robots.txt` et fallback vérifiés |
-| `check:prerender -- --production --forbid-demo` | Échec strict sur 46 problèmes : URL publique HTTPS absente, 14 canoniques locales, 20 fiches `is_demo=true`, 11 pages avec marqueur visible. Ces blocages ne sont pas masqués. |
+| Frontend `npm test` | 15 fichiers, 83 tests réussis |
+| Frontend `build` | Réussi dans le conteneur frontend existant avec `API_INTERNAL_URL=http://backend:8000`, `VITE_SITE_URL=https://jacigreen-web-rho.vercel.app` et `VITE_API_URL=https://jacigreen-web.onrender.com` |
+| `check:prerender` | Réussi ; HTML, métadonnées, canoniques, sitemap, `robots.txt` et fallback contrôlés |
+| `check:prerender -- --production --forbid-demo` | Réussi avec `VITE_SITE_URL=https://jacigreen-web-rho.vercel.app`, `VITE_API_URL=https://jacigreen-web.onrender.com` et l’API locale correspondante |
 | Backend Ruff lint/format | Réussi ; 60 fichiers déjà formatés |
 | `manage.py check` | Réussi, aucun problème |
 | `makemigrations --check --dry-run` | Réussi, aucune migration manquante |
 | Schéma OpenAPI | Réussi avec `--fail-on-warn` |
 | Backend Django tests | 47 tests réussis |
-| `DJANGO_SETTINGS_MODULE=config.settings.production python manage.py check --deploy` | Code de sortie 0 ; avertissement `security.W021` car HSTS preload est désactivé en attendant la validation du domaine. La commande utilisait les variables Compose de développement, pas des valeurs de production réelles. |
-| Vérification base de démonstration | 20/20 fiches publiées ont `is_demo=true` ; 0 fiche non-démo |
-| Navigateur | 14 routes × 5 largeurs = 70 vérifications : pas de débordement horizontal, exactement un `<h1>`, canonique et aucun lien vide |
-| Liens internes | 15 destinations uniques vérifiées, toutes HTTP 200 |
-| Console navigateur | Aucune erreur JavaScript ou console observée |
-| Menu mobile | Ouverture et fermeture par Échap vérifiées à 360 px après hydratation |
+| `DJANGO_SETTINGS_MODULE=config.settings.production python manage.py check --deploy` | Code de sortie 0 ; avertissement `security.W021` car HSTS preload est désactivé. La commande utilisait les variables Compose de développement, pas des valeurs de production réelles. |
+| Vérification des listes API locale et distante | 20 fiches et slugs concordants ; toutes `is_demo=false` dans les deux API |
+| Navigateur responsive | 11 routes × 10 largeurs (320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920 px), soit 110 vérifications sans débordement horizontal, avec un `<h1>` par route et sans erreur JavaScript |
+| Détail inexistant | Les routes solution/article affichent l’état « Contenu introuvable » et ne proposent pas de retry pour un 404 |
+| Interactions | Menu mobile s’ouvre et ferme avec Échap ; filtre Niger réduit le catalogue à ses 2 projets ; validation contact signale les champs invalides et ne déclenche aucun POST |
+| Carrousel | Contrôles restent visibles à 320 px ; les trois images se chargent ; réduction des animations et contrôles clavier couverts par tests |
+| Mentions légales | Page de travail rendue dans le navigateur à 320, 390, 768 et 1440 px : un seul `<h1>`, aucun débordement horizontal ; `noindex` confirmé par le contrôle de pré-rendu |
+| Formulaire de contact — sécurité | Revue de sécurité dédiée : aucune vulnérabilité identifiée dans le périmètre revu. Tests frontend/backend couvrent validation, consentement, honeypot, rate limiting, écriture seule et erreurs |
+| Mesure de bundle | `entry.client` : 403,47 kB (122,57 kB gzip) ; formulaire : 121,94 kB (37,81 kB gzip) ; police Material Symbols : 1 138,40 kB. Aucun audit Lighthouse/Core Web Vitals n’a été exécuté |
+| Build distant Render | Connexion sortante vers Render expirée depuis le conteneur ; les vérifications faites depuis l’hôte répondent HTTP 200. Pré-rendu et build ont été validés sur l’API locale dont les slugs et statuts correspondent à ceux de l’API distante |
+| Liens internes | 15 destinations uniques ont été vérifiées historiquement, toutes HTTP 200 |
 | `git diff --check` | Réussi |
 
-Revalidation frontend effectuée le 25 octobre 2026 après la dernière réduction
-éditoriale : `format:check`, `typecheck`, `lint`, 12 fichiers/64 tests,
-`build` et `check:prerender` local ont tous réussi. `docker compose config
---quiet` et un nouveau `git diff --check` ont également réussi.
+Le 7 novembre 2026, `format:check`, `typecheck`, `lint`, 15 fichiers/83 tests,
+`build`, `check:prerender` et le contrôle strict ont réussi dans les conteneurs
+existants. `git diff --check` passe également.
 
-Le 25 octobre 2026, les routes de détail ont été imbriquées sous des routes de
-catalogue avec `loader` et `clientLoader` parent afin que le pré-rendu fonctionne
-même lorsque l'API ne publie encore aucune fiche. Validation après ce
-changement : format, typecheck, lint et 12 fichiers/64 tests réussis ; build et
-`check:prerender` réussis avec les contenus de l'API locale (13 URL de sitemap,
-dont 3 solutions et 3 articles). Un build et un contrôle de pré-rendu ont aussi
-réussi avec un serveur API simulé renvoyant des catalogues vides (7 URL de
-sitemap, aucune route de détail). Le test vide valide le build/pré-rendu, pas
-l'expérience navigateur avec une API de production vide.
+Les routes de détail sont imbriquées sous des routes de catalogue avec `loader`
+et `clientLoader` parent afin que le pré-rendu reste viable avec des catalogues
+vides. Les changements de slug invalident le contexte parent ; des tests ciblés
+et des parcours navigateur liste → fiche → liste → autre fiche vérifient ce
+comportement.
 
 Les messages Django de type 404, 403, 429 et échec réseau apparus pendant les
 tests proviennent des scénarios négatifs attendus ; aucune suite n’a échoué.
-L’avertissement `security.W021` est distinct d’un échec de test. Le domaine
-réel n’étant pas confirmé, HSTS preload reste désactivé.
+L’avertissement `security.W021` est distinct d’un échec de test. HSTS preload
+reste désactivé ; confirmer la couverture des sous-domaines et la configuration
+HTTPS de production avant de l’activer.
 
 ## Reconstruction Docker
 
@@ -102,13 +97,11 @@ existant a, lui, réussi.
 
 ## Non exécuté ou non certifié
 
-- Le domaine de production étant inconnu et les données étant encore des
-  démonstrations, le contrôle strict n’est pas passé : le site n’est pas prêt
-  pour la production.
+- La configuration réelle Vercel/Render (origines CORS/CSRF, hôtes et variables)
+  n’a pas été inspectée.
 - L’API n’a pas été vidée pour tester les états vides en navigateur. Les pages
   contiennent des branches `ContentPending` pour ces cas.
 - La comparaison pixel à pixel par route avec les captures Stitch n’a pas été
   effectuée.
-- Aucune migration, modification de modèle, de serializer ou d’endpoint backend
-  n’a été nécessaire.
-- Aucun formulaire n’a été envoyé pendant les contrôles navigateur.
+- Aucun formulaire valide n’a été envoyé en navigateur ; seul le refus de
+  données invalides sans requête POST a été testé.

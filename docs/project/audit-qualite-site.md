@@ -18,35 +18,34 @@ brevets, rendements, coordonnées, études ni autres données inventées
 document institutionnel ont depuis été autorisées à la publication par le
 propriétaire ; les données d’API doivent néanmoins être évaluées séparément.
 
-## État actuel — reprise du 24 octobre 2026
+## État actuel — validation des phases 2 et 3, 6 novembre 2026
 
-Les routes Accueil, Solutions, Services, Réalisations et Actualités utilisent
-désormais les API comme source de vérité pour les contenus de catalogue ; les
-copies statiques concurrentes ont été retirées. Les états vides sont prévus. La
-page À propos conserve les seuls éléments institutionnels non gérés par ces
-endpoints, en réduisant les répétitions et en maintenant les réserves de la
-source. Les détails sont consignés dans la
-[`matrice-contenu.md`](./matrice-contenu.md).
+Les listes et détails de Solutions, Services, Réalisations et Actualités
+restent alimentés exclusivement par l’API ; l’accueil affiche les sélections
+API. Le client API utilise des délais distincts selon la méthode, limite les
+reprises GET aux erreurs réseau et statuts transitoires, valide la pagination
+et signale les erreurs sans les confondre avec un catalogue vide. Les layouts
+Solutions et Actualités rechargent le contexte parent lorsqu’un slug change.
+Les 20 slugs et valeurs `is_demo=false` de l’API locale correspondent aux
+réponses des endpoints distants ; les réserves éditoriales et dates techniques
+restent dans le [`content-register.md`](../content/content-register.md).
 
-La base locale contient 20 fiches `published` mais `is_demo=true` (3 solutions,
-8 services, 6 réalisations et 3 articles). Leurs slugs sont comparés à la source
-dans le [`content-register.md`](../content/content-register.md). Aucune n’a été
-promue : l’autorisation de publier le document ne vaut pas validation distincte
-du statut éditorial et des champs de chaque fiche.
+La refonte UX/visuelle menée sur cette reprise compactifie les cartes et réunit
+le contenu du hero dans un seul titre sémantique, avec carrousel mobile
+contrôlable. Une matrice navigateur couvre 11 routes à 320, 360, 375, 390, 430,
+768, 1024, 1280, 1440 et 1920 px (110 vérifications) sans débordement
+horizontal ni erreur JavaScript. Le menu mobile, le filtre pays, les erreurs
+de validation du formulaire et les fiches API inexistantes ont aussi été
+exercés. Une comparaison pixel à pixel des maquettes Stitch n’a pas été faite.
 
-Validation dans les conteneurs existants : format, typecheck, lint, 64 tests
-frontend, build, pré-rendu local ; Ruff, checks Django, migrations, OpenAPI et
-47 tests backend. Contrôle navigateur : 14 routes aux cinq largeurs demandées
-(70 contrôles), 15 destinations internes HTTP 200, aucune erreur JavaScript,
-aucun lien vide ou débordement horizontal. Le menu mobile a été vérifié.
-Comparaison pixel à pixel Stitch non effectuée.
-
-Le contrôle strict de production échoue sur 46 problèmes : URL publique HTTPS
-absente, 14 canoniques locales, 20 fiches `is_demo=true` et 11 pages avec un
-marqueur visible. `docker compose up -d --build` échoue encore pendant
-`pip install` : résolution DNS indisponible pour le dépôt Python, puis Django
-5.2.18 déclaré introuvable. Le build frontend dans le conteneur existant a
-réussi ; la reconstruction des images n’a pas réussi.
+État de validation dans les conteneurs existants : 83 tests frontend, 47 tests
+backend, format, typecheck, lint, build et pré-rendu réussis. Le contrôle strict
+de production passe avec les URL communiquées et l’API locale équivalente.
+L’URL Render répond depuis l’hôte, mais le build direct depuis le conteneur
+échoue sur un délai de connexion externe. La reconstruction Docker fraîche
+avait échoué sur la résolution DNS du dépôt Python et reste à refaire. Les URL
+publiques répondent HTTP 200 ; la configuration réelle des environnements
+hébergés n’a pas été inspectée.
 
 ## 1. État des lieux
 
@@ -74,9 +73,9 @@ réussi ; la reconstruction des images n’a pas réussi.
   donnée à cette date. Le registre actuel reflète la décision ultérieure du
   propriétaire.
 - **Rendu et blocage de livraison :** le build et le pré-rendu sont désormais
-  réussis après la configuration IPv4 du Preview. Le contrôle local passe ;
-  le contrôle strict de production bloque sur les canoniques Compose en
-  `localhost` et sur les enregistrements de démonstration non validés.
+  réussis après la configuration IPv4 du Preview. Le contrôle strict de
+  production passe avec les URL communiquées et l’API locale correspondante ;
+  les variables réellement hébergées restent à inspecter.
 - **Git au moment de l'audit :** branche
   `feature/core-backend-frontend`, alignée sur
   `origin/feature/core-backend-frontend`. Aucun changement suivi n'est présent ;
@@ -85,22 +84,24 @@ réussi ; la reconstruction des images n’a pas réussi.
 
 ## 2. Routes et comparaison maquette / code
 
-Les notes sont celles de l’audit visuel antérieur et ne sont pas de nouvelles
-notes de fidélité après la réduction éditoriale. Les écarts décrivent l’état du
-code actuel ; aucune comparaison pixel à pixel n’a été menée pour cette reprise.
+Les notes et descriptions détaillées ci-dessous proviennent de l’audit visuel
+antérieur ; elles ne constituent pas une nouvelle notation de fidélité ni un
+inventaire complet de l’interface après les reprises UX/API. L’état actuel des
+changements et contrôles est résumé ci-dessus et dans le rapport de
+finalisation. Aucune comparaison pixel à pixel n’a été menée pour cette reprise.
 
 | Route | Maquette de référence | Code observé et écarts concrets | Fidélité |
 |---|---|---|---:|
-| `/` | [`accueil/code.html`](../../design/stitch/jacigreen_accueil_institutional/code.html) et [`screen.png`](../../design/stitch/jacigreen_accueil_institutional/screen.png) | Hero en deux colonnes et présentation courte ; trois sections de solutions, réalisations et actualités alimentées exclusivement par l’API, chacune avec état vide. Média de remplacement. La référence a des séquences éditoriales et photos supplémentaires ; le bandeau démo reste visible avec les seeds. | **5/10** |
+| `/` | [`accueil/code.html`](../../design/stitch/jacigreen_accueil_institutional/code.html) et [`screen.png`](../../design/stitch/jacigreen_accueil_institutional/screen.png) | Hero responsive : contenu partagé dans un seul `<h1>`, cluster desktop et carrousel mobile ; trois sections catalogue API avec état vide. Il reste des écarts de séquences éditoriales et une comparaison pixel à pixel n’a pas été faite. | **5/10** |
 | `/a-propos` | [`propos/code.html`](../../design/stitch/jacigreen_propos_notre_histoire/code.html) et [`screen.png`](../../design/stitch/jacigreen_propos_notre_histoire/screen.png) | Présentation, mission/vision/valeurs proposées, biographie, distinctions, culture, perspectives et chiffres historiques avec réserve. Média de remplacement. Les longs récits et répétitions ont été réduits ; aucune comparaison pixel à pixel récente. | **4/10** |
-| `/solutions` | [`solutions/code.html`](../../design/stitch/jacigreen_nos_solutions/code.html) et [`screen.png`](../../design/stitch/jacigreen_nos_solutions/screen.png) | Cartes API uniquement, badges démo/prototype et état vide. Les copies statiques institutionnelles ont été retirées. Pas de navigation groupée par catégorie ni de grande photo de la maquette. | **4/10** |
+| `/solutions` | [`solutions/code.html`](../../design/stitch/jacigreen_nos_solutions/code.html) et [`screen.png`](../../design/stitch/jacigreen_nos_solutions/screen.png) | Cartes API compactées, badge démo conditionnel, marqueur prototype et état vide. Les copies statiques institutionnelles ont été retirées. Pas de navigation groupée par catégorie ni de grande photo de la maquette. | **4/10** |
 | `/solutions/:slug` | [`jacibiogaz/code.html`](../../design/stitch/jacigreen_jacibiogaz_fiche_solution/code.html) et [`screen.png`](../../design/stitch/jacigreen_jacibiogaz_fiche_solution/screen.png) | Hero avec catégorie/maturité, média, description API, CTA devis/retour et zone de documentation technique en attente de validation. La fiche Stitch contient plusieurs tableaux et affirmations de procédés/performance qui restent à vérifier avant publication ; ces détails ne sont pas inventés. | **4/10** |
-| `/services` | La maquette [`formations/code.html`](../../design/stitch/jacigreen_formations_transfert_d_expertise/code.html) est explicitement une référence pour la section Formations de Services, pas une page distincte. | Catalogue API uniquement en lignes éditoriales ; état vide et bandeau démo. Les huit prestations statiques et la section Formation séparée ont été retirées pour éviter une seconde source de vérité. | **3/10** |
-| `/realisations` | [`realisations/code.html`](../../design/stitch/jacigreen_exp_riences_r_alisations/code.html) et [`screen.png`](../../design/stitch/jacigreen_exp_riences_r_alisations/screen.png) | Cartes et filtre de pays alimentés par l’API, avec état vide et badges démo. Les projets institutionnels statiques ont été retirés ; les images restent placeholders si l’API n’a pas de média. | **3/10** |
-| `/actualites` | [`actualites/code.html`](../../design/stitch/jacigreen_actualit_s_ressources/code.html) et [`screen.png`](../../design/stitch/jacigreen_actualit_s_ressources/screen.png) | Articles API groupés par catégorie ; état vide et bandeau démo. Le projet ELLESadAPt et la chronologie ne sont plus dupliqués ici en statique. | **4/10** |
+| `/services` | La maquette [`formations/code.html`](../../design/stitch/jacigreen_formations_transfert_d_expertise/code.html) est explicitement une référence pour la section Formations de Services, pas une page distincte. | Catalogue API uniquement en lignes éditoriales ; état vide et badge démo conditionnel. Les huit prestations statiques et la section Formation séparée ont été retirées pour éviter une seconde source de vérité. | **3/10** |
+| `/realisations` | [`realisations/code.html`](../../design/stitch/jacigreen_exp_riences_r_alisations/code.html) et [`screen.png`](../../design/stitch/jacigreen_exp_riences_r_alisations/screen.png) | Cartes compactées et filtre de pays alimentés par l’API, avec état vide et badges démo conditionnels. Les projets institutionnels statiques ont été retirés ; les images restent placeholders si l’API n’a pas de média. | **3/10** |
+| `/actualites` | [`actualites/code.html`](../../design/stitch/jacigreen_actualit_s_ressources/code.html) et [`screen.png`](../../design/stitch/jacigreen_actualit_s_ressources/screen.png) | Articles API groupés par catégorie, cartes compactées et état vide ; badge démo conditionnel. Le projet ELLESadAPt et la chronologie ne sont plus dupliqués ici en statique. | **4/10** |
 | `/actualites/:slug` | Aucune fiche d'article n'est maquettée. | Mise en page éditoriale plus hiérarchisée avec date/auteur, titre, extrait, média 16:9, corps via `Prose` et retour à la liste. Cohérence de thème uniquement, pas de comparaison de référence directe. | **5/10*** |
 | `/contact` | [`contact/code.html`](../../design/stitch/jacigreen_contact/code.html) et [`screen.png`](../../design/stitch/jacigreen_contact/screen.png) | Grille formulaire/contexte ; formulaire et validation API conservés. Aucune coordonnée publique n’est inventée ; catégories de publics listées sans présumer de clients ou partenaires. | **4/10** |
-| `/mentions-legales` | [`legal/code.html`](../../design/stitch/jacigreen_politiques_mentions_l_gales/code.html) et [`screen.png`](../../design/stitch/jacigreen_politiques_mentions_l_gales/screen.png) | Identité disponible, état des informations juridiques manquantes et `noindex`. Aucun texte légal n’est inventé ; validation juridique nécessaire. | **3/10** |
+| `/mentions-legales` | [`legal/code.html`](../../design/stitch/jacigreen_politiques_mentions_l_gales/code.html) et [`screen.png`](../../design/stitch/jacigreen_politiques_mentions_l_gales/screen.png) | Projet de mentions structuré et `noindex` ; l’identité juridique et les informations administratives restent à fournir. Aucun droit national n’est présumé ; validation juridique nécessaire. | **3/10** |
 | `*` (404) | Aucune maquette dédiée. | Mise en page centrée avec repère 404, explication et lien d'accueil ; cohérence avec les styles et interaction fonctionnelle. Aucune référence dédiée ; statut HTTP/soft 404 reste une limite technique connue. | **6/10*** |
 
 **Notes sans référence directe :** `*` signifie que le score évalue seulement la
@@ -165,8 +166,8 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
 | Ressource | Constat |
 |---|---|
 | [`frontend/public/brand/jacigreen.png`](../../frontend/public/brand/jacigreen.png) | Fichier présent et suivi par Git ; PNG RGB **400 × 400**, fond blanc opaque. Le logo est intégré dans Header et Footer via `BrandLogo`, sans slogan ni icône substitutive. Le fond blanc est conservé ; aucun fichier transparent/vectoriel n'est fourni. |
-| Photos utilisables dans `frontend/public/images/` | Aucune. Le dossier contient seulement son README. |
-| Emplacements média | `MEDIA.homeHero.src` et `MEDIA.aboutStory.src` sont absents ; `MediaFrame` produit un placeholder. Les couvertures API sont facultatives et aucune photographie de contenu validée n'est recensée. |
+| Photos dans `frontend/public/images/` | Trois photos WebP locales sont présentes et utilisées par le hero mobile/desktop. Leur provenance individuelle et les droits de publication restent à confirmer ; aucun média associé aux fiches API n’a été validé dans ce contrôle. |
+| Emplacements média | `MEDIA.homeHero.src` référence la photo locale du hero ; `MEDIA.aboutStory` n’a pas de source et affiche un placeholder. Les couvertures API restent facultatives. |
 | Références Stitch | Dix fichiers `screen.png` (aperçus d'environ 220 à 704 px de large sur 1 600 px de haut) accompagnent dix `code.html` de 362 à 681 lignes ; un `DESIGN.md` de système visuel complète l'ensemble. Ces captures sont des références, pas des médias à publier. Les images générées/distantes des maquettes ne doivent pas être hotlinkées. |
 | Documentation de marque | [`brand/README.md`](../../frontend/public/brand/README.md) et le registre distinguent maintenant le logo présent des photographies éditoriales absentes. |
 
@@ -179,13 +180,13 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
    éditoriales des maquettes (récits détaillés, portrait, publication phare,
    données d'impact). Les contenus correspondants doivent être confirmés avant
    d'être renseignés.
-2. **Absence de photographie approuvée.** Le hero d'accueil et les cartes sont
-   occupés par des aplats placeholders ; le rapport d'aspect est fixé, mais le
-   signal visuel de terrain des maquettes manque.
-3. **Le bandeau de démonstration apparaît sur les données de seed.** Il est
-   explicitement visible dans le navigateur local et protège correctement
-   l'utilisateur contre les contenus fictifs ; il ne doit pas être présent sur
-   une production.
+2. **Provenance des médias à confirmer.** Le hero utilise trois photos locales
+   présentes dans le dépôt et les cartes API gardent des placeholders lorsque
+   leur couverture manque. Les droits et la provenance des photos n’ont pas été
+   vérifiés dans cette reprise.
+3. **Bandeau de démonstration conditionnel.** Il reste affiché pour toute fiche
+   reçue avec `is_demo=true`; il n’apparaît pas sur les 20 fiches locales
+   contrôlées, toutes `is_demo=false`.
 4. **Contrastes du thème Stitch à surveiller.** Les étiquettes utilisent
    désormais `text-ochre-text` sur fonds clairs plutôt que la couleur décorative
    `on-tertiary-container`. Les tests vérifient les paires de texte et les teintes
@@ -199,24 +200,26 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
 
 ### Fonctionnement et livraison
 
-1. **Pré-rendu corrigé, domaine de production manquant :** Vite Preview utilise
-   désormais `127.0.0.1`, ce qui corrige l'échec `/_.data` causé par le bind
-   `::1` et la résolution IPv4 de `localhost`. Le build et le contrôle local
-   passent. Le contrôle strict de production échoue sur 14 canoniques locales,
-   20 contenus API démo et les avertissements rendus sur 11 pages.
-2. **Navigation de détail partielle :** Solutions et Articles disposent de liens
-   vers leurs fiches. Les cartes Réalisations ne sont pas des liens, bien que
-   l'API offre un endpoint détail ; les services n'ont pas de page de détail
-   frontend alors que l'API en offre une. L'ADR 0003 exclut actuellement la fiche
-   de réalisation : décider le périmètre plutôt que d'ajouter silencieusement
-   des routes.
+1. **Pré-rendu vérifié avec les URL communiquées :** le build et les contrôles
+   local et strict passent avec `API_INTERNAL_URL=http://backend:8000`. Le
+   build tentant d’interroger Render directement depuis le conteneur expire sur
+   la connexion réseau ; les sondes externes exécutées depuis l’hôte répondent.
+   Les variables actuellement définies dans les comptes hébergés n’ont pas été
+   inspectées.
+2. **Navigation de détail ciblée :** Solutions et Articles disposent de liens
+   vers leurs fiches ; transitions liste → détail → liste → autre détail et
+   réponses de slug inexistant ont été vérifiées. Les cartes Réalisations ne
+   sont pas des liens et les services n'ont pas de page de détail frontend ;
+   l’ADR 0003 n’inclut pas la fiche de réalisation.
 3. **Formations conditionnelles et fragiles :** la séparation de Services dépend
    du mot « formation » dans le titre ; il n'existe ni modèle dédié ni décision
    produit confirmée. Conserver cette limite tant que le périmètre n'est pas
    tranché.
-4. **Page légale provisoire :** les mentions, politique et CGU sont absentes. La
-   page neutre `noindex` est préférable à la maquette inventée, mais doit être
-   remplacée par des textes validés avant ouverture publique.
+4. **Page légale provisoire :** un projet de mentions structurées est désormais
+   présent, mais l’identité de l’éditeur, les informations de confidentialité
+   et les conditions d’utilisation restent à compléter et à valider. La page
+   demeure `noindex` jusqu’à validation par JACIGREEN et un conseil juridique
+   compétent dans le pays d’établissement confirmé.
 5. **SEO :** les mentions légales et la 404 sont `noindex`, mais une URL inconnue
    reçoit un statut 200 (soft 404). Aucune image `og:image` par défaut n'est
    publiée. Ces limites sont documentées dans
@@ -230,9 +233,9 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
    nécessite une configuration de cache et `DRF_NUM_PROXIES`. Ce sont des
    points documentés dans [`security.md`](../architecture/security.md), à fermer
    avant exposition publique selon le déploiement retenu.
-8. **Contrôle de production à terminer :** le domaine canonique n'est pas fourni ;
-   le pré-rendu valide localement, mais la configuration Compose ne peut pas
-   valider une URL de production.
+8. **Variables de production à confirmer :** les canoniques sont validées avec
+   les URL communiquées, mais la configuration réellement déployée sur
+   Vercel/Render (hôtes autorisés, CORS et CSRF) n’a pas été inspectée.
 
 ## 6. Plan de correction priorisé
 
@@ -240,28 +243,26 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
 
 - Rétablir la résolution DNS/réseau de Docker vers le dépôt Python puis réussir
   une nouvelle reconstruction avec `docker compose up -d --build`.
-- Obtenir l’URL publique définitive et configurer explicitement
-  `VITE_SITE_URL`, `VITE_API_URL`, `API_INTERNAL_URL`,
-  `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` et
-  `CSRF_TRUSTED_ORIGINS`. Le contrôle de production refuse les canoniques
-  locales ou non HTTPS.
-- Faire valider ou corriger les 20 fiches API, une par une, dans Django Admin.
-  Garder `is_demo=true` sans confirmation ; ne pas utiliser de promotion globale.
-- Fournir et faire valider les informations légales avant lancement ; à défaut,
-  conserver la page neutre `noindex` et différer la publication.
+- Vérifier dans Vercel/Render que `VITE_SITE_URL`,
+  `VITE_API_URL`, `API_INTERNAL_URL`, `DJANGO_ALLOWED_HOSTS`,
+  `CORS_ALLOWED_ORIGINS` et `CSRF_TRUSTED_ORIGINS` sont configurés avec les URL
+  communiquées.
+- Fournir et faire valider les informations légales avant lancement ; conserver
+  la page de travail `noindex` jusqu’à l’approbation et différer la publication
+  légale si les éléments manquent.
 
 ### P1 — Écarts majeurs de crédibilité et d'expérience
 
-- Fournir les photos locales/API avec leurs textes alternatifs validés. La
-  palette et le logo existant sont déjà configurés ; les placeholders restent
-  tant qu’aucun média officiel n’est fourni.
+- Confirmer les droits/provenance des photos du hero et fournir les médias
+  API manquants avec des textes alternatifs approuvés.
 - Après configuration du domaine et des données, comparer visuellement chaque
   route aux références Stitch aux largeurs desktop et mobile.
 
 ### P2 — Qualité documentaire et technique
 
-- Ajouter une couverture ciblée des pages aux tests frontend et des tests
-  navigateur automatisés sur les parcours critiques.
+- Étendre l’automatisation navigateur des parcours critiques ; la matrice
+  responsive et les parcours principaux ont pour l’instant été exécutés
+  manuellement.
 - Traiter le soft 404, l'absence d'image Open Graph, la CSP, la sécurisation de
   l'Admin, la limitation de débit distribuée et les notifications de contact en
   fonction des exigences de mise en production.
@@ -274,17 +275,19 @@ décrite dans [`matrice-contenu.md`](./matrice-contenu.md) et le
 
 ## 7. Tests et contrôles
 
-Les résultats du 24 octobre 2026 sont consignés dans
+Les résultats actualisés au 6 novembre 2026 sont consignés dans
 [`quality/testing.md`](../quality/testing.md) et
 [`rapport-finalisation.md`](./rapport-finalisation.md).
 
-- Frontend : format, typecheck, lint, 64 tests, build et pré-rendu local réussis
-  dans le conteneur existant.
+- Frontend : format, typecheck, lint, 83 tests, build et pré-rendu local réussis
+  dans le conteneur existant ; contrôle strict passé avec les URL communiquées
+  et l’API locale correspondante.
 - Backend : Ruff, configuration, migration, OpenAPI et 47 tests réussis dans le
   conteneur existant.
-- Strict production : 46 blocages attendus, décrits plus haut.
+- Build direct vers Render : délai réseau depuis le conteneur.
 - Docker : reconstruction échouée sur la résolution DNS des paquets Python.
-- Navigateur : 70 vérifications responsive, 15 destinations internes HTTP 200,
-  aucune erreur JS ; aucune comparaison pixel à pixel.
-- Après fourniture des domaines et validation de contenu, rejouer la
-  reconstruction Docker et le contrôle strict avant toute publication.
+- Navigateur : 110 vérifications responsive sans débordement/erreur JS, plus
+  parcours de navigation, filtre et validation du formulaire ; comparaison
+  pixel à pixel non effectuée.
+- Avant toute publication, vérifier les variables hébergées, reconstruire les
+  images Docker et obtenir les informations légales/médias manquants.

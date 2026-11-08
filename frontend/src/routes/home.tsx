@@ -9,6 +9,7 @@ import { HomeHeroCluster } from "~/components/home/HomeHeroCluster";
 import { positioning } from "~/content/institutional";
 import { buildMeta, organizationJsonLd } from "~/lib/seo";
 import { listLatestArticles, listProjects, listSolutions } from "~/services/api/content";
+import { MobileHeroCarousel } from "~/components/home/MobileHeroCarousel";
 
 import type { Route } from "./+types/home";
 
@@ -39,18 +40,21 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <DemoBanner show={hasDemo} />
-      <section className="on-dark bg-primary-container py-space-xl text-on-primary md:py-20">
-        <Container className="grid grid-cols-1 items-center gap-gutter lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <div className="home-hero__copy py-4 md:py-8">
-            <p className="font-label-md text-label-md font-semibold text-on-primary uppercase">
+      <section className="on-dark relative isolate min-h-dvh overflow-hidden bg-primary-container text-on-primary">
+        <Container className="relative z-10 flex min-h-dvh flex-col justify-end py-space-xl lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16 lg:py-20">
+          <div className="home-hero__copy max-w-3xl pb-24 lg:py-8">
+            <p className="hidden font-label-md text-label-md font-semibold text-on-primary uppercase lg:block">
               JACIGREEN
             </p>
+
             <h1 className="mt-space-md max-w-4xl font-headline-2xl-mobile text-fluid-heading text-on-primary md:font-headline-2xl">
               Transformer les défis environnementaux en ressources utiles
             </h1>
+
             <p className="mt-space-md font-label-md text-label-md font-semibold text-on-primary/90">
               {positioning.tagline}
             </p>
+
             <p className="mt-space-lg max-w-reading font-body-lg text-body-lg text-on-primary/90">
               {positioning.short}
             </p>
@@ -59,6 +63,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <ButtonLink to="/solutions" variant="accent">
                 Découvrir nos solutions
               </ButtonLink>
+
               <ButtonLink
                 to="/contact"
                 variant="secondary"
@@ -68,8 +73,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </ButtonLink>
             </div>
           </div>
-          <HomeHeroCluster />
         </Container>
+        <div className="absolute inset-0 hidden lg:block">
+          <Container className="grid min-h-dvh grid-cols-1 items-center gap-gutter lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+            <div aria-hidden="true" />
+            <HomeHeroCluster />
+          </Container>
+        </div>
+        <div className="absolute inset-0 lg:hidden">
+          <MobileHeroCarousel />
+        </div>
       </section>
 
       <section className="py-space-xl md:py-20" aria-labelledby="approche">
@@ -178,6 +191,31 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               <ContentPending>Aucune actualité n’est actuellement publiée.</ContentPending>
             </div>
           )}
+        </Container>
+      </section>
+
+      <section
+        className="bg-primary-container py-space-xl text-on-primary md:py-20"
+        aria-labelledby="home-contact"
+      >
+        <Container>
+          <div className="mx-auto max-w-3xl text-center">
+            <h2
+              id="home-contact"
+              className="font-headline-xl text-fluid-section-heading text-on-primary"
+            >
+              Échangeons sur votre projet
+            </h2>
+            <p className="mx-auto mt-space-md max-w-reading font-body-lg text-body-lg text-on-primary/80">
+              Découvrez notre approche et échangeons autour de vos projets de valorisation des
+              ressources naturelles.
+            </p>
+            <div className="mt-space-lg flex justify-center">
+              <ButtonLink to="/contact" variant="accent">
+                Parlons de votre projet
+              </ButtonLink>
+            </div>
+          </div>
         </Container>
       </section>
     </>

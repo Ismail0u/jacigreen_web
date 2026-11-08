@@ -6,12 +6,12 @@
   version 1.0 (2026), avant-propos, 24 sections, tableaux/listes et fiche
   d’identité finale.
 - Le propriétaire a autorisé la publication du document le 24 octobre 2026.
-  Cette autorisation ne rend pas automatiquement authentiques les 20 fiches
-  `is_demo=true` du seed.
+  Les contenus des fiches API recensées ont également été autorisés ; leurs
+  réserves de source et de date restent applicables.
 - Les contenus de catalogue sont servis uniquement par les endpoints API
   existants. Le frontend n’en conserve pas de copie statique.
 - La base locale compte 3 solutions, 8 services, 6 réalisations et 3 articles ;
-  les 20 enregistrements portent `is_demo=true`. Le registre
+  les 20 enregistrements vérifiés portent `is_demo=false`. Le registre
   [`content-register.md`](../content/content-register.md) détaille leur
   comparaison à la source et les validations manquantes.
 
@@ -28,11 +28,11 @@
 | §8 Vision | Formulation proposée et ambition | À propos | Vision publiée comme proposition. |
 | §9 Valeurs | Six valeurs et descriptions | À propos | Six valeurs affichées comme propositions. |
 | §10 Modèle de création de valeur | Étapes de récupération, transformation, valorisation et usages | Accueil | Le résumé d’approche est publié ; les longues listes d’étapes répétées ont été retirées. |
-| §11 Solutions | JaciBiogaz™, JaciGrow™, JaciPur’O™ et voies de valorisation | API `/api/v1/solutions/`, `SolutionCard`, fiche solution | Aucune copie statique. Les 3 fiches de démonstration restent signalées ; leur validation éditoriale individuelle est requise. |
-| §12 Services | Huit prestations | API `/api/v1/services/`, `ServiceEntry` | Aucune copie statique. Les 8 fiches existantes sont `is_demo=true` ; modalités et validation à confirmer. |
+| §11 Solutions | JaciBiogaz™, JaciGrow™, JaciPur’O™ et voies de valorisation | API `/api/v1/solutions/`, `SolutionCard`, fiche solution | Aucune copie statique. Les 3 fiches autorisées sont publiables avec les réserves du registre ; conserver le statut prototype et les limites techniques. |
+| §12 Services | Huit prestations | API `/api/v1/services/`, `ServiceEntry` | Aucune copie statique. Les 8 fiches API sont autorisées à la publication ; ne pas inventer tarifs, calendriers ou modalités. |
 | §13 Publics, bénéficiaires et partenaires | Catégories de publics possibles | Contact | Les catégories restent accessibles ; elles ne sont pas présentées comme clients ou partenaires avérés. |
-| §14 Expériences et réalisations | Expériences au Burkina Faso, au Niger, au Nigeria et au Burundi ; chiffres historiques | API `/api/v1/projects/`, `ProjectCard` | Les doublons statiques sont retirés. Les 6 fiches API restent des démos ; certaines dates/formulations ne sont pas confirmées par la source. |
-| §15 ELLESadAPt – Tchad | Projet, activité, contexte, financement et suite évoquée | API `/api/v1/projects/` et `/api/v1/articles/` | Les versions statiques du projet/article sont retirées. Une fiche vérifiée doit être saisie dans l’API avant affichage comme contenu éditorial. |
+| §14 Expériences et réalisations | Expériences au Burkina Faso, au Niger, au Nigeria et au Burundi ; chiffres historiques | API `/api/v1/projects/`, `ProjectCard` | Les doublons statiques sont retirés. Les 6 fiches sont autorisées à la publication ; préserver les distinctions entre étude, projection et résultat ainsi que les réserves de dates. |
+| §15 ELLESadAPt – Tchad | Projet, activité, contexte, financement et suite évoquée | API `/api/v1/projects/` et `/api/v1/articles/` | Les versions statiques du projet/article sont retirées. La fiche API autorisée est publiée sans ajout de résultats non documentés. |
 | §16 Impact social et environnemental | Quatre chiffres historiques et demande d’actualisation | À propos | Affichés avec avertissement explicite : non actuels, à dater et documenter. |
 | §17 Reconnaissance et visibilité | Distinctions 2016–2018 | À propos | Huit mentions conservées avec les années de la source. |
 | §18 Fondatrice | Biographie de Mariama Mamane | À propos | Parcours résumé sans ajout de coordonnées ou de résultats. |
@@ -47,20 +47,20 @@
 
 | Route | Contenu statique institutionnel | Contenu éditorial | État |
 |---|---|---|---|
-| `/` | Positionnement bref et approche | Solutions, réalisations et trois actualités récentes depuis l’API | États vides accessibles ; bannière si données démo. |
+| `/` | Positionnement bref et approche | Solutions, réalisations et trois actualités récentes depuis l’API | États vides accessibles ; bannière uniquement si une réponse contient `is_demo=true`. |
 | `/a-propos` | Identité, histoire, mission, vision, valeurs, biographie, distinctions, culture, impacts historiques et perspectives | Aucun catalogue | Sections raccourcies ; réserves originales maintenues. |
-| `/solutions` et `/solutions/:slug` | Aucun doublon de fiche | API solutions | 3 fiches locales `is_demo=true`, marqueur visible. |
-| `/services` | Aucun doublon de prestation | API services | 8 fiches locales `is_demo=true`, marqueur visible. |
-| `/realisations` | Aucun projet statique | API projets et filtre existant | 6 fiches locales `is_demo=true`, marqueur visible. |
-| `/actualites` et `/actualites/:slug` | Aucune actualité statique | API articles | 3 articles locaux `is_demo=true`, marqueur visible. |
+| `/solutions` et `/solutions/:slug` | Aucun doublon de fiche | API solutions | 3 fiches vérifiées `is_demo=false`. |
+| `/services` | Aucun doublon de prestation | API services | 8 fiches vérifiées `is_demo=false`. |
+| `/realisations` | Aucun projet statique | API projets et filtre existant | 6 fiches vérifiées `is_demo=false`. |
+| `/actualites` et `/actualites/:slug` | Aucune actualité statique | API articles | 3 articles vérifiés `is_demo=false`. |
 | `/contact` | Publics possibles et positionnement | Formulaire API existant | Pas de coordonnées inventées. |
-| `/mentions-legales` | Identité disponible | Mentions juridiques | Informations manquantes signalées, page `noindex`. |
+| `/mentions-legales` | Nom affiché uniquement, aucune identité juridique établie | Projet de mentions structuré | Champs manquants suivis dans le registre ; non validé, `noindex`. |
 
 ## Décisions restant à obtenir
 
-1. Validation explicite des 20 fiches API, une par une, ou correction/saisie de
-   contenu éditorial vérifié dans Django Admin.
-2. Confirmation des dates des études et des statuts de disponibilité dans les
+1. Confirmation des dates des études et des statuts de disponibilité dans les
    fiches concernées.
-3. URL publique définitive du site et URL publique de l’API.
-4. Coordonnées, textes juridiques et médias éditoriaux officiels.
+2. Vérification des URL et variables réellement déployées, bien que les URL
+   publiques communiquées aient passé le pré-rendu strict.
+3. Coordonnées et informations juridiques listées dans le registre, ainsi que
+   médias éditoriaux et droits associés.
