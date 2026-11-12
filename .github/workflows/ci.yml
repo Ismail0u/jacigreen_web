@@ -40,7 +40,7 @@ jobs:
       DATABASE_URL: postgres://jacigreen:ci-only-password@localhost:5432/jacigreen
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -100,7 +100,7 @@ jobs:
       VITE_SITE_URL: https://ci.example.test
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
